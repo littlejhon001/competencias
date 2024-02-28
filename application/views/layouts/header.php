@@ -62,7 +62,7 @@
 
 
 <aside
-    class="sidenav navbar navbar-vertical navbar-expand-xs border border-radius-xl my-3 fixed-start ms-3 shadow-sm bg-ppal  animate__animated animate__fadeInLeft"
+    class="sidenav navbar navbar-vertical navbar-expand-xs z- border-radius-xl border my-3 fixed-start ms-3 shadow-sm z-0 bg-ppal  animate__animated animate__fadeInLeft"
     id="sidenav-main">
 
     <div class="sidenav-header">
@@ -87,7 +87,7 @@
                 </a>
             </li>
 
-            <?php if ($user_data->Rol_ID == 1 || $user_data->Rol_ID == 2 || $user_data->Rol_ID == 3) { ?>
+            <?php if ($user_data->id == 1 || $user_data->id == 2 || $user_data->id == 3) { ?>
                 <li class="nav-item">
                     <a class="nav-link text-dark " href="<?php echo IP_SERVER ?>Usuarios">
 
@@ -100,7 +100,7 @@
             <?php } ?>
 
 
-            <?php if ($user_data->Rol_ID == 1 || $user_data->Rol_ID == 2 || $user_data->Rol_ID == 3) { ?>
+            <?php if ($user_data->id == 1 || $user_data->id == 2 || $user_data->id == 3) { ?>
                 <li class="nav-item">
                     <a class="nav-link text-dark " href="<?php IP_SERVER?>Competencias">
 

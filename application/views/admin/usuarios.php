@@ -1,5 +1,3 @@
-
-
 <body class="g-sidenav-show  bg-gray-100 animate__fadeIn animate__animated">
     <main class="main-content border-radius-lg ">
         <!-- Navbar -->
@@ -14,7 +12,7 @@
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">index</li>
           </ol> -->
-                    <!-- <pre><?php // echo print_r($user_data, true)                 ?></pre> -->
+                    <!-- <pre><?php // echo print_r($user_data, true)                   ?></pre> -->
 
 
                     <h6 class="font-weight-bolder mb-0">Bienvenido de nuevo
@@ -163,25 +161,28 @@
                         </div>
                         <div class="col-lg-4 col-sm-5 mt-sm-0 mt-4">
                             <div class="card card-users mb-2">
-                                <div class="card-header p-3 pt-2 bg-transparent">
-                                    <div
-                                        class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
-                                        <i class="material-icons  bi bi-person-badge"></i>
+                                <a href="<?php echo IP_SERVER ?>Usuarios/asignar">
+                                    <div class="card-header p-3 pt-2 bg-transparent">
+                                        <div
+                                            class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
+                                            <i class="material-icons  bi bi-person-badge"></i>
+                                        </div>
+                                        <div class="text-end pt-1">
+                                            <p class="text-sm mb-0 text-capitalize ">Asignar competencias y evaluadores
+                                            </p>
+                                            <h4 class="mb-0 ">34</h4>
+                                        </div>
                                     </div>
-                                    <div class="text-end pt-1">
-                                        <p class="text-sm mb-0 text-capitalize ">Gestores de evaluadores</p>
-                                        <h4 class="mb-0 ">34</h4>
-                                    </div>
-                                </div>
 
-                                <hr class="horizontal my-0 dark">
-                                <div class="card-footer p-3">
-                                    <p class="mb-0 "><span class="text-success text-sm font-weight-bolder">+1%
-                                        </span>than yesterday</p>
-                                </div>
+                                    <hr class="horizontal my-0 dark">
+                                    <div class="card-footer p-3">
+                                        <p class="mb-0 "><span class="text-success text-sm font-weight-bolder">+1%
+                                            </span>than yesterday</p>
+                                    </div>
+                                </a>
                             </div>
-
                         </div>
+
                         <div class="col-lg-4 col-sm-5 mt-sm-0 mt-4">
                             <div class="card  card-users mb-2">
                                 <div class="card-header  p-3 pt-2 bg-transparent">
@@ -190,7 +191,7 @@
                                         <i class="material-icons opacity-10">store</i>
                                     </div>
                                     <div class="text-end pt-1">
-                                        <p class="text-sm mb-0 text-capitalize ">Evaluadores</p>
+                                        <p class="text-sm mb-0 text-capitalize ">Usuarios asignados</p>
                                         <h4 class="mb-0 ">34</h4>
                                     </div>
                                 </div>

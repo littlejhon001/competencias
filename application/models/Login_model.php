@@ -11,7 +11,7 @@ class Login_model extends MY_Model {
     {
         $query = $this->db
             ->where('email', $email)
-            ->where('contraseña', $password)
+            ->where('password', $password)
             ->get('usuarios');
 
         return $query->row();

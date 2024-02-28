@@ -15,7 +15,7 @@
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">index</li>
           </ol> -->
-                    <!-- <pre><?php // echo print_r($user_data, true)                                           ?></pre> -->
+                    <!-- <pre><?php // echo print_r($user_data, true)                                                          ?></pre> -->
 
 
                     <h6 class="font-weight-bolder mb-0">Bienvenido de nuevo
@@ -105,14 +105,20 @@
                                 <div class="d-flex ">
                                     <h6 class="text-white text-capitalize ps-5 mt-2">Lista de usuarios</h6>
                                     <div class="ms-auto">
-                                        <button type="button" class="me-3 btn btn-success" data-bs-toggle="modal"
-                                            data-bs-target="#staticBackdrop">
-                                            Agregar nuevo usuario <i class="fs-6 bi bi-plus-circle"></i>
-                                        </button>
-                                        <button type="button" class="me-3 btn btn-success" data-bs-toggle="modal"
-                                            data-bs-target="#importar">
-                                            Importar usuarios masivamente<i class="fs-6 bi bi-plus-circle"></i>
-                                        </button>
+                                        <?php if ($user_data->Rol_ID == 1) { ?>
+                                            <button type="button" class="me-3 btn btn-success" data-bs-toggle="modal"
+                                                data-bs-target="#staticBackdrop">
+                                                Agregar nuevo usuario <i class="fs-6 bi bi-plus-circle"></i>
+                                            </button>
+                                            <button type="button" class="me-3 btn btn-success" data-bs-toggle="modal"
+                                                data-bs-target="#importar">
+                                                Importar usuarios masivamente<i class="fs-6 bi bi-plus-circle"></i>
+                                            </button>
+                                        <?php } else { ?>
+                                            <a href="<?php echo IP_SERVER ?>Usuarios/asignar" class="me-3 btn btn-success">
+                                                asignar evaluador <i class="fs-6 bi bi-person-plus-fill"></i>
+                                            </a>
+                                        <?php } ?>
                                     </div>
                                 </div>
                             </div>
@@ -134,52 +140,83 @@
                                                 Cargo</th>
                                             <th
                                                 class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                Competencia</th>
+                                                Asignado</th>
                                             <th
                                                 class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                                 Acciones</th>
-                                            <th class="text-secondary opacity-7"></th>
+                                            <!-- <th class="text-secondary opacity-7"></th> -->
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <!--
-                                        <pre><?php // echo print_r($usuarios, true)        ?></pre> -->
+                                        <pre><?php // echo print_r($usuarios, true)                       ?></pre> -->
 
-                                        <?php foreach ($usuarios as $row) { ?>
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div>
-                                                            <i class="me-2 bi bi-person-circle"></i>
+                                        <?php foreach ($usuarios as $row) {
+                                            if ($row->Rol_ID == 4) {
+                                                ?>
+                                                <tr
+                                                    class="<?php echo ($row->id_evaluador != "") ? 'bg-asignado' : 'bg-sin_asignar'; ?>">
+                                                    <td>
+                                                        <div class="d-flex px-2 py-1">
+                                                            <div>
+                                                                <i class="me-2 bi bi-person-circle"></i>
+                                                            </div>
+                                                            <div class="d-flex flex-column justify-content-center">
+                                                                <?php echo $row->nombre ?>
+                                                                <p class="text-xs text-secondary mb-0">
+                                                                    <?php echo $row->email ?>
+                                                                </p>
+                                                            </div>
                                                         </div>
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <?php echo $row->nombre ?>
-                                                            <p class="text-xs text-secondary mb-0">
-                                                                <?php echo $row->email ?>
-                                                            </p>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="mb-0 text-sm">
+                                                            <?php echo $row->apellido ?>
+                                                        </h6>
+                                                    </td>
+                                                    <td class="align-middle text-center text-sm">
+                                                        <?php echo $row->cargo ?>
+                                                    </td>
+                                                    <td class="align-middle text-center">
+                                                        <?php echo ($row->id_evaluador != "") ? '<i class="bi bi-check-circle text-success"></i>' : '<i class="bi bi-info-circle-fill text-warning"></i>'; ?>
+                                                    </td>
+                                                    <td class="align-middle text-center">
+                                                        <button class="border rounded bg-primary" type="button"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#ver_mas<?php echo $row->id ?>">
+                                                            <i class="text-light bi bi-eye"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="ver_mas<?php echo $row->id ?>" tabindex="-1"
+                                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Información
+                                                                    del usuario
+                                                                </h1>
+                                                                <button type="button" class="btn-close bg-danger"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <h5>
+                                                                    <?php echo $row->nombre . ' ' . $row->apellido ?>
+                                                                </h5>
+                                                                <h6 class="text-xs"><?php echo $row->email ?><br>
+                                                                <h6 class="text-xs"><?php echo $row->cargo ?>
+                                                            </h6>
+
+                                                            </div>
+                                                            <div class="modal-footer border-0">
+                                                                <button type="button" class="btn btn-primary m-0">Guardar</button>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </td>
-                                                <td>
-                                                    <h6 class="mb-0 text-sm">
-                                                        <?php echo $row->apellido ?>
-                                                    </h6>
-                                                </td>
-                                                <td class="align-middle text-center text-sm">
-                                                    <?php echo $row->cargo ?>
-                                                </td>
-                                                <td class="align-middle text-start">
-                                                    GESTIONAR EL RETIRO DE GL POR CAMIONES Y/O GASODUCTO
-                                                </td>
-
-                                                <td class="align-middle text-center">
-                                                    <a href="javascript:;" class="" data-toggle="tooltip"
-                                                        data-original-title="Edit user">
-                                                        <i class="text-warning bi bi-pencil-square"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        <?php } ?>
+                                                </div>
+                                            <?php }
+                                        } ?>
                                     </tbody>
                                 </table>
                             </div>

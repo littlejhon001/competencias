@@ -23,12 +23,12 @@ class Home extends CI_Controller
 		$user_data = $this->session->userdata('user_data');
 		// Verificar si el usuario está logeado
 		if (!empty($user_data)) {
-			if ($this->Usuario_model->has_role($user_data->ID_usuario, 'Administrador')) {
+			if ($this->Usuario_model->has_role($user_data->id, 'Administrador')) {
 				// Si el usuario es administrador, cargar el header y la vista de dashboard
 				$data['user_data'] = $user_data;
 				$this->load->view('layouts/header', $data);
 				$this->load->view('dashboard', $data);
-			} elseif ($this->Usuario_model->has_role($user_data->ID_usuario, 'Gestor de Evaluadores')) {
+			} elseif ($this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
 				$data['user_data'] = $user_data;
 				$this->load->view('layouts/header', $data);
 				$this->load->view('dashboard', $data);

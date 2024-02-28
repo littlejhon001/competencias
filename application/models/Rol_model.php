@@ -8,7 +8,7 @@ class Rol_model extends MY_Model {
 
 
     public function get_role_by_id($role_id) {
-        return $this->db->get_where('roles', array('ID_rol' => $role_id))->row_array();
+        return $this->db->get_where('roles', array('id' => $role_id))->row_array();
     }
 
 }
