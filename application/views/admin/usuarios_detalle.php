@@ -15,7 +15,7 @@
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">index</li>
           </ol> -->
-                    <!-- <pre><?php // echo print_r($user_data, true)                                                          ?></pre> -->
+                    <!-- <pre><?php // echo print_r($user_data, true)                                                           ?></pre> -->
 
 
                     <h6 class="font-weight-bolder mb-0">Bienvenido de nuevo
@@ -149,7 +149,7 @@
                                     </thead>
                                     <tbody>
                                         <!--
-                                        <pre><?php // echo print_r($usuarios, true)                       ?></pre> -->
+                                        <pre><?php // echo print_r($usuarios, true)                        ?></pre> -->
 
                                         <?php foreach ($usuarios as $row) {
                                             if ($row->Rol_ID == 4) {
@@ -204,13 +204,25 @@
                                                                 <h5>
                                                                     <?php echo $row->nombre . ' ' . $row->apellido ?>
                                                                 </h5>
-                                                                <h6 class="text-xs"><?php echo $row->email ?><br>
-                                                                <h6 class="text-xs"><?php echo $row->cargo ?>
-                                                            </h6>
-
+                                                                <h6 class="text-xs">
+                                                                    <?php echo $row->email ?><br>
+                                                                    <h6 class="text-xs">
+                                                                        <?php echo $row->cargo ?>
+                                                                    </h6>
+                                                                    <select class="form-select me-3" name="evaluador"
+                                                                        aria-label="Seleccionar opción">
+                                                                        <option selected disabled>Selecciona un evaluador ---
+                                                                        </option>
+                                                                        <?php foreach ($evaluadores as $row) { ?>
+                                                                            <option value="<?php echo $row->id ?>">
+                                                                                <?php echo $row->nombre . ' ' . $row->apellido ?>
+                                                                            </option>
+                                                                        <?php } ?>
+                                                                    </select>
                                                             </div>
                                                             <div class="modal-footer border-0">
-                                                                <button type="button" class="btn btn-primary m-0">Guardar</button>
+                                                                <button type="button"
+                                                                    class="btn btn-primary m-0">Guardar</button>
                                                             </div>
                                                         </div>
                                                     </div>
