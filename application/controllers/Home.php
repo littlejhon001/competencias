@@ -13,9 +13,7 @@ class Home extends CI_Controller
 		//     die();
 
 		$this->load->model('Usuario_model');
-		$this->load->helper('url');
 		$this->load->model('Login_model');
-		$this->load->library('session');
 	}
 	public function index()
 	{
@@ -25,18 +23,15 @@ class Home extends CI_Controller
 		if (!empty($user_data)) {
 			if ($this->Usuario_model->has_role($user_data->id, 'Administrador')) {
 				// Si el usuario es administrador, cargar el header y la vista de dashboard
-				$data['user_data'] = $user_data;
-				$this->load->view('layouts/header', $data);
-				$this->load->view('dashboard', $data);
+				$this->load->view('layouts/header');
+				$this->load->view('dashboard');
 			} elseif ($this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
-				$data['user_data'] = $user_data;
-				$this->load->view('layouts/header', $data);
-				$this->load->view('dashboard', $data);
+				$this->load->view('layouts/header');
+				$this->load->view('dashboard');
 			} else {
 				// Si no es administrador, cargar solo la vista de dashboard
-				$data['user_data'] = $user_data;
-				$this->load->view('layouts/header', $data);
-				$this->load->view('dashboard', $data);
+				$this->load->view('layouts/header');
+				$this->load->view('dashboard');
 			}
 		} else {
 			// Si el usuario no está logeado, redirigir al formulario de inicio de sesión

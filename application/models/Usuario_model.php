@@ -17,15 +17,14 @@ class Usuario_model extends MY_Model
 
     public function obtener_rol($user_id)
     {
-        $user_data = $this->db->get_where('usuarios', array('id' => $user_id))->row_array();
-        return $user_data['id'];
+        return $this->find($user_id, 'Rol_ID')->Rol_ID;
     }
 
     public function has_role($user_id, $role_name)
     {
         $rol_usuario = $this->obtener_rol($user_id);
-        $role_data = $this->db->get_where('roles', array('nombre' => $role_name))->row_array();
-        return ($rol_usuario == $role_data['id']);
+        $rol_consultado = $this->db->get_where('roles', array('nombre' => $role_name))->row()->id;
+        return ($rol_usuario == $rol_consultado);
     }
 
     public function datos_evaluadores()
@@ -63,5 +62,8 @@ class Usuario_model extends MY_Model
         }
     }
 
+    public function existe($email){
+        return !empty($this->findName('email',$email,'email'));
+    }
 
 }

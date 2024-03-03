@@ -19,17 +19,17 @@
 
 
                     <h6 class="font-weight-bolder mb-0">Bienvenido de nuevo
-                        <?php if ($user_data->Rol_ID == 1) { ?>
-                            <?php echo $user_data->nombre ?>,
+                        <?php if ($this->session->userdata('user_data')->Rol_ID == 1) { ?>
+                            <?php echo $this->session->userdata('user_data')->nombre ?>,
                             has ingresado como administrador
-                        <?php } elseif ($user_data->Rol_ID == 2) { ?>
-                            <?php echo $user_data->nombre ?>,
+                        <?php } elseif ($this->session->userdata('user_data')->Rol_ID == 2) { ?>
+                            <?php echo $this->session->userdata('user_data')->nombre ?>,
                             has ingresado como gestor de evaluadores
-                        <?php } elseif ($user_data->Rol_ID == 3) { ?>
-                            <?php echo $user_data->nombre ?>,
+                        <?php } elseif ($this->session->userdata('user_data')->Rol_ID == 3) { ?>
+                            <?php echo $this->session->userdata('user_data')->nombre ?>,
                             has ingresado como evaluador
-                        <?php } elseif ($user_data->Rol_ID == 4) { ?>
-                            <?php echo $user_data->nombre ?>,
+                        <?php } elseif ($this->session->userdata('user_data')->Rol_ID == 4) { ?>
+                            <?php echo $this->session->userdata('user_data')->nombre ?>,
                             has ingresado como usuario
                         <?php } ?>
 
@@ -73,7 +73,7 @@
                                 <i class="fa fa-user me-sm-1"></i>
 
                                 <span class="d-sm-inline d-none">
-                                    <?php echo $user_data->nombre ?>
+                                    <?php echo $this->session->userdata('user_data')->nombre ?>
                                     </php>
                                 </span>
 

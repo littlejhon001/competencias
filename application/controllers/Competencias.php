@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-require_once 'application/third_party/Autoloader.php';
-require_once 'application/third_party/psr/Autoloader.php';
+// require_once 'application/third_party/Autoloader.php';
+// require_once 'application/third_party/psr/Autoloader.php';
 class Competencias extends CI_Controller
 {
 	public function __construct()
@@ -13,7 +13,6 @@ class Competencias extends CI_Controller
 		//     die();
 
 		$this->load->model('Usuario_model');
-
 		$this->load->model('Competencias_model');
 	}
 	public function index()
@@ -22,13 +21,13 @@ class Competencias extends CI_Controller
 		$user_data = $this->session->userdata('user_data');
 		// Verificar si el usuario está logeado
 		if (!empty($user_data)) {
-			if ($this->Usuario_model->has_role($user_data->ID_usuario, 'Administrador')) {
+			if ($this->Usuario_model->has_role($user_data->id, 'Administrador')) {
 				// Si el usuario es administrador, cargar el header y la vista de dashboard
                 $data['competencias'] = $this->Competencias_model->findAll();
 				$data['user_data'] = $user_data;
 				$this->load->view('layouts/header', $data);
 				$this->load->view('admin/competencias', $data);
-			} elseif ($this->Usuario_model->has_role($user_data->ID_usuario, 'Gestor de Evaluadores')) {
+			} elseif ($this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
 				$data['user_data'] = $user_data;
 				$this->load->view('layouts/header', $data);
 				$this->load->view('competencias', $data);
