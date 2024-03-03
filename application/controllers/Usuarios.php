@@ -11,9 +11,8 @@ class Usuarios extends CI_Controller
         //     $this->iffalse('Acceso denegado');
         //     $this->json();
         //     die();
-        $this->load->helper('url');
-        $this->load->library('session');
         $this->load->model('Usuario_model');
+        $this->load->model('Rol_model');
     }
     public function index()
     {
@@ -47,6 +46,7 @@ class Usuarios extends CI_Controller
             if ($this->Usuario_model->has_role($user_data->id, 'Administrador') || $this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
 
                 $data['usuarios'] = $this->Usuario_model->findAll();
+                $data['roles'] = $this->Rol_model->listado();
                 // var_dump($data['usuarios']);
                 // die;
                 $data['user_data'] = $user_data;
@@ -102,6 +102,44 @@ class Usuarios extends CI_Controller
         }
     }
 
+    public function agregar(){
+        if(!empty($this->formData)){
+            $this->formData->password = hash("sha256",'aula'.$this->formData->identificacion);      //cifrado de contraseña
+            if(!$this->Usuario_model->existe($this->formData->email)){
+                $this->db->trans_begin();
+                if($this->Usuario_model->insert($this->formData) > 0){
+                    // $envio_correo = $this->enviar_credenciales($this->formData);     //Descomentar para enviar correo
+                    $envio_correo = $this->emular_correo();     //Comentar esta línea y descomentar la de arriba para efectuar el envío de correo
+                    if(!empty($envio_correo->error)){
+                        $this->session->set_flashdata([
+                            'success' => false,
+                            'message' => 'Error al notificar al usuario'
+                        ]);
+                        $this->db->trans_rollback();
+                    }else{
+                        $this->session->set_flashdata([
+                            'success' => true,
+                            'message' => 'Usuario agregado con éxito'
+                        ]);
+                        $this->db->trans_commit();
+                    }
+                }
+            }
+        }
+        return redirect($_SERVER['HTTP_REFERER']);
+    }
+    protected function enviar_credenciales($usuario){
+        $this->load->library('php_mailer');
+        $correo = (object) array(
+            'email' => $usuario->email,
+            'subject' => 'Credenciales de acceso AULA',
+            'body' => $this->view('mails/_credenciales',(object)['usuario' => $usuario], TRUE),
+        );
+        return $this->php_mailer->enviarcorreo($correo);
+    }
+    protected function emular_correo(){
+        return (object)['error' => ''];
+    }
 }
 
 

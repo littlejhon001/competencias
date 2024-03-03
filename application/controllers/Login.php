@@ -5,9 +5,7 @@ class Login extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-        $this->load->helper('url');
 		$this->load->model('Login_model');
-		$this->load->library('session');
 
 	}
 
@@ -25,7 +23,7 @@ class Login extends CI_Controller
 		$password = $this->input->post('contrasena');
 
 		// Obtener el usuario autenticado desde el modelo de inicio de sesión
-		$user = $this->Login_model->get_user($email, $password);
+		$user = $this->Login_model->get_user($email, hash('sha256',$password));     //Se compara con la contraseña hasheada
 
 		if ($user) {
 			// Usuario autenticado, guardar toda la información del usuario en la sesión

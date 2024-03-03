@@ -87,7 +87,7 @@
                 </a>
             </li>
 
-            <?php if ($user_data->id == 1 || $user_data->id == 2 || $user_data->id == 3) { ?>
+            <?php if ($this->session->userdata('user_data')->Rol_ID == 1 || $this->session->userdata('user_data')->Rol_ID == 2 || $this->session->userdata('user_data')->Rol_ID == 3) { ?>
                 <li class="nav-item">
                     <a class="nav-link text-dark " href="<?php echo IP_SERVER ?>Usuarios">
 
@@ -100,9 +100,9 @@
             <?php } ?>
 
 
-            <?php if ($user_data->id == 1 || $user_data->id == 2 || $user_data->id == 3) { ?>
+            <?php if ($this->session->userdata('user_data')->Rol_ID == 1 || $this->session->userdata('user_data')->Rol_ID == 2 || $this->session->userdata('user_data')->Rol_ID == 3) { ?>
                 <li class="nav-item">
-                    <a class="nav-link text-dark " href="<?php IP_SERVER?>Competencias">
+                    <a class="nav-link text-dark " href="<?php echo IP_SERVER?>Competencias">
 
                         <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="material-icons opacity-10">receipt_long</i>
@@ -141,7 +141,7 @@
 
             <hr class="horizontal dark mt-4 mb-2">
             <li class="nav-item">
-                <a class="nav-link text-info " href="<?php IP_SERVER ?>Login/logout">
+                <a class="nav-link text-info " href="<?php echo IP_SERVER ?>Login/logout">
 
                     <div class="text-warnning text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="material-icons opacity-10">login</i>
@@ -157,5 +157,3 @@
 
 
 </aside>
-
-<html lang="en">
