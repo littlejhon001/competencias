@@ -12,7 +12,6 @@
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">index</li>
           </ol> -->
-                    <!-- <pre><?php // echo print_r($this->session->userdata('user_data'), true)           ?></pre> -->
 
 
                     <h6 class="font-weight-bolder mb-0">Bienvenido de nuevo
@@ -137,7 +136,7 @@
                                 </thead>
                                 <tbody>
                                     <!--
-                                        <pre><?php // echo print_r($usuarios, true)                              ?></pre> -->
+                                        <pre><?php // echo print_r($usuarios, true)                               ?></pre> -->
                                 </tbody>
                             </table>
                         </div>

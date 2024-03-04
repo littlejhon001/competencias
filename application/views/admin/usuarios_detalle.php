@@ -15,21 +15,21 @@
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">index</li>
           </ol> -->
-                    <!-- <pre><?php // echo print_r($this->session->userdata('user_data'), true)                                                           ?></pre> -->
+                    <!-- <pre><?php // echo print_r($user_data, true)                                                               ?></pre> -->
 
 
                     <h6 class="font-weight-bolder mb-0">Bienvenido de nuevo
-                        <?php if ($this->session->userdata('user_data')->Rol_ID == 1) { ?>
-                            <?php echo $this->session->userdata('user_data')->nombre ?>,
+                        <?php if ($user_data->Rol_ID == 1) { ?>
+                            <?php echo $user_data->nombre ?>,
                             has ingresado como administrador
-                        <?php } elseif ($this->session->userdata('user_data')->Rol_ID == 2) { ?>
-                            <?php echo $this->session->userdata('user_data')->nombre ?>,
+                        <?php } elseif ($user_data->Rol_ID == 2) { ?>
+                            <?php echo $user_data->nombre ?>,
                             has ingresado como gestor de evaluadores
-                        <?php } elseif ($this->session->userdata('user_data')->Rol_ID == 3) { ?>
-                            <?php echo $this->session->userdata('user_data')->nombre ?>,
+                        <?php } elseif ($user_data->Rol_ID == 3) { ?>
+                            <?php echo $user_data->nombre ?>,
                             has ingresado como evaluador
-                        <?php } elseif ($this->session->userdata('user_data')->Rol_ID == 4) { ?>
-                            <?php echo $this->session->userdata('user_data')->nombre ?>,
+                        <?php } elseif ($user_data->Rol_ID == 4) { ?>
+                            <?php echo $user_data->nombre ?>,
                             has ingresado como usuario
                         <?php } ?>
 
@@ -83,7 +83,7 @@
                                 <i class="fa fa-user me-sm-1"></i>
 
                                 <span class="d-sm-inline d-none">
-                                    <?php echo $this->session->userdata('user_data')->nombre ?>
+                                    <?php echo $user_data->nombre ?>
                                     </php>
                                 </span>
 
@@ -105,7 +105,7 @@
                                 <div class="d-flex ">
                                     <h6 class="text-white text-capitalize ps-5 mt-2">Lista de usuarios</h6>
                                     <div class="ms-auto">
-                                        <?php if ($this->session->userdata('user_data')->Rol_ID == 1) { ?>
+                                        <?php if ($user_data->Rol_ID == 1) { ?>
                                             <button type="button" class="me-3 btn btn-success" data-bs-toggle="modal"
                                                 data-bs-target="#staticBackdrop">
                                                 Agregar nuevo usuario <i class="fs-6 bi bi-plus-circle"></i>
@@ -149,7 +149,7 @@
                                     </thead>
                                     <tbody>
                                         <!--
-                                        <pre><?php // echo print_r($usuarios, true)                        ?></pre> -->
+                                        <pre><?php // echo print_r($usuarios, true)                            ?></pre> -->
 
                                         <?php foreach ($usuarios as $row) {
                                             if ($row->Rol_ID == 4) {
@@ -201,25 +201,41 @@
                                                                     data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <h5>
+                                                                <h4>
+                                                                    Nombres y apellidos usuario:
+                                                                </h4>
+                                                                <h4>
                                                                     <?php echo $row->nombre . ' ' . $row->apellido ?>
-                                                                </h5>
-                                                                <h6 class="text-xs">
-                                                                    <?php echo $row->email ?><br>
-                                                                    <h6 class="text-xs">
+                                                                </h4>
+                                                                <div class="text-md">
+                                                                    <h6>
+                                                                        Correo:
+                                                                        <a href="mailto:<?php echo $row->email ?>">
+                                                                            <?php echo $row->email ?>
+                                                                        </a>
+                                                                    </h6>
+                                                                    <h6 class="text-md">
+                                                                        Cargo:
                                                                         <?php echo $row->cargo ?>
                                                                     </h6>
-                                                                    <select class="form-select me-3" name="evaluador"
-                                                                        aria-label="Seleccionar opción">
-                                                                        <option selected disabled>Selecciona un evaluador ---
-                                                                        </option>
-                                                                        <?php foreach ($evaluadores as $row) { ?>
-                                                                            <option value="<?php echo $row->id ?>">
-                                                                                <?php echo $row->nombre . ' ' . $row->apellido ?>
-                                                                            </option>
-                                                                        <?php } ?>
-                                                                    </select>
+
+                                                                    <?php
+                                                                    // Buscar el nombre del evaluador basado en el id_evaluador
+                                                                    $nombre_evaluador = "No asignado";
+                                                                    foreach ($usuarios as $usuario) {
+                                                                        if ($usuario->id == $row->id_evaluador) {
+                                                                            $nombre_evaluador = $usuario->nombre . ' ' . $usuario->apellido;
+                                                                            break; // Salir del bucle una vez encontrado el nombre del evaluador
+                                                                        }
+                                                                    }
+                                                                    ?>
+                                                                    <h6 class="text-md <?php echo ($nombre_evaluador != "No asignado") ? 'bg-asignado' : 'bg-sin_asignar'; ?>">
+                                                                        Evaluador asignado:
+                                                                        <?php echo $nombre_evaluador; ?>
+                                                                    </h6>
+                                                                </div>
                                                             </div>
+
                                                             <div class="modal-footer border-0">
                                                                 <button type="button"
                                                                     class="btn btn-primary m-0">Guardar</button>
@@ -252,39 +268,41 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="agregar" method="post">
+                    <form>
                         <div class="mb-3">
-                            <label for="identificacion" class="form-label">Numero de documento</label>
-                            <input type="text" class="form-control ps-2" id="identificacion" minlength="8" pattern="^[0-9]+$" maxlength="10" placeholder="Numero de documento" name="identificacion" required>
+                            <label for="cargo" name="email" class="form-label">Numero de documento</label>
+                            <input type="number" class="form-control ps-2" id="cargo" placeholder="Numero de documento">
                         </div>
                         <div class="mb-3">
-                            <label for="nombre" class="form-label">Nombre</label>
-                            <input type="text" placeholder="Nombre" class="form-control ps-2" id="nombre" name="nombre" required>
+                            <label for="exampleInputEmail1" class="form-label">Nombre</label>
+                            <input type="text" placeholder="Nombre" class="form-control ps-2" id=""
+                                name="Nombre_usuario" aria-describedby="emailHelp">
                         </div>
                         <div class="mb-3">
-                            <label for="apellido" class="form-label">Apellido</label>
-                            <input type="text" placeholder="Apellido" class="form-control ps-2" id="apellido"  name="apellido" required>
+                            <label for="exampleInputEmail1" class="form-label">Apellido</label>
+                            <input type="text" placeholder="Apellido" class="form-control ps-2" id=""
+                                name="Nombre_usuario" aria-describedby="emailHelp">
                         </div>
                         <div class="mb-3">
-                            <label for="email" class="form-label">Correo</label>
-                            <input type="email" class="form-control ps-2" id="email" pattern="^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$" placeholder="Correo" name="email" required>
+                            <label for="email" name="email" class="form-label">Correo</label>
+                            <input type="email" class="form-control ps-2" id="email" placeholder="Correo">
                         </div>
                         <div class="mb-3">
-                            <label for="cargo" class="form-label">Cargo</label>
-                            <input type="text" class="form-control ps-2" id="cargo" placeholder="Cargo" name="cargo" >
+                            <label for="cargo" name="email" class="form-label">Cargo</label>
+                            <input type="cargo" class="form-control ps-2" id="cargo" placeholder="Cargo">
                         </div>
                         <div class="mb-3">
-                            <label for="Rol_ID" class="form-label">Seleccione el tipo de usuario</label>
-                            <select class="form-select ps-2" id="Rol_ID" name="Rol_ID" required>
-                                <option selected disabled value="">Seleccione ---</option>
-                                <?php foreach($roles as $rol):?>
-                                <option value="<?php echo $rol->id?>"><?php echo $rol->nombre?></option>
-                                <?php endforeach;?>
+                            <label for="cargo" name="email" class="form-label">Seleccione el tipo de usuario</label>
+                            <select class="form-select ps-2" aria-label="Default select example">
+                                <option selected disabled>Seleccione ---</option>
+                                <option value="1">Gestor de evaluador</option>
+                                <option value="2">Evaluador</option>
+                                <option value="3">Usuario</option>
                             </select>
                         </div>
                         <div class="modal-footer">
                             <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
-                            <button type="submit" class="btn btn-success">Guardar</button>
+                            <button type="button" class="btn btn-success">Guardar</button>
                         </div>
                     </form>
                 </div>

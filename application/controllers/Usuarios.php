@@ -102,21 +102,22 @@ class Usuarios extends CI_Controller
         }
     }
 
-    public function agregar(){
-        if(!empty($this->formData)){
-            $this->formData->password = hash("sha256",'aula'.$this->formData->identificacion);      //cifrado de contraseña
-            if(!$this->Usuario_model->existe($this->formData->email)){
+    public function agregar()
+    {
+        if (!empty($this->formData)) {
+            $this->formData->password = hash("sha256", 'aula' . $this->formData->identificacion);      //cifrado de contraseña
+            if (!$this->Usuario_model->existe($this->formData->email)) {
                 $this->db->trans_begin();
-                if($this->Usuario_model->insert($this->formData) > 0){
+                if ($this->Usuario_model->insert($this->formData) > 0) {
                     // $envio_correo = $this->enviar_credenciales($this->formData);     //Descomentar para enviar correo
                     $envio_correo = $this->emular_correo();     //Comentar esta línea y descomentar la de arriba para efectuar el envío de correo
-                    if(!empty($envio_correo->error)){
+                    if (!empty($envio_correo->error)) {
                         $this->session->set_flashdata([
                             'success' => false,
                             'message' => 'Error al notificar al usuario'
                         ]);
                         $this->db->trans_rollback();
-                    }else{
+                    } else {
                         $this->session->set_flashdata([
                             'success' => true,
                             'message' => 'Usuario agregado con éxito'
@@ -128,17 +129,26 @@ class Usuarios extends CI_Controller
         }
         return redirect($_SERVER['HTTP_REFERER']);
     }
-    protected function enviar_credenciales($usuario){
+    protected function enviar_credenciales($usuario)
+    {
         $this->load->library('php_mailer');
         $correo = (object) array(
             'email' => $usuario->email,
             'subject' => 'Credenciales de acceso AULA',
-            'body' => $this->view('mails/_credenciales',(object)['usuario' => $usuario], TRUE),
+            'body' => $this->view('mails/_credenciales', (object) ['usuario' => $usuario], TRUE),
         );
         return $this->php_mailer->enviarcorreo($correo);
     }
-    protected function emular_correo(){
-        return (object)['error' => ''];
+    protected function emular_correo()
+    {
+        return (object) ['error' => ''];
+    }
+
+
+    public function usuarios_por_evaluador($id_evaluador)
+    {
+
+        // Cargar vista con los usuarios obtenidos
     }
 }
 

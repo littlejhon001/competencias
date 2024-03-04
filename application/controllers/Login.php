@@ -6,6 +6,7 @@ class Login extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model('Login_model');
+		$this->load->library('form_validation');
 
 	}
 
@@ -16,25 +17,82 @@ class Login extends CI_Controller
 
 	}
 
+	// public function procesar()
+	// {
+	// 	// Procesar el formulario de inicio de sesión
+	// 	$email = $this->input->post('email');
+	// 	$password = $this->input->post('contrasena');
+
+	// 	// Obtener el usuario autenticado desde el modelo de inicio de sesión
+	// 	$user = $this->Login_model->get_user($email, hash('sha256', $password));     //Se compara con la contraseña hasheada
+
+	// 	$this->form_validation->set_rules(
+	// 		'email',
+	// 		'correo del usuario',
+	// 		'required',
+	// 		array(
+	// 			'required' => 'Por favor ingrese un %s',
+	// 		)
+	// 	);
+
+	// 	$this->form_validation->set_rules(
+	// 		'contrasena',
+	// 		'contraseña',
+	// 		'required',
+	// 		array(
+	// 			'required' => '<br> Por favor ingrese una %s',
+	// 		)
+	// 	);
+
+
+
+	// 	if ($user) {
+	// 		// Usuario autenticado, guardar toda la información del usuario en la sesión
+	// 		if ($this->form_validation->run()) {
+	// 			// Validación exitosa
+	// 			if (!empty($datos->data) && $datos->success == 1) {
+
+	// 				$this->session->set_userdata('user_data', $user);
+	// 				$this->json(array('success' => 1, 'msg' => 'Bienvenido'));
+	// 			} else {
+
+	// 				$this->session->set_flashdata('mensaje', 'Datos Erróneos');
+	// 				$this->json(array('success' => 0, 'msg' => 'Usuario o contraseña incorrectos'));
+	// 			}
+	// 		} else {
+	// 			// Validación fallida
+	// 			$this->json(array('success' => 0, 'msg' => $this->form_validation->error_array()));
+	// 		}
+
+	// 		redirect('Home');
+	// 	} else {
+	// 		// Usuario no autenticado, mostrar mensaje de error o redirigir al formulario de inicio de sesión
+	// 		$this->session->set_flashdata('error', 'Usuario o contraseña incorrectos.');
+	// 		redirect('login'); // Redirigir de vuelta al formulario de inicio de sesión
+	// 	}
+	// }
+
 	public function procesar()
 	{
+
 		// Procesar el formulario de inicio de sesión
 		$email = $this->input->post('email');
 		$password = $this->input->post('contrasena');
-
 		// Obtener el usuario autenticado desde el modelo de inicio de sesión
-		$user = $this->Login_model->get_user($email, hash('sha256',$password));     //Se compara con la contraseña hasheada
+		$user = $this->Login_model->get_user($email, hash('sha256', $password)); //Se compara con la contraseña hasheada
 
 		if ($user) {
-			// Usuario autenticado, guardar toda la información del usuario en la sesión
+			// Usuario autenticado
 			$this->session->set_userdata('user_data', $user);
-			redirect('Home');
+			$this->json(array('success' => 1, 'msg' => 'Bienvenido'));
 		} else {
-			// Usuario no autenticado, mostrar mensaje de error o redirigir al formulario de inicio de sesión
+			// Usuario no autenticado
 			$this->session->set_flashdata('error', 'Usuario o contraseña incorrectos.');
-			redirect('login'); // Redirigir de vuelta al formulario de inicio de sesión
+			$this->json(array('success' => 0, 'msg' => 'Usuario o contraseña incorrectos'));
+			// Redirigir de vuelta al formulario de inicio de sesión
 		}
 	}
+
 
 	public function logout()
 	{

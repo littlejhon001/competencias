@@ -38,7 +38,7 @@
     <div class="row no-gutter">
         <!-- The image half -->
         <div class="col-md-6 d-none d-md-flex bg-image animate__fadeIn animate__animated">
-            <img class="img_bg  " src="<?php  echo  IP_SERVER  ?>assets/img/competencias.jpg" alt="">
+            <img class="img_bg  " src="<?php echo IP_SERVER ?>assets/img/competencias.jpg" alt="">
         </div>
         <!-- The content half -->
         <div class="col-md-6 bg-login animate__fadeIn animate__animated">
@@ -47,10 +47,10 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-10 col-xl-7 mx-auto">
-                            <img class="" src="<?php  echo IP_SERVER  ?>/assets/img/logoAula.png" width="500px" alt="">
+                            <img class="" src="<?php echo IP_SERVER ?>/assets/img/logoAula.png" width="500px" alt="">
                             <h3 class="display-4 color-text">Competencias</h3>
                             <p class=" mb-4 color-text">Inicia sesión</p>
-                            <form id="ingresar" method="post" action="<?php echo IP_SERVER  ?>Login/procesar">
+                            <form id="ingresar" method="post">
                                 <div class="form-group mb-3">
                                     <input id="inputEmail" type="email" placeholder="usuario" autofocus=""
                                         class="form-control rounded-pill border-0 shadow-sm px-4" name="email">
@@ -68,16 +68,13 @@
                                 </div>
 
                                 <button type="submit"
-                                    class="btn btn-primary btn-block text-uppercase mb-2 rounded-pill shadow-sm btn-bg">Ingresar</button>
-                                <div class="text-center d-flex justify-content-between mt-4">
-                                    <p class="text-light">Necesitas ayuda? <a href="" class=" text-light">
+                                    class="btn btn-primary btn-block text-uppercase my-2 rounded-pill w-100 shadow-sm btn-bg">Ingresar</button>
+                                <div class="text-center d-flex justify-content-center mt-2">
+                                    <p class="">¿Olvidaste tu contraseña? <a href="" class=" ">
                                             <u>Contacto</u></a></p>
                                 </div>
                             </form>
 
-
-                            <a href="<?php echo IP_SERVER ?>Home">prueba</a>
-                            <a href="<?php // echo base_url('Home'); ?>">prueba</a>
                         </div>
                     </div>
                 </div><!-- End -->
@@ -94,37 +91,101 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
+
 <script>
-    // $(document).ready(function () {
-    //     $('#ingresar').submit(function (event) {
-    //         event.preventDefault();
-    //         $.post('<?php // echo IP_SERVER     ?>Login/validarlogin',
-    //             $(this).serialize(),
-    //             function (result) {
-    //                 if (result.success == 1) {
-    //                     Swal.fire({
-    //                         icon: 'success',
-    //                         title: result.msg,
-    //                         showConfirmButton: false,
-    //                         timer: 1000
-    //                     }).then(() => {
-    //                         location.assign('<?php echo IP_SERVER ?>Home/admin_publicaciones');
-    //                     });
-    //                 } else {
-    //                     arguments
-    //                     let errorMessage = Object.values(result.msg).join('');
-    //                     Swal.fire({
-    //                         icon: 'error',
-    //                         title: 'Error',
-    //                         html: errorMessage,
-    //                         confirmButtonColor: '#0d6efd',
-    //                         confirmButtonText: 'Entendido'
-    //                     });
-    //                 }
-    //             }
-    //         );
-    //     });
-    // });
+    $(document).ready(function () {
+        $('#ingresar').submit(function (event) {
+            event.preventDefault();
+
+            // Obtener valores de los campos de email y contraseña
+            var email = $('#inputEmail').val();
+            var contrasena = $('#inputPassword').val();
+
+            // Verificar que el campo de email no esté vacío
+            if (email == '') {
+                Swal.fire({
+                    position: "top-end",
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Por favor ingrese su correo electrónico.',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    showClass: {
+                        popup: `
+      animate__animated
+      animate__fadeInRight
+      animate__faster
+    `
+                    },
+                    hideClass: {
+                        popup: `
+      animate__animated
+      animate__fadeOutRight
+    `
+                    }
+                });
+                return;
+            }
+            // Verificar que el campo de email no esté vacío
+            if (contrasena == '') {
+                Swal.fire({
+                    position: "top-end",
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Por favor ingrese su contraseña.',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    showClass: {
+                        popup: `
+      animate__animated
+      animate__fadeInRight
+      animate__faster
+    `
+                    },
+                    hideClass: {
+                        popup: `
+      animate__animated
+      animate__fadeOutRight
+    `
+                    }
+                });
+                return;
+            }
+
+            // Verificar que el campo de contraseña no esté vacío
+
+
+            // Si los campos no están vacíos, proceder con la solicitud AJAX
+            $.post('<?php echo IP_SERVER ?>Login/procesar',
+                $(this).serialize(),
+                function (result) {
+                    if (result.success == 1) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: result.msg,
+                            showConfirmButton: false,
+                            timer: 1000
+                        }).then(() => {
+                            location.assign('<?php echo IP_SERVER ?>Home');
+                        });
+                    } else {
+                        let errorMessage = Object.values(result.msg).join('');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            html: errorMessage,
+                            showConfirmButton: false,
+                            timerProgressBar: true,
+                            timer: 5000
+                        });
+                    }
+                }
+            );
+        });
+    });
+
 
 
 
