@@ -16,28 +16,31 @@ class Home extends CI_Controller
 		$this->load->model('Login_model');
 	}
 	public function index()
-	{
-		// Obtener toda la información de sesión del usuario actual
-		$user_data = $this->session->userdata('user_data');
-		// Verificar si el usuario está logeado
-		if (!empty($user_data)) {
-			if ($this->Usuario_model->has_role($user_data->id, 'Administrador')) {
-				// Si el usuario es administrador, cargar el header y la vista de dashboard
-				$this->load->view('layouts/header');
-				$this->load->view('dashboard');
-			} elseif ($this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
-				$this->load->view('layouts/header');
-				$this->load->view('dashboard');
-			} else {
-				// Si no es administrador, cargar solo la vista de dashboard
-				$this->load->view('layouts/header');
-				$this->load->view('dashboard');
-			}
-		} else {
-			// Si el usuario no está logeado, redirigir al formulario de inicio de sesión
-			redirect('login');
-		}
-	}
+    {
+        $user_data = $this->session->userdata('user_data');
+
+        // Verificar si el usuario está logeado
+        if (!empty($user_data)) {
+            // Si el usuario es administrador, cargar el header y la vista de usuarios
+            if ($this->Usuario_model->has_role($user_data->id, 'Administrador') || $this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
+                $this->load->view('layouts/header');
+                $this->view('admin/usuarios');
+            } else if($this->Usuario_model->has_role($user_data->id,'Evaluador')){
+                $data['usuarios_asignados'] = $this->Usuario_model->obtener_usuarios_por_evaluador($user_data->id);
+                $this->load->view('layouts/header');
+                $this->load->view('evaluador/usuarios_asignados',$data);
+            }
+            else {
+                // Si el usuario no es administrador, podrías redirigirlo a otra vista o mostrar un mensaje de error
+                redirect('Home');
+            }
+        } else {
+
+            redirect('login');
+
+        }
+
+    }
 
 }
 

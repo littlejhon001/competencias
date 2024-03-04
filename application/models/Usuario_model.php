@@ -69,10 +69,6 @@ class Usuario_model extends MY_Model
 
     public function obtener_usuarios_por_evaluador($id_evaluador)
     {
-        $this->db->select('*');
-        $this->db->from('usuarios');
-        $this->db->where('id_evaluador', $id_evaluador);
-        $query = $this->db->get();
-        return $query->result();
+        return $this->findAll(['id_evaluador' => $id_evaluador],'id,nombre,apellido,cargo,identificacion');
     }
 }
