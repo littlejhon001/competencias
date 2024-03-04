@@ -136,7 +136,7 @@
                                 </thead>
                                 <tbody>
                                     <!--
-                                        <pre><?php // echo print_r($usuarios, true)                               ?></pre> -->
+                                        <pre><?php // echo print_r($usuarios, true) ?></pre> -->
                                 </tbody>
                             </table>
                         </div>
