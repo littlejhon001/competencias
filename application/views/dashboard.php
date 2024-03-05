@@ -12,7 +12,7 @@
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">index</li>
           </ol> -->
-                    <!-- <pre><?php // echo print_r($this->session->userdata('user_data'), true)           ?></pre> -->
+                    <!-- <pre><?php // echo print_r($this->session->userdata('user_data'), true)                    ?></pre> -->
 
 
                     <h6 class="font-weight-bolder mb-0">Bienvenido de nuevo
@@ -92,11 +92,6 @@
         </nav>
 
         <!-- End Navbar -->
-
-
-
-
-
         <div class="container-fluid py-4">
             <h2>Aula competencias</h2>
             <div class="row">
@@ -106,43 +101,12 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="d-flex flex-column h-100">
-                                        <h3 class="font-weight-bolder mb-0">Usuarios asignados</h3>
+                                        <h3 class="font-weight-bolder mb-0">Información general</h3>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="row">
-                        <div class="table-responsive p-0">
-                            <table class="table align-items-center mb-0">
-                                <thead>
-                                    <tr>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Nombre</th>
-                                        <th
-                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Apellido</th>
-                                        <th
-                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Cargo</th>
-                                        <th
-                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Asignado</th>
-                                        <th
-                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Acciones</th>
-                                        <!-- <th class="text-secondary opacity-7"></th> -->
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!--
-                                        <pre><?php // echo print_r($usuarios, true)                              ?></pre> -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
 
                 </div>
             </div>

@@ -69,6 +69,6 @@ class Usuario_model extends MY_Model
 
     public function obtener_usuarios_por_evaluador($id_evaluador)
     {
-        return $this->findAll(['id_evaluador' => $id_evaluador],'id,nombre,apellido,cargo,identificacion');
+        return $this->findAll(['id_evaluador' => $id_evaluador],'id,nombre,apellido,cargo,identificacion,email');
     }
 }

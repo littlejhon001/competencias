@@ -12,6 +12,7 @@
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">index</li>
           </ol> -->
+                    <!-- <pre><?php // echo print_r($this->session->userdata('user_data'), true)                        ?></pre> -->
 
 
                     <h6 class="font-weight-bolder mb-0">Bienvenido de nuevo
@@ -100,82 +101,24 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="d-flex flex-column h-100">
-                                        <h3 class="font-weight-bolder mb-0">Usuarios asignados</h3>
+                                        <h3 class="font-weight-bolder mb-0">Mis competencias</h3>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="table-responsive p-0">
-                            <table class="table align-items-center mb-0">
-                                <thead>
-                                    <tr>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Nombre</th>
-                                        <th
-                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Apellido</th>
-                                        <th
-                                            class=" text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Cargo</th>
-                                        <th
-                                            class=" text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            correo</th>
-                                        <th
-                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Estado evaluación</th>
-                                        <!-- <th class="text-secondary opacity-7"></th> -->
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    <?php foreach ($usuarios_asignados as $row) { ?>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex px-2 py-1">
-                                                    <div>
-                                                        <i class="me-2 bi bi-person-circle"></i>
-                                                    </div>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <?php echo $row->nombre ?>
-                                                        <p class="text-xs text-secondary mb-0">
-                                                            <?php echo $row->email ?>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </td>
-
-
-                                            <td>
-                                                <div class="">
-                                                    <?php echo $row->apellido ?>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="">
-                                                    <?php echo $row->cargo ?>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="">
-                                                    <?php echo $row->email ?>
-                                                </div>
-                                            </td>
-                                            <td class="d-flex justify-content-center">
-                                                <a href="">
-                                                    <i class="text-success bi bi-file-earmark-ruled"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-
-                                    <?php } ?>
-                                </tbody>
-                            </table>
+                    <div class="card  w-50 mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <?php echo $competencia_asignada->nombre ?>
+                            </h5>
+                            <p class="card-text">
+                                <?php echo $competencia_asignada->descripcion ?>
+                            </p>
+                            <a href="#" class="text-center btn btn-success">Ver mas..</a>
                         </div>
                     </div>
-
 
                 </div>
             </div>
