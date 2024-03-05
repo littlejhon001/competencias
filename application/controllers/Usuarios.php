@@ -13,6 +13,7 @@ class Usuarios extends CI_Controller
         //     die();
         $this->load->model('Usuario_model');
         $this->load->model('Rol_model');
+        $this->load->model('Competencias_model');
     }
     public function index()
     {
@@ -145,9 +146,16 @@ class Usuarios extends CI_Controller
     }
 
 
-    public function usuarios_por_evaluador($id_evaluador)
+    public function evaluacion_usuario($id)
     {
+        $user_data = $this->session->userdata('user_data');
 
+        $data['usuarios'] = $this->Usuario_model->find($id);
+        // var_dump([$data['competencia_asignada']]);
+        // die;
+        $data['competencia_asignada'] = $this->Competencias_model->competencias_usuario($user_data->id);
+        $this->load->view('layouts/header');
+        $this->load->view('evaluador/evaluacion_usuario', $data);
         // Cargar vista con los usuarios obtenidos
     }
 }

@@ -164,7 +164,8 @@
                                                 </div>
                                             </td>
                                             <td class="d-flex justify-content-center">
-                                                <a href="">
+                                                <a
+                                                    href="<?php echo IP_SERVER ?>Usuarios/evaluacion_usuario/<?php echo $row->id ?>">
                                                     <i class="text-success bi bi-file-earmark-ruled"></i>
                                                 </a>
                                             </td>

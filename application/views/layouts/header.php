@@ -62,7 +62,7 @@
 
 
 <aside
-    class="sidenav navbar navbar-vertical navbar-expand-xs z- border-radius-xl border my-3 fixed-start ms-3 shadow-sm z-0 bg-ppal  animate__animated animate__fadeInLeft"
+    class="sidenav navbar navbar-vertical navbar-expand-xs z- border-radius-xl border my-3 fixed-start ms-3 shadow-sm z-3 bg-ppal  animate__animated animate__fadeInLeft"
     id="sidenav-main">
 
     <div class="sidenav-header">
