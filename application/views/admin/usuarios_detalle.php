@@ -15,7 +15,7 @@
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">index</li>
           </ol> -->
-                    <!-- <pre><?php // echo print_r($user_data, true)                                                               ?></pre> -->
+                    <!-- <pre><?php // echo print_r($user_data, true)                                                                ?></pre> -->
 
 
                     <h6 class="font-weight-bolder mb-0">Bienvenido de nuevo
@@ -149,7 +149,7 @@
                                     </thead>
                                     <tbody>
                                         <!--
-                                        <pre><?php // echo print_r($usuarios, true)                            ?></pre> -->
+                                        <pre><?php // echo print_r($usuarios, true)                             ?></pre> -->
 
                                         <?php foreach ($usuarios as $row) {
                                             if ($row->Rol_ID == 4) {
@@ -229,7 +229,8 @@
                                                                         }
                                                                     }
                                                                     ?>
-                                                                    <h6 class="text-md <?php echo ($nombre_evaluador != "No asignado") ? 'bg-asignado' : 'bg-sin_asignar'; ?>">
+                                                                    <h6
+                                                                        class="text-md <?php echo ($nombre_evaluador != "No asignado") ? 'bg-asignado' : 'bg-sin_asignar'; ?>">
                                                                         Evaluador asignado:
                                                                         <?php echo $nombre_evaluador; ?>
                                                                     </h6>
@@ -290,6 +291,15 @@
                         <div class="mb-3">
                             <label for="cargo" name="email" class="form-label">Cargo</label>
                             <input type="cargo" class="form-control ps-2" id="cargo" placeholder="Cargo">
+                        </div>
+                        <div class="mb-3">
+                            <label for="cargo" name="email" class="form-label">Areas</label>
+                            <select class="form-select ps-2" aria-label="Default select example">
+                                <option selected disabled>Seleccione ---</option>
+                                <?php foreach ($areas as $row) { ?>
+                                    <option value="1"><?php echo $row->nombre?></option>
+                                <?php } ?>
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label for="cargo" name="email" class="form-label">Seleccione el tipo de usuario</label>

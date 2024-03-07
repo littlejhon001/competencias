@@ -13,6 +13,7 @@ class Usuarios extends CI_Controller
         //     die();
         $this->load->model('Usuario_model');
         $this->load->model('Rol_model');
+        $this->load->model('Area_model');
         $this->load->model('Competencias_model');
     }
     public function index()
@@ -48,9 +49,9 @@ class Usuarios extends CI_Controller
 
                 $data['usuarios'] = $this->Usuario_model->findAll();
                 $data['roles'] = $this->Rol_model->listado();
-                // var_dump($data['usuarios']);
-                // die;
+                $data['areas'] = $this->Area_model->findAll();
                 $data['user_data'] = $user_data;
+
                 $this->load->view('layouts/header', $data);
                 $this->view('admin/usuarios_detalle', $data);
             } else {
@@ -72,8 +73,13 @@ class Usuarios extends CI_Controller
             // Si el usuario es administrador, cargar el header y la vista de usuarios
             if ($this->Usuario_model->has_role($user_data->id, 'Administrador') || $this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
 
-                $data['usuarios'] = $this->Usuario_model->findAll();
+                $data['usuarios'] = $this->Usuario_model->usuarios_asignar();
                 $data['evaluadores'] = $this->Usuario_model->datos_evaluadores();
+                $data['area'] = $this->Area_model->find(['id'=>$user_data->id_area],'nombre')->nombre;
+
+                // var_dump( $data['area']);
+                // die;
+
                 $data['user_data'] = $user_data;
                 $this->load->view('layouts/header', $data);
                 $this->view('admin/asignar_evaluador', $data);
@@ -154,6 +160,8 @@ class Usuarios extends CI_Controller
         // var_dump([$data['competencia_asignada']]);
         // die;
         $data['competencia_asignada'] = $this->Competencias_model->competencias_usuario($user_data->id);
+
+
         $this->load->view('layouts/header');
         $this->load->view('evaluador/evaluacion_usuario', $data);
         // Cargar vista con los usuarios obtenidos

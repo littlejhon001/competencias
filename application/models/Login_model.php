@@ -9,7 +9,7 @@ class Login_model extends MY_Model {
 
     public function get_user($email, $password)
     {
-        $query = $this->db->select('id,Rol_ID,nombre,apellido,email,cargo,identificacion')
+        $query = $this->db->select('id,Rol_ID,nombre,apellido,email,cargo,identificacion,id_area')
             ->where('email', $email)
             ->where('password', $password)
             ->get('usuarios');

@@ -27,13 +27,18 @@ class Home extends CI_Controller
                 $this->load->view('layouts/header');
                 $this->view('dashboard');
             } else if ($this->Usuario_model->has_role($user_data->id, 'Evaluador')) {
+
                 $data['usuarios_asignados'] = $this->Usuario_model->obtener_usuarios_por_evaluador($user_data->id);
+
+
+
                 $this->load->view('layouts/header');
                 $this->load->view('evaluador/usuarios_asignados', $data);
+
             } else if ($this->Usuario_model->has_role($user_data->id, 'Usuario')) {
-                $data['competencia_asignada'] = $this->Competencias_model->competencias_usuario($user_data->id);
+                // $data['competencia_asignada'] = $this->Competencias_model->competencias_usuario($user_data->id);
                 $this->load->view('layouts/header');
-                $this->load->view('usuario/dashboard_usuario', $data);
+                $this->load->view('usuario/dashboard_usuario');
             } else {
                 // Si el usuario no es administrador, podrías redirigirlo a otra vista o mostrar un mensaje de error
                 redirect('Home');

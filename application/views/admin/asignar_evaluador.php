@@ -15,7 +15,7 @@
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">index</li>
           </ol> -->
-                    <!-- <pre><?php // echo print_r($evaluadores, true)                            ?></pre> -->
+                    <!-- <pre><?php // echo print_r($evaluadores, true)                             ?></pre> -->
 
 
                     <h6 class="font-weight-bolder mb-0">Bienvenido de nuevo
@@ -87,7 +87,7 @@
         <div class="container-fluid py-4">
             <h2>Aula competencias</h2>
             <div class="row">
-                <h2 class="font-weight-bolder my-3 mb-4">Asignar evaluadores</h2>
+                <h2 class="font-weight-bolder my-3 mb-4">Asignar evaluadores al área <?php echo $area ?></h2>
                 <div class="col-12">
                     <div class="card my-4">
                         <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
@@ -142,43 +142,41 @@
                                             </thead>
                                             <tbody>
 
-                                                <?php foreach ($usuarios as $row) {
-                                                    if ($row->Rol_ID == 4) {
-                                                        if ($row->id_evaluador == '') { ?>
-                                                            <tr >
-                                                                <td class="align-middle text-center text-sm>">
-                                                                    <input class="mt-2 text-center checkbox-seleccion"
-                                                                        type="checkbox" name="usuarios_seleccionados[]"
-                                                                        value="<?php echo $row->id ?>">
-                                                                </td>
-                                                                <td>
-                                                                    <div class="d-flex px-2 py-1">
-                                                                        <div class="d-flex ms-2 flex-column justify-content-center">
-                                                                            <?php echo $row->nombre ?>
-                                                                            <p class="text-xs text-secondary mb-0">
-                                                                                <?php echo $row->email ?>
-                                                                            </p>
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <h6 class="mb-0 text-sm">
-                                                                        <?php echo $row->apellido ?>
-                                                                    </h6>
-                                                                </td>
-                                                                <td class="align-middle text-center text-sm">
-                                                                    <?php echo $row->cargo ?>
-                                                                </td>
-                                                                <td class="align-middle text-center">
-                                                                    <a href="javascript:;" class="" data-toggle="tooltip"
-                                                                        data-original-title="Edit user">
-                                                                        <i class="text-warning bi bi-pencil-square"></i>
-                                                                    </a>
-                                                                </td>
-                                                            </tr>
-                                                        <?php }
-                                                    }
-                                                } ?>
+                                                <?php foreach ($usuarios as $row) { ?>
+                                                    <tr
+                                                        class="<?php echo $row->id_evaluador == '' ? "bg-sin_asignar" : "bg-asignado" ?>">
+
+                                                        <td class="align-middle text-center text-sm>">
+                                                            <input class="mt-2 text-center checkbox-seleccion"
+                                                                type="checkbox" name="usuarios_seleccionados[]"
+                                                                value="<?php echo $row->id ?>">
+                                                        </td>
+                                                        <td>
+                                                            <div class="d-flex px-2 py-1">
+                                                                <div class="d-flex ms-2 flex-column justify-content-center">
+                                                                    <?php echo $row->nombre ?>
+                                                                    <p class="text-xs text-secondary mb-0">
+                                                                        <?php echo $row->email ?>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <h6 class="mb-0 text-sm">
+                                                                <?php echo $row->apellido ?>
+                                                            </h6>
+                                                        </td>
+                                                        <td class="align-middle text-center text-sm">
+                                                            <?php echo $row->cargo ?>
+                                                        </td>
+                                                        <td class="align-middle text-center">
+                                                            <a href="javascript:;" class="" data-toggle="tooltip"
+                                                                data-original-title="Edit user">
+                                                                <i class="text-warning bi bi-pencil-square"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                <?php } ?>
                                             </tbody>
                                         </table>
                                     </div>
