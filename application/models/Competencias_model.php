@@ -23,4 +23,9 @@ class Competencias_model extends MY_Model
     //         ->row();
     // }
 
+
+    public function competencias_por_area()
+    {
+        return $this->findAll(['id_area' => $this->session->userdata('user_data')->id_area]);
+    }
 }

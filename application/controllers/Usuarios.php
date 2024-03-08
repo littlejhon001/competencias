@@ -15,6 +15,7 @@ class Usuarios extends CI_Controller
         $this->load->model('Rol_model');
         $this->load->model('Area_model');
         $this->load->model('Competencias_model');
+        $this->load->model('Usuario_competencia');
     }
     public function index()
     {
@@ -75,9 +76,11 @@ class Usuarios extends CI_Controller
 
                 $data['usuarios'] = $this->Usuario_model->usuarios_asignar();
                 $data['evaluadores'] = $this->Usuario_model->datos_evaluadores();
-                $data['area'] = $this->Area_model->find(['id'=>$user_data->id_area],'nombre')->nombre;
 
-                // var_dump( $data['area']);
+                $data['area'] = $this->Area_model->find(['id' => $user_data->id_area], 'nombre')->nombre;
+                $data['competencias'] = $this->Competencias_model->competencias_por_area();
+
+                // var_dump($data['competencias']);
                 // die;
 
                 $data['user_data'] = $user_data;
@@ -101,8 +104,14 @@ class Usuarios extends CI_Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Recuperar los datos del formulario
             $evaluador = $this->input->post('evaluador');
+            $competencia = $this->input->post('competencia');
+
+
             $usuarios_seleccionados = $this->input->post('usuarios_seleccionados');
+
             $this->Usuario_model->guardar_datos_evaluador($evaluador, $usuarios_seleccionados);
+
+            $this->Usuario_competencia->guardar_datos_evaluador($competencia, $usuarios_seleccionados);
 
             // Redirigir a alguna página de éxito
             redirect('Usuarios/asignar');
@@ -156,16 +165,28 @@ class Usuarios extends CI_Controller
     {
         $user_data = $this->session->userdata('user_data');
 
+
         $data['usuarios'] = $this->Usuario_model->find($id);
-        // var_dump([$data['competencia_asignada']]);
+
+        // Obtener todas las entradas de usuarios_competencias para el usuario dado
+        $usuarios_competencias = $this->Usuario_competencia->findAll(['id_usuario' => $id]);
+        $data['competencias'] = [];
+        // Recorrer cada entrada de usuarios_competencias
+        foreach ($usuarios_competencias as $usuario_competencia) {
+            // Obtener los detalles de la competencia correspondiente
+            $competencia = $this->Competencias_model->find($usuario_competencia->id_competencia);
+            if ($competencia) {
+                $data['competencias'][] = $competencia;
+            }
+        }
+        // var_dump($data['competencias']);
         // die;
-        $data['competencia_asignada'] = $this->Competencias_model->competencias_usuario($user_data->id);
 
 
         $this->load->view('layouts/header');
         $this->load->view('evaluador/evaluacion_usuario', $data);
-        // Cargar vista con los usuarios obtenidos
     }
+
 }
 
 

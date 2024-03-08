@@ -131,47 +131,57 @@
                                 </thead>
                                 <tbody>
 
-                                    <?php foreach ($usuarios_asignados as $row) { ?>
+                                    <?php
+                                    if (!empty($usuarios_asignados)) {
+                                        foreach ($usuarios_asignados as $row) {
+                                            ?>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div>
+                                                            <i class="me-2 bi bi-person-circle"></i>
+                                                        </div>
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <?php echo $row->nombre ?>
+                                                            <p class="text-xs text-secondary mb-0">
+                                                                <?php echo $row->email ?>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="">
+                                                        <?php echo $row->apellido ?>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="">
+                                                        <?php echo $row->cargo ?>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="">
+                                                        <?php echo $row->email ?>
+                                                    </div>
+                                                </td>
+                                                <td class="d-flex justify-content-center">
+                                                    <a
+                                                        href="<?php echo IP_SERVER ?>Usuarios/evaluacion_usuario/<?php echo $row->id ?>">
+                                                        <i class="text-success bi bi-file-earmark-ruled"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        <?php
+                                        }
+                                    } else {
+                                        ?>
                                         <tr>
-                                            <td>
-                                                <div class="d-flex px-2 py-1">
-                                                    <div>
-                                                        <i class="me-2 bi bi-person-circle"></i>
-                                                    </div>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <?php echo $row->nombre ?>
-                                                        <p class="text-xs text-secondary mb-0">
-                                                            <?php echo $row->email ?>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </td>
-
-
-                                            <td>
-                                                <div class="">
-                                                    <?php echo $row->apellido ?>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="">
-                                                    <?php echo $row->cargo ?>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="">
-                                                    <?php echo $row->email ?>
-                                                </div>
-                                            </td>
-                                            <td class="d-flex justify-content-center">
-                                                <a
-                                                    href="<?php echo IP_SERVER ?>Usuarios/evaluacion_usuario/<?php echo $row->id ?>">
-                                                    <i class="text-success bi bi-file-earmark-ruled"></i>
-                                                </a>
-                                            </td>
+                                            <td colspan="5" class="text-center">No tienes usuarios asignados</td>
                                         </tr>
+                                    <?php
+                                    }
+                                    ?>
 
-                                    <?php } ?>
                                 </tbody>
                             </table>
                         </div>

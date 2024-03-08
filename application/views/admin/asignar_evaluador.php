@@ -15,7 +15,7 @@
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">index</li>
           </ol> -->
-                    <!-- <pre><?php // echo print_r($evaluadores, true)                             ?></pre> -->
+                    <!-- <pre><?php // echo print_r($evaluadores, true)                                                     ?></pre> -->
 
 
                     <h6 class="font-weight-bolder mb-0">Bienvenido de nuevo
@@ -87,7 +87,9 @@
         <div class="container-fluid py-4">
             <h2>Aula competencias</h2>
             <div class="row">
-                <h2 class="font-weight-bolder my-3 mb-4">Asignar evaluadores al área <?php echo $area ?></h2>
+                <h2 class="font-weight-bolder my-3 mb-4">Asignar evaluadores al área
+                    <?php echo $area ?>
+                </h2>
                 <div class="col-12">
                     <div class="card my-4">
                         <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
@@ -101,21 +103,27 @@
                             <form class="ms-auto" action="<?php echo IP_SERVER ?>Usuarios/asignar_evaluador"
                                 method="POST" id="formulario-asignacion">
                                 <div class="d-flex  px-3">
-                                    <select class="form-select me-3" name="evaluador" aria-label="Seleccionar opción">
-                                        <option selected disabled>Selecciona un evaluador ---</option>
+                                    <select class="form-select me-3" name="evaluador" id="evaluador"
+                                        aria-label="Seleccionar opción">
+                                        <option selected value="">Selecciona un evaluador ---</option>
                                         <?php foreach ($evaluadores as $row) { ?>
                                             <option value="<?php echo $row->id ?>">
                                                 <?php echo $row->nombre . ' ' . $row->apellido ?>
                                             </option>
                                         <?php } ?>
                                     </select>
-                                    <select class="form-select" id="evaluador" aria-label="Seleccionar opción">
-                                        <option selected disabled>Selecciona la competencia ---</option>
-                                        <option value="opcion1">Opción 1</option>
-                                        <option value="opcion2">Opción 2</option>
-                                        <option value="opcion3">Opción 3</option>
+                                    <select class="form-select" id="competencia" aria-label="Seleccionar opción"
+                                        name="competencia">
+                                        <option selected value="">Selecciona la competencia ---</option>
+                                        <?php foreach ($competencias as $row) { ?>
+                                            <option value=" <?php echo $row->id ?>">
+                                                <?php echo $row->nombre ?>
+                                            </option>
+                                        <?php } ?>
+
                                     </select>
-                                    <button type="submit" class="btn btn-success w-75 m-0 ms-3">Asignar</button>
+                                    <button id="asignar" type="submit"
+                                        class="btn btn-success w-75 m-0 ms-3">Asignar</button>
                                 </div>
                                 <div class="card-body px-0 pb-2">
                                     <div class="table-responsive p-0">
@@ -285,6 +293,10 @@
         </div>
     </div>
 
+
+    <script src="<?php echo IP_SERVER ?>assets/jquery/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             // Obtener referencia a todos los checkboxes con la clase "checkbox-seleccion"
@@ -316,7 +328,113 @@
         });
     </script>
 
+    <script>
+        $(document).ready(function () {
+            $('#formulario-asignacion').submit(function (event) {
 
+
+                // Obtener el valor seleccionado del select de evaluador
+                var evaluador = $('#evaluador').val();
+
+                // Obtener el valor seleccionado del select de competencia
+                var competencia = $('#competencia').val();
+
+                // Verificar si el select de evaluador está vacío
+                if (evaluador == '') {
+                    event.preventDefault();
+                    Swal.fire({
+                        position: "top-end",
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Por favor selecciona un evaluador.',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showClass: {
+                            popup: `
+                        animate__animated
+                        animate__fadeInRight
+                        animate__faster
+                    `
+                        },
+                        hideClass: {
+                            popup: `
+                        animate__animated
+                        animate__fadeOutRight
+                    `
+                        }
+                    });
+                    return;
+                }
+
+                // Verificar si el select de competencia está vacío
+                if (competencia == '') {
+                    event.preventDefault();
+                    Swal.fire({
+                        position: "top-end",
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Por favor selecciona una competencia.',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showClass: {
+                            popup: `
+                        animate__animated
+                        animate__fadeInRight
+                        animate__faster
+                    `
+                        },
+                        hideClass: {
+                            popup: `
+                        animate__animated
+                        animate__fadeOutRight
+                    `
+                        }
+                    });
+                    return;
+                }
+
+                if (!$('.checkbox-seleccion').is(':checked')) {
+                    event.preventDefault();
+                    Swal.fire({
+                        position: "top-end",
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Selecciona almenos un usuario',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showClass: {
+                            popup: `
+                        animate__animated
+                        animate__fadeInRight
+                        animate__faster
+                    `
+                        },
+                        hideClass: {
+                            popup: `
+                        animate__animated
+                        animate__fadeOutRight
+                    `
+                        }
+                    });
+                    event.preventDefault(); // Prevenir el envío del formulario
+                    return;
+                }
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Usuarios asignados',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar:true
+                });
+
+            });
+
+        });
+
+    </script>
 
     <!--   Core JS Files   -->
     <script src="../assets/js/core/popper.min.js"></script>

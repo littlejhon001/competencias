@@ -1,5 +1,5 @@
-<!-- <pre><?php //echo print_r($usuarios, true)        ?> </pre> -->
-<div class="row py-5  ">
+<!-- <pre><?php //echo print_r($usuarios, true)           ?> </pre> -->
+<div class="row py-5 animate__animated animate__fadeIn ">
     <div class="row">
         <div class="col-md-2 ">
 
@@ -26,17 +26,20 @@
                     </div>
                 </div>
 
-                <div class="px-4 py-3">
-                    <h5 class="mb-2">Competencia</h5>
-                    <div class="p-4 rounded shadow-sm bg-light">
-                        <h6 class="mb-0">GESTIONAR EL RETIRO DE GL POR CAMIONES Y/O GASODUCTO</h6>
-                        <p class="my-2">Es la capacidad de llevar a cabo el retiro de GL desde el proveedor,
-                            a través de camiones cisterna
-                            o gasoducto, de acuerdo a 10 programado y asegurando las condiciones de satisfacción y
-                            estándares de servicio.</p>
+                <?php foreach ($competencias as $row) { ?>
+                    <div class="px-4 py-3">
+                        <h5 class="mb-2">Competencia</h5>
+                        <div class="p-4 rounded shadow-sm bg-light">
+                            <h6 class="mb-0">
+                                <?php echo $row->nombre ?>
+                            </h6>
+                            <p class="my-2">
+                                <?php echo $row->descripcion ?>
+                            </p>
 
+                        </div>
                     </div>
-                </div>
+                <?php } ?>
 
             </div>
         </div>
