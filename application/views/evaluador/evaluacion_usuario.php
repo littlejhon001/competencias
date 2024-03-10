@@ -1,46 +1,57 @@
-<!-- <pre><?php //echo print_r($usuarios, true)           ?> </pre> -->
+<!-- <pre><?php // echo // print_r($usuarios, true)     ?> </pre> -->
 <div class="row py-5 animate__animated animate__fadeIn ">
     <div class="row">
         <div class="col-md-2 ">
 
         </div>
         <div class="col-md-9 mx-auto"> <!-- Profile widget -->
-            <div class="bg-white shadow rounded overflow-hidden">
-                <div class="px-4 pt-0  cover">
-                    <div class="media align-items-end profile-head">
-                        <div class="profile mr-3">
+            <div class="bg-white shadow  mb-4 rounded overflow-hidden">
+                <div class=" d-flex border bg-perfil justify-content-center cover">
+                    <div class="media text-center mt-2  profile-head">
+                        <div class="profile ">
                             <img src="<?php echo IP_SERVER ?>assets/img/avatar.webp" alt="..." width="130"
                                 class="rounded-circle shadow  mb-2 border img-thumbnail">
                         </div>
-                        <div class="media-body ">
-                            <h4 class="mt-0 mb-0">
+                        <div class="media-body mb-2">
+                            <h4 class="">
+                                Nombre:
+
                                 <?php echo $usuarios->nombre . ' ' . $usuarios->apellido ?>
                             </h4>
-                            <p class="small ">
+                            <p class=" m-0 p-0 ">
+                                Area:
+                                <?php echo $area ?>
+                            </p>
+                            <p class=" m-0 p-0 ">
+                                Cargo:
                                 <?php echo $usuarios->cargo ?>
                             </p>
-                            <p class="small ">
+                            <p class=" small m-0 p-0">
+                                Correo:
                                 <?php echo $usuarios->email ?>
                             </p>
                         </div>
                     </div>
                 </div>
-
+                <h5 class="mb-2 mt-3">Competencias asignadas al colaborador:
+                    <?php echo $usuarios->nombre . ' ' . $usuarios->apellido ?>
+                </h5>
                 <?php foreach ($competencias as $row) { ?>
-                    <div class="px-4 py-3">
-                        <h5 class="mb-2">Competencia</h5>
-                        <div class="p-4 rounded shadow-sm bg-light">
-                            <h6 class="mb-0">
-                                <?php echo $row->nombre ?>
-                            </h6>
-                            <p class="my-2">
-                                <?php echo $row->descripcion ?>
-                            </p>
+                    <a
+                        href="<?php echo IP_SERVER ?>Usuarios/evaluacion/<?php echo $usuarios->id ?>/<?php echo $row->id ?>">
+                        <div class="px-4 py-3">
 
+                            <div class="p-4 rounded shadow-sm bg-light">
+                                <h6 class="mb-0">
+                                    <?php echo $row->nombre ?>
+                                </h6>
+                                <p class="my-2">
+                                    <?php echo $row->descripcion ?>
+                                </p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 <?php } ?>
-
             </div>
         </div>
     </div>

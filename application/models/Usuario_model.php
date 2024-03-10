@@ -27,12 +27,12 @@ class Usuario_model extends MY_Model
         return($rol_usuario == $rol_consultado);
     }
 
-    public function datos_evaluadores()
-    {
-        // Aquí colocarías la lógica para obtener los datos de los evaluadores
-        $query = $this->db->get_where('usuarios', array('Rol_id' => 3));
-        return $query->result();
-    }
+    // public function datos_evaluadores()
+    // {
+    //     // Aquí colocarías la lógica para obtener los datos de los evaluadores del área correspondiente
+    //     $query = $this->db->get_where('usuarios', array('Rol_id' => 3, 'id_area' => $this->session->userdata('user_data')));
+    //     return $query->result();
+    // }
 
     public function guardar_datos_evaluador($evaluador, $usuarios_seleccionados)
     {

@@ -16,6 +16,7 @@ class Usuarios extends CI_Controller
         $this->load->model('Area_model');
         $this->load->model('Competencias_model');
         $this->load->model('Usuario_competencia');
+        $this->load->model('Actividad_competencia');
     }
     public function index()
     {
@@ -75,7 +76,9 @@ class Usuarios extends CI_Controller
             if ($this->Usuario_model->has_role($user_data->id, 'Administrador') || $this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
 
                 $data['usuarios'] = $this->Usuario_model->usuarios_asignar();
-                $data['evaluadores'] = $this->Usuario_model->datos_evaluadores();
+                // $data['evaluadores'] = $this->Usuario_model->datos_evaluadores();
+
+                $data['evaluadores'] = $this->Usuario_model->findAll(['Rol_id' => 3, 'id_area' => $user_data->id_area], 'id,nombre,apellido,cargo,identificacion,email');
 
                 $data['area'] = $this->Area_model->find(['id' => $user_data->id_area], 'nombre')->nombre;
                 $data['competencias'] = $this->Competencias_model->competencias_por_area();
@@ -179,12 +182,30 @@ class Usuarios extends CI_Controller
                 $data['competencias'][] = $competencia;
             }
         }
-        // var_dump($data['competencias']);
-        // die;
 
+        $data['area'] = $this->Area_model->find(['id' => $user_data->id_area], 'nombre')->nombre;
+
+        // var_dump( $data['area']);
+        // die;
 
         $this->load->view('layouts/header');
         $this->load->view('evaluador/evaluacion_usuario', $data);
+    }
+
+    public function evaluacion($id, $id_competencia)
+    {
+        $user_data = $this->session->userdata('user_data');
+        $data['usuarios'] = $this->Usuario_model->find($id);
+        $data['area'] = $this->Area_model->find(['id' => $user_data->id_area], 'nombre')->nombre;
+
+        $data['competencia'] = $this->Competencias_model->find(['id' => $id_competencia]);
+        $data['actividades_clave'] = $this->Actividad_competencia->findAll(['id_competencia'=>$data['competencia']->id], 'nombre');
+        // var_dump($data['actividades_clave']);
+        // die;
+
+        $this->load->view('layouts/header');
+        $this->load->view('evaluador/evaluacion', $data);
+
     }
 
 }
