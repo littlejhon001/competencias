@@ -4,7 +4,8 @@
         <div class="col-md-2 ">
 
         </div>
-        <div class="col-md-9 mx-auto"> <!-- Profile widget -->
+        <div class="col-md-9 mx-auto">
+            <!-- Profile widget -->
             <div class="bg-white shadow  mb-4 rounded overflow-hidden">
                 <div class=" d-flex border bg-perfil justify-content-center cover">
                     <div class="media text-center mt-2  profile-head">
@@ -49,46 +50,74 @@
                         </h5>
                         <?php foreach ($actividades_clave as $row) { ?>
 
-                            <div class="d-flex m-2 ">
-                                <h6 class="mt-1">
-                                    <?php echo $row->nombre ?>
-                                </h6>
-                                <div class="ms-auto">
-                                    <a type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#evaluacion<?php echo $row->id ?>">
-                                        Comenzar evaluación
-                                    </a>
-                                </div>
-
+                        <div class="d-flex m-2 ">
+                            <h6 class="mt-1">
+                                <?php echo $row->nombre ?>
+                            </h6>
+                            <div class="ms-auto">
+                                <a type="button" class="btn btn-primary consulta_criterios" data-bs-toggle="modal"
+                                    data-bs-target="#evaluacion" data-row='<?php echo json_encode($row);?>'>
+                                    Comenzar evaluación
+                                </a>
                             </div>
-                            <!-- Modal -->
 
-
-                            <div class="modal modal-lg fade" id="evaluacion<?php echo $row->id ?>"
-                                data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                                aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">
-                                                <?php echo $row->nombre ?>
-                                            </h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            criterios
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-success">Guardar evaluación</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        </div>
+                        <!-- Modal -->
 
                         <?php } ?>
 
-
+                        <div class="modal modal-lg fade" id="evaluacion" data-bs-backdrop="static"
+                            data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form novalidate class="needs-validation" action="<?php echo IP_SERVER?>usuarios/guardar_evaluacion" method="post">
+                                    <input name="id_usuario" type="hidden" value="<?php echo $usuarios->id?>">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                                            <?php echo $row->nombre ?>
+                                        </h1>
+                                        <button type="button" class="btn-close bg-danger" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                            <div class="d-none" id="plantilla_criterios">
+                                                <input name="id_criterio_competencia[]" type="hidden" value="">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <label><b>Texto label de ejemplo</b></label>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="resultado" required value="1"
+                                                                id="resultado1">
+                                                            <label class="form-check-label" for="resultado1">
+                                                                Sí
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="resultado" value="2"
+                                                                id="resultado2">
+                                                            <label class="form-check-label" for="resultado2">
+                                                                No
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="resultado" value="3"
+                                                                id="resultado3">
+                                                            <label class="form-check-label" for="resultado3">
+                                                                No aplica
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-success">Guardar evaluación</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -101,3 +130,48 @@
 </div>
 
 </div>
+<script src="<?php echo IP_SERVER ?>assets/jquery/jquery.min.js"></script>
+
+<script>
+input_criterio = $('#plantilla_criterios')
+$('.consulta_criterios').click(function() {
+    $('#evaluacion').find('.modal-title').text($(this).data('row').nombre);
+    consultar_criterios($(this).data('row').id).then((respuesta) => {
+        $('#evaluacion').find('.modal-body').text('');
+        if (!respuesta.error) {
+            if (respuesta.success == true) {
+                criterios = respuesta.criterios
+                $.each(criterios, (index,criterio) => {
+                    input = input_criterio
+                    input.find('label b').text(criterio.nombre)
+                    input.find('input[type="hidden"]').attr('value',criterio.id)
+                    input.find('input[type="radio"]').attr('name','resultado['+index+']')
+                    $('#evaluacion').find('.modal-body').append(`<p>${input.html()}</p>`)
+                })
+                // $('#evaluacion').find('.modal-body').text(respuesta.criterios);
+            }
+        } else {
+            alert(respuesta.error)
+        }
+    })
+})
+
+function consultar_criterios(id_actividad) {
+    return $.get('<?php echo IP_SERVER?>usuarios/criterios_por_actividad/' + id_actividad)
+}
+
+// Fetch all the forms we want to apply custom Bootstrap validation styles to
+const forms = document.querySelectorAll('.needs-validation')
+
+// Loop over them and prevent submission
+Array.from(forms).forEach(form => {
+  form.addEventListener('submit', event => {
+    if (!form.checkValidity()) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+
+    form.classList.add('was-validated')
+  }, false)
+})
+</script>
