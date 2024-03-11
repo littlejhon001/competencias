@@ -1,4 +1,4 @@
-<!-- <pre><?php // echo // print_r($usuario, true)     ?> </pre> -->
+<!-- <pre><?php // echo // print_r($usuario, true)      ?> </pre> -->
 <div class="row py-5 animate__animated animate__fadeIn ">
     <div class="row">
         <div class="col-md-2 ">
@@ -33,12 +33,11 @@
                         </div>
                     </div>
                 </div>
-                <h5 class="mb-2 mt-3">Competencias asignadas al colaborador:
+                <h5 class="mb-2 ms-2 mt-3">Competencias asignadas al colaborador:
                     <?php echo $usuario->nombre . ' ' . $usuario->apellido ?>
                 </h5>
                 <?php foreach ($competencias as $row) { ?>
-                    <a
-                        href="<?php echo IP_SERVER ?>Usuarios/evaluacion/<?php echo $usuario->id ?>/<?php echo $row->id ?>">
+                    <a href="<?php echo IP_SERVER ?>Usuarios/evaluacion/<?php echo $usuario->id ?>/<?php echo $row->id ?>">
                         <div class="px-4 py-3 ">
 
                             <div class="p-4 card-competencia rounded shadow-sm ">
