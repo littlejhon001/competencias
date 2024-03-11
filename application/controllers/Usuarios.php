@@ -193,15 +193,50 @@ class Usuarios extends CI_Controller
         $data['competencia'] = $this->Competencias_model->find(['id' => $id_competencia]);
         $data['actividades_clave'] = $this->Actividad_competencia->findAll(['id_competencia'=>$data['competencia']->id], 'nombre,id');
 
-
-        // var_dump($data['actividades_clave']);
-        // die;
-
         $this->load->view('layouts/header');
         $this->load->view('evaluador/evaluacion', $data);
 
     }
 
+    public function criterios_por_actividad($id_actividad){
+        if(!empty($id_actividad) && intval($id_actividad) > 0){
+            $this->load->model('Criterios_model','criterios');
+            $this->reques->criterios = $this->criterios->listado_por_actividad($id_actividad);
+            if(!empty($this->reques->criterios)){
+                $this->reques->success = true;
+            }
+        }else{
+            $this->iffalse('Actividad no válida para consultar');
+        }
+        $this->json();
+    }
+
+    public function guardar_evaluacion(){
+        if(!empty($this->formData)){
+            $this->load->model('Evaluacion_usuario_model','evaluacion_usuario');
+            foreach($this->formData->id_criterio_competencia as $indice => $id_criterio_competencia){
+                $data[] = (object) [
+                    'id_criterio_competencia' => $id_criterio_competencia,
+                    'id_usuario' => $this->formData->id_usuario,
+                    'resultado' => $this->formData->resultado[$indice]
+                ];
+            }
+            if($this->evaluacion_usuario->insertar_evaluacion($data)){
+                $this->session->set_flashdata([
+                    'success' => true,
+                    'message' => 'El usuario ha sido evaluado con éxito'
+                ]);
+                $this->reques = (object)[
+                    'success' => true,
+                    'message' => 'El usuario ha sido evaluado con éxito'
+                ];
+                redirect('usuarios/evaluacion_usuario/' . $this->formData->id_usuario);
+            }
+        }else{
+            $this->iffalse('No ingresó ningún valor');
+        }
+        $this->json();
+    }
 }
 
 
