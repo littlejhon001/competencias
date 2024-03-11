@@ -175,7 +175,7 @@ class CI_Controller
 	}
 	public function vista($view, $vars = '')
 	{
-		$this->load->view('layouts/header', ['urlapp' => IP_SERVER]);
+		$this->load->view('layouts/header', $vars);
 		$this->load->view($view, $vars);
 		$this->load->view('layouts/footer');
 	}

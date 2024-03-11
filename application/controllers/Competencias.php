@@ -25,17 +25,14 @@ class Competencias extends CI_Controller
 				// Si el usuario es administrador, cargar el header y la vista de dashboard
                 $data['competencias'] = $this->Competencias_model->findAll();
 				$data['user_data'] = $user_data;
-				$this->load->view('layouts/header', $data);
-				$this->load->view('admin/competencias', $data);
+				$this->vista('admin/competencias', $data);
 			} elseif ($this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
 				$data['user_data'] = $user_data;
-				$this->load->view('layouts/header', $data);
-				$this->load->view('competencias', $data);
+				$this->vista('competencias', $data);
 			} else {
 				// Si no es administrador, cargar solo la vista de dashboard
 				$data['user_data'] = $user_data;
-				$this->load->view('layouts/header', $data);
-				$this->load->view('dashboard', $data);
+				$this->vista('dashboard', $data);
 			}
 		} else {
 			// Si el usuario no está logeado, redirigir al formulario de inicio de sesión

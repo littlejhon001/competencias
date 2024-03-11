@@ -24,7 +24,6 @@ class Home extends CI_Controller
         if (!empty($user_data)) {
             // Si el usuario es administrador, cargar el header y la vista de usuarios
             if ($this->Usuario_model->has_role($user_data->id, 'Administrador') || $this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
-                $this->load->view('layouts/header');
                 $this->view('dashboard');
             } else if ($this->Usuario_model->has_role($user_data->id, 'Evaluador')) {
 
@@ -32,13 +31,11 @@ class Home extends CI_Controller
 
 
 
-                $this->load->view('layouts/header');
-                $this->load->view('evaluador/usuarios_asignados', $data);
+                $this->vista('evaluador/usuarios_asignados', $data);
 
             } else if ($this->Usuario_model->has_role($user_data->id, 'Usuario')) {
-                // $data['competencia_asignada'] = $this->Competencias_model->competencias_usuario($user_data->id);
-                $this->load->view('layouts/header');
-                $this->load->view('usuario/dashboard_usuario');
+                $data['competencias_asignadas'] = $this->Competencias_model->competencias_por_usuario($user_data->id);
+                $this->vista('usuario/dashboard_usuario',$data);
             } else {
                 // Si el usuario no es administrador, podrías redirigirlo a otra vista o mostrar un mensaje de error
                 redirect('Home');
@@ -49,6 +46,11 @@ class Home extends CI_Controller
 
         }
 
+    }
+
+    public function ver_competencia($id_competencia){
+        var_dump('Hola');
+        die;
     }
 
 }

@@ -107,7 +107,7 @@
                             </div>
                         </div>
                     </div>
-
+                    <?php foreach ($competencias_asignadas as $competencia_asignada){?>
                     <div class="card  w-50 mb-3">
                         <div class="card-body">
                             <h5 class="card-title">
@@ -116,10 +116,10 @@
                             <p class="card-text">
                                 <?php echo $competencia_asignada->descripcion ?>
                             </p>
-                            <a href="#" class="text-center btn btn-success">Ver mas..</a>
+                            <a href="<?php echo IP_SERVER . 'home/ver_competencia/' . $competencia_asignada->id?>" class="text-center btn btn-success">Ver mas..</a>
                         </div>
                     </div>
-
+                    <?php }?>
                 </div>
             </div>
             <!--
