@@ -1,5 +1,5 @@
-<!-- <pre><?php // echo // print_r($usuarios, true)                          ?> </pre> -->
-<div class="row py-5 animate__animated animate__fadeIn ">
+<!-- <pre><?php  // echo  print_r($actividades_clave, true)  ?> </pre> -->
+<div class="row py-5  ">
     <div class="row">
         <div class="col-md-2 ">
 
@@ -54,46 +54,50 @@
                                     <?php echo $row->nombre ?>
                                 </h6>
                                 <div class="ms-auto">
-                                    <a type="button" class="text-end btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#staticBackdrop">
-                                        Comenzar evaluación <i class="bi bi-file-earmark-bar-graph-fill"></i>
+                                    <a type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#evaluacion<?php echo $row->id ?>">
+                                        Comenzar evaluación
                                     </a>
                                 </div>
 
                             </div>
+                            <!-- Modal -->
 
 
-                            <div class="modal modal-lg fade" id="staticBackdrop" data-bs-backdrop="static"
-                                data-bs-keyboard="false" tabindex="1" aria-labelledby="staticBackdropLabel"
-                                aria-hidden="true">
+                            <div class="modal modal-lg fade" id="evaluacion<?php echo $row->id ?>"
+                                data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h1 class="modal-title fs-5" id="staticBackdropLabel">
-                                                <?php echo $competencia->nombre ?>
+                                                <?php echo $row->nombre ?>
                                             </h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            Criterios
+                                            criterios
                                         </div>
                                         <div class="modal-footer">
-                                            <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
-                                            <button type="button" class="btn btn-primary">Guardar evaluación</button>
+                                            <button type="button" class="btn btn-success">Guardar evaluación</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-
                         <?php } ?>
 
 
                     </div>
+
                 </div>
 
             </div>
         </div>
     </div>
+
+
+</div>
+
 </div>

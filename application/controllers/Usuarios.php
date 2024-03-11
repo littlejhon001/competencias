@@ -191,7 +191,9 @@ class Usuarios extends CI_Controller
         $data['area'] = $this->Area_model->find(['id' => $user_data->id_area], 'nombre')->nombre;
 
         $data['competencia'] = $this->Competencias_model->find(['id' => $id_competencia]);
-        $data['actividades_clave'] = $this->Actividad_competencia->findAll(['id_competencia'=>$data['competencia']->id], 'nombre');
+        $data['actividades_clave'] = $this->Actividad_competencia->findAll(['id_competencia'=>$data['competencia']->id], 'nombre,id');
+
+
         // var_dump($data['actividades_clave']);
         // die;
 

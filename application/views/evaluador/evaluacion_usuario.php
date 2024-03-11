@@ -39,9 +39,9 @@
                 <?php foreach ($competencias as $row) { ?>
                     <a
                         href="<?php echo IP_SERVER ?>Usuarios/evaluacion/<?php echo $usuario->id ?>/<?php echo $row->id ?>">
-                        <div class="px-4 py-3">
+                        <div class="px-4 py-3 ">
 
-                            <div class="p-4 rounded shadow-sm bg-light">
+                            <div class="p-4 card-competencia rounded shadow-sm ">
                                 <h6 class="mb-0">
                                     <?php echo $row->nombre ?>
                                 </h6>
