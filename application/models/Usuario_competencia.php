@@ -31,5 +31,4 @@ class Usuario_competencia extends MY_Model
         }
     }
 
-
 }

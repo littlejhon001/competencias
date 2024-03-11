@@ -169,19 +169,11 @@ class Usuarios extends CI_Controller
         $user_data = $this->session->userdata('user_data');
 
 
-        $data['usuarios'] = $this->Usuario_model->find($id);
+        $data['usuario'] = $this->Usuario_model->find($id);
 
         // Obtener todas las entradas de usuarios_competencias para el usuario dado
         $usuarios_competencias = $this->Usuario_competencia->findAll(['id_usuario' => $id]);
-        $data['competencias'] = [];
-        // Recorrer cada entrada de usuarios_competencias
-        foreach ($usuarios_competencias as $usuario_competencia) {
-            // Obtener los detalles de la competencia correspondiente
-            $competencia = $this->Competencias_model->find($usuario_competencia->id_competencia);
-            if ($competencia) {
-                $data['competencias'][] = $competencia;
-            }
-        }
+        $data['competencias'] = $this->Competencias_model->competencias_por_usuario($id);
 
         $data['area'] = $this->Area_model->find(['id' => $user_data->id_area], 'nombre')->nombre;
 

@@ -1,4 +1,4 @@
-<!-- <pre><?php // echo // print_r($usuarios, true)     ?> </pre> -->
+<!-- <pre><?php // echo // print_r($usuario, true)     ?> </pre> -->
 <div class="row py-5 animate__animated animate__fadeIn ">
     <div class="row">
         <div class="col-md-2 ">
@@ -16,7 +16,7 @@
                             <h4 class="">
                                 Nombre:
 
-                                <?php echo $usuarios->nombre . ' ' . $usuarios->apellido ?>
+                                <?php echo $usuario->nombre . ' ' . $usuario->apellido ?>
                             </h4>
                             <p class=" m-0 p-0 ">
                                 Area:
@@ -24,21 +24,21 @@
                             </p>
                             <p class=" m-0 p-0 ">
                                 Cargo:
-                                <?php echo $usuarios->cargo ?>
+                                <?php echo $usuario->cargo ?>
                             </p>
                             <p class=" small m-0 p-0">
                                 Correo:
-                                <?php echo $usuarios->email ?>
+                                <?php echo $usuario->email ?>
                             </p>
                         </div>
                     </div>
                 </div>
                 <h5 class="mb-2 mt-3">Competencias asignadas al colaborador:
-                    <?php echo $usuarios->nombre . ' ' . $usuarios->apellido ?>
+                    <?php echo $usuario->nombre . ' ' . $usuario->apellido ?>
                 </h5>
                 <?php foreach ($competencias as $row) { ?>
                     <a
-                        href="<?php echo IP_SERVER ?>Usuarios/evaluacion/<?php echo $usuarios->id ?>/<?php echo $row->id ?>">
+                        href="<?php echo IP_SERVER ?>Usuarios/evaluacion/<?php echo $usuario->id ?>/<?php echo $row->id ?>">
                         <div class="px-4 py-3">
 
                             <div class="p-4 rounded shadow-sm bg-light">
