@@ -24,12 +24,10 @@ class Home extends CI_Controller
         if (!empty($user_data)) {
             // Si el usuario es administrador, cargar el header y la vista de usuarios
             if ($this->Usuario_model->has_role($user_data->id, 'Administrador') || $this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
-                $this->view('dashboard');
+                $this->vista('dashboard');
             } else if ($this->Usuario_model->has_role($user_data->id, 'Evaluador')) {
 
                 $data['usuarios_asignados'] = $this->Usuario_model->obtener_usuarios_por_evaluador($user_data->id);
-
-
 
                 $this->vista('evaluador/usuarios_asignados', $data);
 

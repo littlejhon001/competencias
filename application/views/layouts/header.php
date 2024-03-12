@@ -33,9 +33,12 @@
     <link href="<?php echo IP_SERVER ?>assets/css/nucleo-icons.css" rel="stylesheet" />
     <link href="<?php echo IP_SERVER ?>assets/css/nucleo-svg.css" rel="stylesheet" />
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 
     <!-- Font Awesome Icons -->
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
@@ -51,7 +54,7 @@
     <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
 
     <script src="<?php echo IP_SERVER ?>assets/jquery/jquery.slim.min.js"></script>
-    <!-- <script src="<?php //  echo IP_SERVER           ?>assets/bootstrap/js/bootstrap.bundle.min.js"></script> -->
+    <!-- <script src="<?php //  echo IP_SERVER            ?>assets/bootstrap/js/bootstrap.bundle.min.js"></script> -->
     <script src="<?php echo IP_SERVER ?>assets/js/material-dashboard.min.js"></script>
     <script src="<?php echo IP_SERVER ?>assets/js/core/popper.min.js"></script>
     <script src="<?php echo IP_SERVER ?>assets/js/core/bootstrap.min.js"></script>
@@ -104,25 +107,15 @@
             <?php } ?>
 
 
-            <?php if ($this->session->userdata('user_data')->Rol_ID == 1 || $this->session->userdata('user_data')->Rol_ID == 2 || $this->session->userdata('user_data')->Rol_ID == 3) { ?>
+            <?php if ($this->session->userdata('user_data')->Rol_ID == 1 || $this->session->userdata('user_data')->Rol_ID == 2) { ?>
                 <li class="nav-item">
-                    <a class="nav-link text-dark " href="<?php echo IP_SERVER?>Competencias">
+                    <a class="nav-link text-dark " href="<?php echo IP_SERVER ?>Competencias">
 
                         <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="material-icons opacity-10">receipt_long</i>
                         </div>
 
                         <span class="nav-link-text ms-1">Competencias</span>
-                    </a>
-                </li>
-            <?php } else { ?>
-                <li class="nav-item">
-                    <a class="nav-link text-dark " href="./billing.html">
-
-                        <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
-                            <i class="material-icons opacity-10">receipt_long</i>
-                        </div>
-                        <span class="nav-link-text ms-1">mis competencias</span>
                     </a>
                 </li>
             <?php } ?>

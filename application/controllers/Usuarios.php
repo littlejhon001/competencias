@@ -180,8 +180,8 @@ class Usuarios extends CI_Controller
         // var_dump( $data['area']);
         // die;
 
-        $this->load->view('layouts/header');
-        $this->load->view('evaluador/evaluacion_usuario', $data);
+        // $this->load->view('layouts/header');
+        $this->vista('evaluador/evaluacion_usuario', $data);
     }
 
     public function evaluacion($id, $id_competencia)

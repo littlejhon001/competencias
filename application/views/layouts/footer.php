@@ -11,7 +11,7 @@
                 Swal.fire({
                     toast: true,
                     position: "top-end",
-                    timer: 3000,
+                    timer: 5000,
                     timerProgressBar: true,
                     title: flashdata.message,
                     icon: "success",
