@@ -27,6 +27,7 @@ class Usuarios extends CI_Controller
             // Si el usuario es administrador, cargar el header y la vista de usuarios
             if ($this->Usuario_model->has_role($user_data->id, 'Administrador') || $this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
                 $data['user_data'] = $user_data;
+
                 $this->load->view('layouts/header', $data);
                 $this->view('admin/usuarios', $data);
             } else {
@@ -76,6 +77,13 @@ class Usuarios extends CI_Controller
             if ($this->Usuario_model->has_role($user_data->id, 'Administrador') || $this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
 
                 $data['usuarios'] = $this->Usuario_model->usuarios_asignar();
+
+                foreach ($data['usuarios'] as $usuario) {
+                    $usuario->numero_competencias = $this->Usuario_competencia->obtener_numero_competencias_usuario($usuario->id);
+                }
+                // var_dump( $data['usuarios']);
+                // die;
+
                 // $data['evaluadores'] = $this->Usuario_model->datos_evaluadores();
 
                 $data['evaluadores'] = $this->Usuario_model->findAll(['Rol_id' => 3, 'id_area' => $user_data->id_area], 'id,nombre,apellido,cargo,identificacion,email');
@@ -83,8 +91,7 @@ class Usuarios extends CI_Controller
                 $data['area'] = $this->Area_model->find(['id' => $user_data->id_area], 'nombre')->nombre;
                 $data['competencias'] = $this->Competencias_model->competencias_por_area();
 
-                // var_dump($data['competencias']);
-                // die;
+
 
                 $data['user_data'] = $user_data;
                 $this->load->view('layouts/header', $data);
@@ -108,6 +115,7 @@ class Usuarios extends CI_Controller
             // Recuperar los datos del formulario
             $evaluador = $this->input->post('evaluador');
             $competencia = $this->input->post('competencia');
+
 
 
             $usuarios_seleccionados = $this->input->post('usuarios_seleccionados');

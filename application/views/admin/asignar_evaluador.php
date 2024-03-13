@@ -15,7 +15,7 @@
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">index</li>
           </ol> -->
-                    <!-- <pre><?php // echo print_r($evaluadores, true)                                                     ?></pre> -->
+                    <!-- <pre><?php // echo print_r($evaluadores, true)                                                                  ?></pre> -->
 
 
                     <h6 class="font-weight-bolder mb-0">Bienvenido de nuevo
@@ -142,6 +142,9 @@
                                                     <th
                                                         class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                                         Cargo</th>
+                                                    <th
+                                                        class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                        numero de competencias asignadas</th>
 
                                                     <th
                                                         class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
@@ -151,6 +154,7 @@
                                             <tbody>
 
                                                 <?php foreach ($usuarios as $row) { ?>
+
                                                     <tr
                                                         class="<?php echo $row->id_evaluador == '' ? "bg-sin_asignar" : "bg-asignado" ?>">
 
@@ -177,13 +181,52 @@
                                                         <td class="align-middle text-center text-sm">
                                                             <?php echo $row->cargo ?>
                                                         </td>
+                                                        <td class="align-middle text-center text-sm">
+                                                            <?php echo $row->numero_competencias ?>
+                                                        </td>
                                                         <td class="align-middle text-center">
-                                                            <a href="javascript:;" class="" data-toggle="tooltip"
-                                                                data-original-title="Edit user">
-                                                                <i class="text-warning bi bi-pencil-square"></i>
+                                                            <a type="button" class=" " data-bs-toggle="modal"
+                                                                data-bs-target="#detalles<?php $row->id ?>">
+                                                                <i class="text-warning bi bi-eye"></i>
                                                             </a>
+
                                                         </td>
                                                     </tr>
+
+                                                    <div class="modal fade" id="detalles<?php $row->id ?>" tabindex="-1"
+                                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                                                        Detalle del usuario</h1>
+                                                                    <button type="button" class="bg-danger btn-close"
+                                                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+
+
+                                                                    <div class="card" style="width: auto;">
+                                                                        <div class="card-body">
+                                                                            <h5 class="card-title">Nombres:
+                                                                                <?php echo $row->nombre . ' ' . $row->apellido ?>
+                                                                            </h5>
+                                                                            <h6
+                                                                                class="card-subtitle mb-2 text-body-secondary">
+                                                                                Cargo:
+                                                                                <?php echo $row->cargo ?>
+                                                                            </h6>
+                                                                            <p class="card-text">Evaluador:</p>
+                                                                            <p class="card-text">Competencias:</p>
+
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 <?php } ?>
                                             </tbody>
                                         </table>
@@ -427,7 +470,7 @@
                     title: 'Usuarios asignados',
                     showConfirmButton: false,
                     timer: 3000,
-                    timerProgressBar:true
+                    timerProgressBar: true
                 });
 
             });

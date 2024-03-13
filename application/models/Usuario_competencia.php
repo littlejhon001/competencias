@@ -30,5 +30,14 @@ class Usuario_competencia extends MY_Model
             }
         }
     }
+    public function obtener_numero_competencias_usuario($id_usuario)
+    {
+        // Query para contar las competencias para un usuario específico
+        $this->db->where('id_usuario', $id_usuario);
+        $query = $this->db->get('usuario_competencia');
+        // Retorna el número de filas (competencias) encontradas
+        return $query->num_rows();
+    }
+
 
 }
