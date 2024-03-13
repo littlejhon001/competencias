@@ -31,7 +31,7 @@ defined('EXIT__AUTO_MAX') OR define('EXIT__AUTO_MAX', 125); // highest automatic
 $enviroment = "DEVELOPMENT"; // PRODUCTION DEVELOPMENT
 if ($enviroment == "DEVELOPMENT") {
 
-	define('IP_SERVER', 'http://localhost/fokus_aula/'); //Ip o ruta desarrollo
+	define('IP_SERVER', 'http://localhost/competencias/'); //Ip o ruta desarrollo
 	define('HOSTNAME', 'localhost');
 	define('USERNAME', 'root');
 	define('PASSWORD', '');
