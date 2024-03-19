@@ -17,17 +17,17 @@
 
                     <h6 class="font-weight-bolder mb-0">Bienvenido de nuevo
                         <?php if ($this->session->userdata('user_data')->Rol_ID == 1) { ?>
-                            <?php echo $this->session->userdata('user_data')->nombre ?>,
-                            has ingresado como administrador
+                        <?php echo $this->session->userdata('user_data')->nombre ?>,
+                        has ingresado como administrador
                         <?php } elseif ($this->session->userdata('user_data')->Rol_ID == 2) { ?>
-                            <?php echo $this->session->userdata('user_data')->nombre ?>,
-                            has ingresado como gestor de evaluadores
+                        <?php echo $this->session->userdata('user_data')->nombre ?>,
+                        has ingresado como gestor de evaluadores
                         <?php } elseif ($this->session->userdata('user_data')->Rol_ID == 3) { ?>
-                            <?php echo $this->session->userdata('user_data')->nombre ?>,
-                            has ingresado como evaluador
+                        <?php echo $this->session->userdata('user_data')->nombre ?>,
+                        has ingresado como evaluador
                         <?php } elseif ($this->session->userdata('user_data')->Rol_ID == 4) { ?>
-                            <?php echo $this->session->userdata('user_data')->nombre ?>,
-                            has ingresado como usuario
+                        <?php echo $this->session->userdata('user_data')->nombre ?>,
+                        has ingresado como usuario
                         <?php } ?>
 
                     </h6>
@@ -107,58 +107,107 @@
                             </div>
                         </div>
                     </div>
-                    <?php foreach ($competencias_asignadas as $competencia_asignada){?>
-                    <div class="card  w-50 mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <?php echo $competencia_asignada->nombre ?>
-                            </h5>
-                            <p class="card-text">
-                                <?php echo $competencia_asignada->descripcion ?>
-                            </p>
-                            <a href="<?php echo IP_SERVER . 'home/ver_competencia/' . $competencia_asignada->id?>" class="text-center btn btn-success">Ver mas..</a>
+                    <!-- PLANTILLA PARA CADA ACTIVIDAD -->
+                    <div id="actividad" class="d-none">
+                        <div class="card bg-light bg-opacity-50 bg-gradient my-3 p-3">
+                            <div class="row align-items-center justify-content-center">
+                                <div class="col-12 col-md-8 align-middle">
+                                    <h6 class="m-0">Ejemplo</h6>
+                                </div>
+                                <div class="col-12 col-md-4 text-center">
+                                    <button class="btn btn-primary consulta_criterios" data-bs-toggle="modal"
+                                        data-bs-target="#evaluacion" data-row="">Comenzar evaluación</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <?php }?>
+                    <!-- --- -->
+                    <!-- TARJETA DE VACÍO -->
+                    <div id="vacio" class="d-none">
+                        <div class="card bg-light bg-opacity-50 bg-gradient my-3 p-3">
+                            <div class="row align-items-center justify-content-center">
+                                <div class="col-12 align-middle text-center">
+                                    <h6 class="m-0">No hay registros.</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- --- -->
+                    <?php foreach ($competencias_asignadas as $row) { ?>
+                    <div>
+                        <div class="px-4 py-3 ">
+                            <div class="p-4 card-competencia rounded shadow-sm ">
+                                <h6 class="mb-0">
+                                    <?php echo $row->nombre ?>
+                                </h6>
+                                <p class="my-2">
+                                    <?php echo $row->descripcion ?>
+                                </p>
+                                <button class="consultar_detalle_competencia text-center btn btn-success"
+                                    data-id="<?php echo $row->id?>">Ver más..</button>
+                                <div class="extender" style="display:none;">
+                                    <h5 class="mt-2">Actividades Clave</h5>
+                                    <div class="actividades">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <?php } ?>
                 </div>
             </div>
-            <!--
-      <footer class="footer py-4  ">
-        <div class="container-fluid">
-          <div class="row align-items-center justify-content-lg-between">
-            <div class="col-lg-6 mb-lg-0 mb-4">
-              <div class="copyright text-center text-sm text-muted text-lg-start">
-                ©
-                <script>
-                  document.write(new Date().getFullYear())
-                </script>,
-                made with <i class="fa fa-heart"></i> by
-                <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Creative Tim</a>
-                for a better web.
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <ul class="nav nav-footer justify-content-center justify-content-lg-end">
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com" class="nav-link text-muted" target="_blank">Creative Tim</a>
-                </li>
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com/presentation" class="nav-link text-muted" target="_blank">About
-                    Us</a>
-                </li>
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com/blog" class="nav-link text-muted" target="_blank">Blog</a>
-                </li>
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com/license" class="nav-link pe-0 text-muted"
-                    target="_blank">License</a>
-                </li>
-              </ul>
-            </div>
-          </div>
         </div>
-      </footer> -->
-
+        <div class="modal modal-lg fade" id="evaluacion" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <input name="id_usuario" type="hidden" value="">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel"></h1>
+                        <button type="button" class="btn-close bg-danger" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-none" id="plantilla_criterios">
+                            <input name="id_criterio_competencia[]" type="hidden" value="">
+                            <div class="card">
+                                <div class="card-body">
+                                    <label><b>Texto label de ejemplo</b></label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="resultado" disabled
+                                            value="1" id="resultado1">
+                                        <label class="form-check-label" for="resultado1">
+                                            Sí
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="resultado" disabled value="2"
+                                            id="resultado2">
+                                        <label class="form-check-label" for="resultado2">
+                                            No
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="resultado" disabled value="3"
+                                            id="resultado3">
+                                        <label class="form-check-label" for="resultado3">
+                                            No aplica
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="loader" class="d-none">
+            <div class="spinner-border spinner-border-sm" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
         </div>
 
 
@@ -214,6 +263,93 @@
         </div>
     </div>
 
+    <script src="<?php echo IP_SERVER ?>assets/jquery/jquery.min.js"></script>
+
+
+    <script>
+    $(document).ready(function() {
+        plantilla_actividad = $('#actividad').clone()
+        tarjeta_vacio = $('#vacio').clone()
+        $('#actividad').remove()
+        $('#vacio').remove()
+    })
+    $('.consultar_detalle_competencia').click(function(){
+        elemento_actual = $(this);
+        listado_actividades = elemento_actual.next('.extender').find('.actividades');
+        if (listado_actividades.children().length) {
+            elemento_actual.next('.extender').toggle("fast")
+        } else {
+            elemento_actual.append($('#loader').html())
+            elemento_actual.prop("disabled", true)
+            listado_actividades.empty()
+            $.get("<?php echo IP_SERVER?>competencias/listado_actividades/" + $(this).data('id'), function(
+                respuesta) {
+                elemento_actual.find('.spinner-border').remove()
+                elemento_actual.prop("disabled", false)
+                if (respuesta.success == true) {
+                    if (respuesta.actividades.length > 0) {
+                        $.each(respuesta.actividades, function(indice, valor) {
+                            actividad = plantilla_actividad.clone()
+                            boton = actividad.find('.consulta_criterios')
+                            if (valor.evaluada == 1) {
+                                boton.text("ver mis resultados")
+                            } else {
+                                if (valor.criterios > 0) {
+                                    boton.text("criterios de evaluación")
+                                    boton.removeClass('btn-primary')
+                                    boton.addClass('btn-secondary')
+
+                                } else {
+                                    boton.prop("disabled", true)
+                                    boton.removeClass('btn-primary')
+                                    boton.text("sin criterios de evaluación")
+                                }
+                            }
+                            actividad.find('h6').text(valor.nombre)
+                            actividad.removeClass('d-none')
+                            boton.data('row',{ id: valor.id, nombre: valor.nombre, evaluada: valor.evaluada})
+                            listado_actividades.append(actividad)
+                        })
+                    } else {
+                        listado_actividades.append(tarjeta_vacio.html())
+                    }
+                    elemento_actual.next('.extender').toggle("fast")
+                }
+            })
+        }
+    });
+
+    // <!-- LISTA DE CRITERIOS EN EL MODAL -->
+
+    input_criterio = $('#plantilla_criterios').clone()
+    $('.extender').on('click','.consulta_criterios',function() {
+        boton_actividad = $(this);
+        consultar_criterios(boton_actividad.data('row').id).then((respuesta) => {
+            $('#evaluacion').find('.modal-title').text('Criterios para: '+boton_actividad.data('row').nombre);
+            $('#evaluacion').find('.modal-body').text('');
+            if (!respuesta.error) {
+                if (respuesta.success == true) {
+                    criterios = respuesta.criterios
+                    $.each(criterios, (index,criterio) => {
+                        input = input_criterio.clone()
+                        input.find('label b').text(criterio.nombre)
+                        if(boton_actividad.data('row').evaluada != 1){
+                            input.find('input').detach()
+                        }
+                        input.find('input[type="hidden"]').attr('value',criterio.id)
+                        input.find('input[type="radio"]').attr('name','resultado['+index+']')
+                        $('#evaluacion').find('.modal-body').append(`<p>${input.html()}</p>`)
+                    })
+                }
+            } else {
+                alert(respuesta.error)
+            }
+        })
+    })
+    function consultar_criterios(id_actividad) {
+        return $.get('<?php echo IP_SERVER?>usuarios/criterios_por_actividad/' + id_actividad)
+    }
+    </script>
 
     </div>
 

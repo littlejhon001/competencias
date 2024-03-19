@@ -39,6 +39,19 @@ class Competencias extends CI_Controller
 			redirect('login');
 		}
 	}
+    public function listado_actividades($id_competencia){
+        if(!empty($id_competencia) && intval($id_competencia) > 0){
+            $this->load->model('Actividad_competencia');
+            if($this->Usuario_model->has_role($this->session->userdata('user_data')->id, 'Usuario')){
+                $this->reques->actividades = $this->Actividad_competencia->listado_por_competencia($id_competencia, $this->session->userdata('user_data')->id);
+            }else{
+                $this->reques->actividades = $this->Actividad_competencia->listado_por_competencia($id_competencia);
+            }
+        }else{
+            $this->iffalse('No ingresó una competencia válida');
+        }
+        $this->json();
+    }
 
 }
 
