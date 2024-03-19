@@ -5,7 +5,7 @@ class Usuario_competencia extends MY_Model
     {
         parent::__construct();
     }
-    public $table = "Usuario_competencia";
+    public $table = "usuario_competencia";
     public $table_id = "id";
 
     public function guardar_datos_evaluador($competencia, $usuarios_seleccionados)

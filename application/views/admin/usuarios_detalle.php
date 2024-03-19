@@ -15,7 +15,7 @@
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">index</li>
           </ol> -->
-                    <!-- <pre><?php // echo print_r($user_data, true)                                                                ?></pre> -->
+                    <!-- <pre><?php // echo print_r($user_data, true)                                                                  ?></pre> -->
 
 
                     <h6 class="font-weight-bolder mb-0">Bienvenido de nuevo
@@ -149,7 +149,7 @@
                                     </thead>
                                     <tbody>
                                         <!--
-                                        <pre><?php // echo print_r($usuarios, true)                             ?></pre> -->
+                                        <pre><?php // echo print_r($usuarios, true)                               ?></pre> -->
 
                                         <?php foreach ($usuarios as $row) {
                                             if ($row->Rol_ID == 4) {
@@ -269,50 +269,58 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form action="agregar" method="post">
                         <div class="mb-3">
-                            <label for="cargo" name="email" class="form-label">Numero de documento</label>
-                            <input type="number" class="form-control ps-2" id="cargo" placeholder="Numero de documento">
+                            <label for="identificacion" class="form-label">Numero de documento</label>
+                            <input type="text" class="form-control ps-2" id="identificacion" minlength="8"
+                                pattern="^[0-9]+$" maxlength="10" placeholder="Numero de documento"
+                                name="identificacion" required>
                         </div>
                         <div class="mb-3">
-                            <label for="exampleInputEmail1" class="form-label">Nombre</label>
-                            <input type="text" placeholder="Nombre" class="form-control ps-2" id=""
-                                name="Nombre_usuario" aria-describedby="emailHelp">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" placeholder="Nombre" class="form-control ps-2" id="nombre" name="nombre"
+                                required>
                         </div>
                         <div class="mb-3">
-                            <label for="exampleInputEmail1" class="form-label">Apellido</label>
-                            <input type="text" placeholder="Apellido" class="form-control ps-2" id=""
-                                name="Nombre_usuario" aria-describedby="emailHelp">
+                            <label for="apellido" class="form-label">Apellido</label>
+                            <input type="text" placeholder="Apellido" class="form-control ps-2" id="apellido"
+                                name="apellido" required>
                         </div>
                         <div class="mb-3">
-                            <label for="email" name="email" class="form-label">Correo</label>
-                            <input type="email" class="form-control ps-2" id="email" placeholder="Correo">
+                            <label for="email" class="form-label">Correo</label>
+                            <input type="email" class="form-control ps-2" id="email"
+                                pattern="^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$" placeholder="Correo"
+                                name="email" required>
                         </div>
                         <div class="mb-3">
-                            <label for="cargo" name="email" class="form-label">Cargo</label>
-                            <input type="cargo" class="form-control ps-2" id="cargo" placeholder="Cargo">
+                            <label for="cargo" class="form-label">Cargo</label>
+                            <input type="text" class="form-control ps-2" id="cargo" placeholder="Cargo" name="cargo">
                         </div>
                         <div class="mb-3">
-                            <label for="cargo" name="email" class="form-label">Areas</label>
-                            <select class="form-select ps-2" aria-label="Default select example">
-                                <option selected disabled>Seleccione ---</option>
-                                <?php foreach ($areas as $row) { ?>
-                                    <option value="1"><?php echo $row->nombre?></option>
-                                <?php } ?>
+                            <label for="id_area" class="form-label">Área</label>
+                            <select class="form-select ps-2" id="id_area" name="id_area" required>
+                                <option selected disabled value="">Seleccione ---</option>
+                                <?php foreach ($areas as $row): ?>
+                                    <option value="<?php echo $row->id ?>">
+                                        <?php echo $row->nombre ?>
+                                    </option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="cargo" name="email" class="form-label">Seleccione el tipo de usuario</label>
-                            <select class="form-select ps-2" aria-label="Default select example">
-                                <option selected disabled>Seleccione ---</option>
-                                <option value="1">Gestor de evaluador</option>
-                                <option value="2">Evaluador</option>
-                                <option value="3">Usuario</option>
+                            <label for="Rol_ID" class="form-label">Seleccione el tipo de usuario</label>
+                            <select class="form-select ps-2" id="Rol_ID" name="Rol_ID" required>
+                                <option selected disabled value="">Seleccione ---</option>
+                                <?php foreach ($roles as $rol): ?>
+                                    <option value="<?php echo $rol->id ?>">
+                                        <?php echo $rol->nombre ?>
+                                    </option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                         <div class="modal-footer">
                             <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
-                            <button type="button" class="btn btn-success">Guardar</button>
+                            <button type="submit" class="btn btn-success">Guardar</button>
                         </div>
                     </form>
                 </div>
