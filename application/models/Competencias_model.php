@@ -27,4 +27,7 @@ class Competencias_model extends MY_Model
         ->where('usuario_competencia.id_usuario',$id_usuario)
         ->get($this->table)->result();
     }
+
+
+
 }

@@ -1,5 +1,3 @@
-
-
 <body class="g-sidenav-show  bg-gray-200 animate__fadeIn animate__animated">
 
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
@@ -8,13 +6,6 @@
             data-scroll="true">
             <div class="container-fluid py-1 px-3">
                 <nav aria-label="breadcrumb">
-
-                    <!-- <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">index</li>
-          </ol> -->
-                    <!-- <pre><?php // echo print_r($this->session->userdata('user_data'), true)                                                             ?></pre> -->
-
 
                     <h6 class="font-weight-bolder mb-0">Bienvenido de nuevo
                         <?php if ($this->session->userdata('user_data')->Rol_ID == 1) { ?>
@@ -36,8 +27,6 @@
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-
-
                     </div>
                     <ul class="navbar-nav  justify-content-end">
 
@@ -95,82 +84,227 @@
         <div class="container-fluid py-4">
             <h2>Aula competencias</h2>
             <div class="row">
-                <h2 class="font-weight-bolder my-3 mb-4">Vista general de competencias</h2>
+                <!-- <h2 class="font-weight-bolder my-3 mb-4">Personalizar competencias al cargo</h2> -->
+                <p>en esta seccion se debe detallar que el administrador puede armar la competencia como el la considere
+                    para cargo puntual</p>
                 <div class="col-12">
                     <div class="card my-4">
                         <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                             <div class="bg-info shadow-primary border-radius-lg pt-4 pb-3">
                                 <div class="d-flex ">
-                                    <h6 class="text-white  ps-5 mt-2">Lista de competencias</h6>
+                                    <h6 class="text-white  ps-5 mt-2">Competencia Personalizada para el cargo:
+                                        <?php echo $cargo->nombre ?>
+                                    </h6>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body px-0 pb-2">
-
                             <div class="table-responsive p-0">
-                                <table class="table align-items-center mb-0">
-                                    <thead>
-                                        <tr>
+                                <div id="loader" class="text-center" style="display: none;">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                                <div id="loader-criterios" class="text-center" style="display: none;">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                                <div class="row m-3">
+                                    <div class="col-6">
+                                        <select class="form-select" id="select-competencias" aria-label="Competencias">
+                                            <option selected>Selecciona la competencia</option>
+                                            <?php foreach ($competencias as $row) { ?>
+                                                <option value="<?php echo $row->id ?>">
+                                                    <?php echo $row->nombre ?>
+                                                </option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <select class="form-select" id="select-actividades"
+                                            aria-label="Actividades Clave">
+                                            <option selected>Selecciona la actividad clave</option>
+                                        </select>
+                                    </div>
 
-                                            <th
-                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                id</th>
-                                            <th
-                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                Nombre cargo</th>
-                                            <th
-                                                class="text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7">
-                                                Acciones</th>
+                                    <div class="col-6 mt-2">
+                                        <select class="form-select" id="select-criterios"
+                                            aria-label="Criterios">
+                                            <option selected>Seleccione uno o más criterios</option>
+                                        </select>
+                                    </div>
 
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <!--
-                                        <pre><?php // echo print_r($usuarios, true)                          ?></pre> -->
+                                    <div class="col-6 mt-2">
+                                        <button class="btn btn-success w-100" id="guardar-seleccion">Guardar
+                                            competencia</button>
+                                    </div>
 
-                                        <?php foreach ($cargos as $row) { ?>
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <?php echo $row->id ?>
-
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div>
-                                                            <i class="me-2 bi bi-person-circle"></i>
-                                                        </div>
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <?php echo $row->nombre ?>
-
-                                                        </div>
-                                                    </div>
-                                                </td>
-
-                                                <td class="align-middle  text-center">
-                                                    <a href="<?php echo IP_SERVER ?>Competencias/asignar_competencia/<?php echo $row->id ?>"
-                                                        class=" ">
-                                                        <i class=" text-success bi bi-clipboard2-plus"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        <?php } ?>
-                                    </tbody>
-                                </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-
-
         </div>
     </main>
+
+
+    <script src="<?php echo IP_SERVER ?>assets/jquery/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+    <script>
+        $(document).ready(function () {
+
+            $('#select-competencias').change(function () {
+                var competencia_id = $(this).val();
+                // Mostrar el loader
+                $('#loader').show();
+                $.ajax({
+                    url: '<?php echo base_url('Competencias/obtener_actividades'); ?>',
+                    type: 'POST',
+                    data: { competencia_id: competencia_id },
+                    dataType: 'json',
+                    success: function (data) {
+                        // Limpiar opciones anteriores
+                        $('#select-actividades').empty();
+
+                        // Agregar la opción "Seleccione una competencia" al principio
+                        $('#select-actividades').append('<option selected>Seleccione una competencia</option>');
+                        // Agregar las nuevas opciones
+                        $.each(data, function (index, actividad) {
+                            $('#select-actividades').append('<option value="' + actividad.id + '">' + actividad.nombre + '</option>');
+                        });
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    },
+                    complete: function () {
+                        // Ocultar el loader cuando la solicitud AJAX haya finalizado (ya sea con éxito o con error)
+                        $('#loader').hide();
+                    }
+                });
+            });
+
+
+            $('#select-actividades').change(function () {
+                var actividad_id = $(this).val();
+                $('#loader-criterios').show(); // Mostrar el loader
+
+                $.ajax({
+                    url: '<?php echo base_url('Competencias/obtener_criterios'); ?>',
+                    type: 'POST',
+                    data: { actividad_id: actividad_id },
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#select-criterios').empty(); // Limpiar opciones anteriores
+                        $('#select-criterios').append('<option selected disabled>Seleccione un criterio</option>');
+                        $('#select-criterios').attr('multiple', 'multiple');
+
+                        $.each(data, function (index, criterio) {
+                            $('#select-criterios').append('<option value="' + criterio.id + '">' + criterio.nombre + '</option>');
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    },
+                    complete: function () {
+                        $('#loader-criterios').hide(); // Ocultar el loader
+                    }
+                });
+            });
+
+
+            var seleccion = {
+                competencia_id: null,
+                actividad_id: null,
+                criterio_id: null
+            };
+
+            $('#select-competencias').change(function () {
+                seleccion.competencia_id = $(this).val();
+                console.log(seleccion);
+            });
+
+            $('#select-actividades').change(function () {
+                seleccion.actividad_id = $(this).val();
+                console.log(seleccion);
+            });
+
+            $('#select-criterios').change(function () {
+                seleccion.criterio_id = $(this).val();
+                console.log(seleccion);
+            });
+
+
+            $('#guardar-seleccion').click(function () {
+
+                // Mostrar SweetAlert para confirmación
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: '¿Quieres guardar la competencia para este cargo?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, guardar',
+                    confirmButtonColor: '#4caf50', // Cambia el color del botón de confirmación
+                    cancelButtonText: 'Cancelar',
+                    cancelButtonColor: '#d33'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        guardarSeleccion();
+                        // Si el usuario confirma, llamar a la función para guardar la selección
+
+                        return;
+
+                    }
+                });
+            });
+
+            var cargo_id = <?php echo $cargo->id; ?>;
+
+            function guardarSeleccion() {
+                $.ajax({
+                    url: '<?php echo IP_SERVER; ?>Competencias/competencia_personalizada/' + cargo_id,
+                    type: 'POST',
+                    data: seleccion,
+                    dataType: 'json',
+                    success: function (response) {
+                        Swal.fire({
+                            position: "top-end",
+                            icon: 'success',
+                            title: 'Competencia personalizada creada',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            showClass: {
+                                popup: `
+      animate__animated
+      animate__fadeInRight
+      animate__faster
+    `
+                            },
+                            hideClass: {
+                                popup: `
+      animate__animated
+      animate__fadeOutRight
+    `
+                            }
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error al guardar la selección:', xhr.responseText);
+                    }
+                });
+            }
+
+        });
+
+    </script>
+
+
 
 
 
@@ -285,5 +419,3 @@
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="../assets/js/material-dashboard.min.js?v=3.1.0"></script>
 </body>
-
-</html>

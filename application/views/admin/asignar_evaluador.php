@@ -15,7 +15,7 @@
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">index</li>
           </ol> -->
-                    <!-- <pre><?php // echo print_r($evaluadores, true)                                                                  ?></pre> -->
+                    <!-- <pre><?php // echo print_r($evaluadores, true)                                                                    ?></pre> -->
 
 
                     <h6 class="font-weight-bolder mb-0">Bienvenido de nuevo
@@ -85,11 +85,18 @@
         </nav>
         <!-- End Navbar -->
         <div class="container-fluid py-4">
-            <h2>Aula competencias</h2>
+            <h2>Bienvenidos líderes '' </h2>
             <div class="row">
-                <h2 class="font-weight-bolder my-3 mb-4">Asignar evaluadores al área
-                    <?php echo $area ?>
-                </h2>
+                <!-- <h2 class="font-weight-bolder my-3 mb-4">Asignar evaluadores a
+                    <?php // echo $area  ?>
+                </h2> -->
+                <p>
+                    Gracias por ayudarnos en el proceso de evaluación de competencias de nuestros colaboradores. Por
+                    favor, asigna a cada persona el evaluador que hará su respectiva evaluación. Asegúrate de que los
+                    evaluadores asignados tengan en cuenta las habilidades y competencias de los colaboradores y que la
+                    carga de trabajo sea equitativa. Si tienes alguna pregunta o inquietud, no dudes en comunicarte con
+                    el Centro de Excelencia Formación y HRBP.
+                </p>
                 <div class="col-12">
                     <div class="card my-4">
                         <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
@@ -112,16 +119,16 @@
                                             </option>
                                         <?php } ?>
                                     </select>
-                                    <select class="form-select" id="competencia" aria-label="Seleccionar opción"
+                                    <!-- <select class="form-select" id="competencia" aria-label="Seleccionar opción"
                                         name="competencia">
                                         <option selected value="">Selecciona la competencia ---</option>
-                                        <?php foreach ($competencias as $row) { ?>
+                                        <?php // foreach ($competencias as $row) { ?>
                                             <option value=" <?php echo $row->id ?>">
-                                                <?php echo $row->nombre ?>
+                                                <?php // echo $row->nombre ?>
                                             </option>
-                                        <?php } ?>
+                                        <?php // } ?>
 
-                                    </select>
+                                    </select> -->
                                     <button id="asignar" type="submit"
                                         class="btn btn-success w-75 m-0 ms-3">Asignar</button>
                                 </div>
@@ -142,9 +149,9 @@
                                                     <th
                                                         class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                                         Cargo</th>
-                                                    <th
+                                                    <!-- <th
                                                         class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                        numero de competencias asignadas</th>
+                                                        numero de competencias asignadas</th> -->
 
                                                     <th
                                                         class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
@@ -181,9 +188,9 @@
                                                         <td class="align-middle text-center text-sm">
                                                             <?php echo $row->cargo ?>
                                                         </td>
-                                                        <td class="align-middle text-center text-sm">
-                                                            <?php echo $row->numero_competencias ?>
-                                                        </td>
+                                                        <!-- <td class="align-middle text-center text-sm">
+                                                            <?php // echo $row->numero_competencias ?>
+                                                        </td> -->
                                                         <td class="align-middle text-center">
                                                             <a type="button" class=" " data-bs-toggle="modal"
                                                                 data-bs-target="#detalles<?php $row->id ?>">

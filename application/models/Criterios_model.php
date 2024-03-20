@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') or exit ('No direct script access allowed');
 
 class Criterios_model extends MY_Model
 {
@@ -12,6 +12,25 @@ class Criterios_model extends MY_Model
     }
     public function listado_por_actividad($id_actividad)
     {
-        return $this->findAll(['id_actividad' => $id_actividad],'id, nombre');
+        return $this->findAll(['id_actividad' => $id_actividad], 'id, nombre');
     }
+
+    public function obtener_criterios($actividad_id)
+    {
+        // Consultar la base de datos para obtener los criterios asociados a la actividad clave
+        $this->db->select('*');
+        $this->db->from('criterios');
+        $this->db->where('id_actividad', $actividad_id);
+        $query = $this->db->get();
+
+        // Verificar si hay resultados
+        if ($query->num_rows() > 0) {
+            // Devolver los criterios como un array de objetos
+            return $query->result();
+        } else {
+            // Si no hay resultados, devolver un array vacío
+            return array();
+        }
+    }
+
 }

@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') or exit ('No direct script access allowed');
 // require_once 'application/third_party/Autoloader.php';
 // require_once 'application/third_party/psr/Autoloader.php';
 class Usuarios extends CI_Controller
@@ -17,13 +17,14 @@ class Usuarios extends CI_Controller
         $this->load->model('Competencias_model');
         $this->load->model('Usuario_competencia');
         $this->load->model('Actividad_competencia');
+        $this->load->model('Evaluacion_usuario_model');
     }
     public function index()
     {
         $user_data = $this->session->userdata('user_data');
 
         // Verificar si el usuario está logeado
-        if (!empty($user_data)) {
+        if (!empty ($user_data)) {
             // Si el usuario es administrador, cargar el header y la vista de usuarios
             if ($this->Usuario_model->has_role($user_data->id, 'Administrador') || $this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
                 $data['user_data'] = $user_data;
@@ -46,7 +47,7 @@ class Usuarios extends CI_Controller
         $user_data = $this->session->userdata('user_data');
 
         // Verificar si el usuario está logeado
-        if (!empty($user_data)) {
+        if (!empty ($user_data)) {
             // Si el usuario es administrador, cargar el header y la vista de usuarios
             if ($this->Usuario_model->has_role($user_data->id, 'Administrador') || $this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
 
@@ -72,7 +73,7 @@ class Usuarios extends CI_Controller
         $user_data = $this->session->userdata('user_data');
 
         // Verificar si el usuario está logeado
-        if (!empty($user_data)) {
+        if (!empty ($user_data)) {
             // Si el usuario es administrador, cargar el header y la vista de usuarios
             if ($this->Usuario_model->has_role($user_data->id, 'Administrador') || $this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
 
@@ -131,14 +132,14 @@ class Usuarios extends CI_Controller
 
     public function agregar()
     {
-        if (!empty($this->formData)) {
+        if (!empty ($this->formData)) {
             $this->formData->password = hash("sha256", 'aula' . $this->formData->identificacion);      //cifrado de contraseña
             if (!$this->Usuario_model->existe($this->formData->email)) {
                 $this->db->trans_begin();
                 if ($this->Usuario_model->insert($this->formData) > 0) {
                     // $envio_correo = $this->enviar_credenciales($this->formData);     //Descomentar para enviar correo
                     $envio_correo = $this->emular_correo();     //Comentar esta línea y descomentar la de arriba para efectuar el envío de correo
-                    if (!empty($envio_correo->error)) {
+                    if (!empty ($envio_correo->error)) {
                         $this->session->set_flashdata([
                             'success' => false,
                             'message' => 'Error al notificar al usuario'
@@ -196,51 +197,57 @@ class Usuarios extends CI_Controller
     {
         $user_data = $this->session->userdata('user_data');
         $data['usuarios'] = $this->Usuario_model->find($id);
+
         $data['area'] = $this->Area_model->find(['id' => $user_data->id_area], 'nombre')->nombre;
 
         $data['competencia'] = $this->Competencias_model->find(['id' => $id_competencia]);
-        $data['actividades_clave'] = $this->Actividad_competencia->findAll(['id_competencia'=>$data['competencia']->id], 'nombre,id');
+        $data['actividades_clave'] = $this->Actividad_competencia->findAll(['id_competencia' => $data['competencia']->id], 'nombre,id');
+
+        $data['resultado'] = $this->Evaluacion_usuario_model->find(['id_usuario' => $id],'resultado')->resultado;
+
 
         $this->load->view('layouts/header');
         $this->load->view('evaluador/evaluacion', $data);
 
     }
 
-    public function criterios_por_actividad($id_actividad){
-        if(!empty($id_actividad) && intval($id_actividad) > 0){
-            $this->load->model('Criterios_model','criterios');
+    public function criterios_por_actividad($id_actividad)
+    {
+        if (!empty ($id_actividad) && intval($id_actividad) > 0) {
+            $this->load->model('Criterios_model', 'criterios');
             $this->reques->criterios = $this->criterios->listado_por_actividad($id_actividad);
-            if(!empty($this->reques->criterios)){
+            if (!empty ($this->reques->criterios)) {
                 $this->reques->success = true;
             }
-        }else{
+        } else {
             $this->iffalse('Actividad no válida para consultar');
         }
         $this->json();
     }
 
-    public function guardar_evaluacion(){
-        if(!empty($this->formData)){
-            $this->load->model('Evaluacion_usuario_model','evaluacion_usuario');
-            foreach($this->formData->id_criterio_competencia as $indice => $id_criterio_competencia){
+    public function guardar_evaluacion()
+    {
+        if (!empty ($this->formData)) {
+            $this->load->model('Evaluacion_usuario_model', 'evaluacion_usuario');
+            foreach ($this->formData->id_criterio_competencia as $indice => $id_criterio_competencia) {
                 $data[] = (object) [
                     'id_criterio_competencia' => $id_criterio_competencia,
                     'id_usuario' => $this->formData->id_usuario,
                     'resultado' => $this->formData->resultado[$indice]
                 ];
             }
-            if($this->evaluacion_usuario->insertar_evaluacion($data)){
+            if ($this->evaluacion_usuario->insertar_evaluacion($data)) {
                 $this->session->set_flashdata([
                     'success' => true,
                     'message' => 'El usuario ha sido evaluado con éxito'
                 ]);
-                $this->reques = (object)[
+                $this->reques = (object) [
                     'success' => true,
                     'message' => 'El usuario ha sido evaluado con éxito'
                 ];
                 redirect('usuarios/evaluacion_usuario/' . $this->formData->id_usuario);
             }
-        }else{
+        } else {
             $this->iffalse('No ingresó ningún valor');
         }
         $this->json();
