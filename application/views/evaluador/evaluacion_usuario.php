@@ -40,18 +40,18 @@
                     <div class="px-4 py-3">
                         <div class="p-4 card-competencia rounded shadow-sm">
                             <a
-                                href="<?php echo IP_SERVER    ?>Usuarios/evaluacion/<?php echo $usuario->id    ?>/<?php  echo $row->id    ?>">
+                                href="<?php echo IP_SERVER    ?>Usuarios/evaluacion/<?php echo $usuario->id?>/<?php  echo $row->id_competencia?>">
                                 <h6 class="mb-0">
                                     Competencia:
                                     <?php echo $row->nombre_competencia; ?> <!-- Muestra el nombre de la competencia -->
                                 </h6>
                                 <p class="my-2">
-                                    ID Competencia:
-                                    <?php echo $row->id_competencia; ?> <!-- Muestra el ID de la competencia -->
+                                    Descripcion:
+                                    <?php echo $row->descripcion_competencia; ?> <!-- Muestra el ID de la competencia -->
                                 </p>
                             </a>
                         </div>
-                    </div>z
+                    </div>
                 <?php } ?>
             </div>
         </div>

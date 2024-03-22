@@ -197,12 +197,26 @@ class Usuarios extends CI_Controller
         $user_data = $this->session->userdata('user_data');
         $data['usuarios'] = $this->Usuario_model->find($id);
 
-        $data['area'] = $this->Area_model->find(['id' => $user_data->id_area], 'nombre')->nombre;
+        // $data['area'] = $this->Area_model->find(['id' => $user_data->id_area], 'nombre')->nombre;
 
         $data['competencia'] = $this->Competencias_model->find(['id' => $id_competencia]);
-        $data['actividades_clave'] = $this->Actividad_competencia->findAll(['id_competencia' => $data['competencia']->id], 'nombre,id');
+        // $data['resultado'] = $this->Evaluacion_usuario_model->find(['id_usuario' => $id],'resultado')->resultado;
+        $data['actividades_clave'] = $this->Asignacion_cargo_model->findActividadesCargoCompetencia($data['usuarios']->id_cargo,$id_competencia);
 
-        $data['resultado'] = $this->Evaluacion_usuario_model->find(['id_usuario' => $id],'resultado')->resultado;
+        $arreglo = [];
+        foreach ($data['actividades_clave'] as $registro) {
+            $actividad = (object)[
+                'id' => $registro->id_actividad,
+                'nombre' => $registro->nombre_actividad,
+            ];
+            $criterio = (object)[
+                'id' => $registro->id_criterio,
+                'nombre' => $registro->nombre_criterio,
+            ];
+            $arreglo[$registro->id_actividad] = (object) array_merge((array) (!empty($arreglo[$registro->id_actividad])? $arreglo[$registro->id_actividad]:[]), (array) $actividad);
+            $arreglo[$registro->id_actividad]->criterios[] = $criterio;
+        }
+        $data['actividades_clave'] = $arreglo;
 
 
         $this->load->view('layouts/header');

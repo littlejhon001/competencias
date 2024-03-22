@@ -29,9 +29,10 @@ class Asignacion_cargo_model extends MY_Model
 
     public function findAllWithCompetencia($conditions)
     {
-        $this->db->select('asignacion_cargo_competencia.*, competencia.nombre AS nombre_competencia');
+        $this->db->select('asignacion_cargo_competencia.*, competencia.nombre AS nombre_competencia, competencia.descripcion AS descripcion_competencia');
         $this->db->from('asignacion_cargo_competencia');
         $this->db->join('competencia', 'asignacion_cargo_competencia.id_competencia = competencia.id', 'inner');
+        $this->db->group_by('competencia.id');
         $this->db->where('asignacion_cargo_competencia.id_cargo', $conditions['id_cargo']); // Calificar el campo id_cargo
         $query = $this->db->get();
 
@@ -42,4 +43,11 @@ class Asignacion_cargo_model extends MY_Model
         }
     }
 
+    public function findActividadesCargoCompetencia($id_cargo,$id_competencia){
+        return $this->db->select('asignacion.id_actividad, actividad.nombre nombre_actividad, asignacion.id_criterio, criterio.nombre nombre_criterio')
+        ->join('actividad_competencia actividad','actividad.id = asignacion.id_actividad','INNER')
+        ->join('criterios criterio','criterio.id = asignacion.id_criterio','INNER')
+        ->where(['asignacion.id_cargo' => $id_cargo, 'asignacion.id_competencia' => $id_competencia])
+        ->get("$this->table asignacion")->result();
+    }
 }
