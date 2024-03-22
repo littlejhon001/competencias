@@ -1,4 +1,4 @@
-<!-- <pre><?php // echo // print_r($usuario, true)      ?> </pre> -->
+<!-- <pre><?php // echo // print_r($usuario, true)          ?> </pre> -->
 <div class="row py-5 animate__animated animate__fadeIn ">
     <div class="row">
         <div class="col-md-2 ">
@@ -20,7 +20,7 @@
                             </h4>
                             <p class=" m-0 p-0 ">
                                 Area:
-                                <?php echo $area ?>
+                                <?php // echo $area     ?>
                             </p>
                             <p class=" m-0 p-0 ">
                                 Cargo:
@@ -36,20 +36,22 @@
                 <h5 class="mb-2 ms-2 mt-3">Competencias asignadas al colaborador:
                     <?php echo $usuario->nombre . ' ' . $usuario->apellido ?>
                 </h5>
-                <?php foreach ($competencias as $row) { ?>
-                    <a href="<?php echo IP_SERVER ?>Usuarios/evaluacion/<?php echo $usuario->id ?>/<?php echo $row->id ?>">
-                        <div class="px-4 py-3 ">
-
-                            <div class="p-4 card-competencia rounded shadow-sm ">
+                <?php foreach ($competencias_cargo as $row) { ?>
+                    <div class="px-4 py-3">
+                        <div class="p-4 card-competencia rounded shadow-sm">
+                            <a
+                                href="<?php echo IP_SERVER    ?>Usuarios/evaluacion/<?php echo $usuario->id    ?>/<?php // echo $row->id    ?>">
                                 <h6 class="mb-0">
-                                    <?php echo $row->nombre ?>
+                                    Competencia:
+                                    <?php echo $row->nombre_competencia; ?> <!-- Muestra el nombre de la competencia -->
                                 </h6>
                                 <p class="my-2">
-                                    <?php echo $row->descripcion ?>
+                                    ID Competencia:
+                                    <?php echo $row->id_competencia; ?> <!-- Muestra el ID de la competencia -->
                                 </p>
-                            </div>
+                            </a>
                         </div>
-                    </a>
+                    </div>z
                 <?php } ?>
             </div>
         </div>

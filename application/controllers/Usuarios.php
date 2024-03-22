@@ -18,6 +18,7 @@ class Usuarios extends CI_Controller
         $this->load->model('Usuario_competencia');
         $this->load->model('Actividad_competencia');
         $this->load->model('Evaluacion_usuario_model');
+        $this->load->model('Asignacion_cargo_model');
     }
     public function index()
     {
@@ -72,6 +73,8 @@ class Usuarios extends CI_Controller
     {
         $user_data = $this->session->userdata('user_data');
 
+        // var_dump($user_data);
+
         // Verificar si el usuario está logeado
         if (!empty ($user_data)) {
             // Si el usuario es administrador, cargar el header y la vista de usuarios
@@ -79,20 +82,13 @@ class Usuarios extends CI_Controller
 
                 $data['usuarios'] = $this->Usuario_model->usuarios_asignar();
 
-                foreach ($data['usuarios'] as $usuario) {
-                    $usuario->numero_competencias = $this->Usuario_competencia->obtener_numero_competencias_usuario($usuario->id);
-                }
-                // var_dump( $data['usuarios']);
-                // die;
 
-                // $data['evaluadores'] = $this->Usuario_model->datos_evaluadores();
+                $data['evaluadores'] = $this->Usuario_model->datos_evaluadores();
 
-                $data['evaluadores'] = $this->Usuario_model->findAll(['Rol_id' => 3, 'id_area' => $user_data->id_area], 'id,nombre,apellido,cargo,identificacion,email');
+                // $data['evaluadores'] = $this->Usuario_model->findAll(['Rol_id' => 3,], 'id,nombre,apellido,cargo,identificacion,email');
 
-                $data['area'] = $this->Area_model->find(['id' => $user_data->id_area], 'nombre')->nombre;
-                $data['competencias'] = $this->Competencias_model->competencias_por_area();
-
-
+                // $data['area'] = $this->Area_model->find(['id' => $, 'nombre')->nombre;
+                // $data['competencias'] = $this->Competencias_model->competencias_por_area();
 
                 $data['user_data'] = $user_data;
                 $this->load->view('layouts/header', $data);
@@ -115,7 +111,7 @@ class Usuarios extends CI_Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Recuperar los datos del formulario
             $evaluador = $this->input->post('evaluador');
-            $competencia = $this->input->post('competencia');
+            // $competencia = $this->input->post('competencia');
 
 
 
@@ -123,7 +119,7 @@ class Usuarios extends CI_Controller
 
             $this->Usuario_model->guardar_datos_evaluador($evaluador, $usuarios_seleccionados);
 
-            $this->Usuario_competencia->guardar_datos_evaluador($competencia, $usuarios_seleccionados);
+            // $this->Usuario_competencia->guardar_datos_evaluador($competencia $usuarios_seleccionados);
 
             // Redirigir a alguna página de éxito
             redirect('Usuarios/asignar');
@@ -181,10 +177,13 @@ class Usuarios extends CI_Controller
         $data['usuario'] = $this->Usuario_model->find($id);
 
         // Obtener todas las entradas de usuarios_competencias para el usuario dado
-        $usuarios_competencias = $this->Usuario_competencia->findAll(['id_usuario' => $id]);
+        $data['competencias_cargo'] = $this->Asignacion_cargo_model->findAllWithCompetencia(['id_cargo' => $user_data->id_cargo]);
         $data['competencias'] = $this->Competencias_model->competencias_por_usuario($id);
 
-        $data['area'] = $this->Area_model->find(['id' => $user_data->id_area], 'nombre')->nombre;
+        // var_dump(     $data['competencias_cargo']);
+        // die;
+
+        // $data['area'] = $this->Area_model->find(['id' => $user_data->id_area], 'nombre')->nombre;
 
         // var_dump( $data['area']);
         // die;
