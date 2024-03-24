@@ -52,7 +52,7 @@
                                 </h6>
                                 <div class="ms-auto">
 
-                                    <?php if (empty ($resultado)) { ?>
+                                    <?php if (empty ($row->evaluada)) { ?>
                                         <a type="button" class="btn btn-primary consulta_criterios" data-bs-toggle="modal"
                                             data-bs-target="#evaluacion" data-row='<?php echo json_encode($row); ?>'>
                                             Comenzar evaluación
@@ -111,6 +111,7 @@
                                                             <label class="form-check-label" for="resultado3">
                                                                 No aplica
                                                             </label>
+                                                            <div class="invalid-feedback">Evalúe este criterio, por favor.</div>
                                                         </div>
                                                     </div>
                                                 </div>

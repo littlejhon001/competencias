@@ -201,7 +201,7 @@ class Usuarios extends CI_Controller
 
         $data['competencia'] = $this->Competencias_model->find(['id' => $id_competencia]);
         // $data['resultado'] = $this->Evaluacion_usuario_model->find(['id_usuario' => $id],'resultado')->resultado;
-        $data['actividades_clave'] = $this->Actividad_competencia->asignadas_por_cargo($data['usuarios']->id_cargo,$id_competencia);
+        $data['actividades_clave'] = $this->Actividad_competencia->asignadas_por_cargo($data['usuarios']->id_cargo,$id_competencia,$id);
 
         $this->load->view('layouts/header');
         $this->load->view('evaluador/evaluacion', $data);
