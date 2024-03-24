@@ -53,7 +53,7 @@ class Actividad_competencia extends MY_Model
             $this->db->where('actividad.id_competencia',$id_competencia);
         }
         if(!empty($id_usuario)){
-             $this->db->select("(count(evaluacion.id) > 0) evaluada, count(criterio.id) as criterio")
+             $this->db->select("(count(evaluacion.id) > 0) evaluada, count(criterio.id) as criterios")
              ->join("evaluacion_usuario evaluacion", "evaluacion.id_criterio_competencia = criterio.id AND evaluacion.id_usuario = $id_usuario", "LEFT");
         }
         $this->db->group_by("actividad.id");

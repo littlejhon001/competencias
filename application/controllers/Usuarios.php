@@ -208,11 +208,11 @@ class Usuarios extends CI_Controller
 
     }
 
-    public function criterios_por_cargo($id_cargo,$id_actividad="")
+    public function criterios_por_cargo($id_cargo,$id_actividad="",$id_usuario="")
     {
         if (!empty ($id_actividad) && intval($id_actividad) > 0) {
             $this->load->model('Criterios_model', 'criterios');
-            $this->reques->criterios = $this->criterios->asignados_por_cargo($id_cargo,$id_actividad);
+            $this->reques->criterios = $this->criterios->asignados_por_cargo($id_cargo,$id_actividad,$id_usuario);
             if (!empty ($this->reques->criterios)) {
                 $this->reques->success = true;
             }

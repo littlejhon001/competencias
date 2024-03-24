@@ -102,7 +102,7 @@ class Competencias extends CI_Controller
 		if (!empty ($id_competencia) && intval($id_competencia) > 0) {
 			$this->load->model('Actividad_competencia');
 			if ($this->Usuario_model->has_role($this->session->userdata('user_data')->id, 'Usuario')) {
-				$this->reques->actividades = $this->Actividad_competencia->listado_por_competencia($id_competencia, $this->session->userdata('user_data')->id);
+				$this->reques->actividades = $this->Actividad_competencia->asignadas_por_cargo($this->session->userdata('user_data')->id_cargo,$id_competencia, $this->session->userdata('user_data')->id);
 			} else {
 				$this->reques->actividades = $this->Actividad_competencia->listado_por_competencia($id_competencia);
 			}

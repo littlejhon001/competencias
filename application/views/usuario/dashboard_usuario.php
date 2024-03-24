@@ -172,7 +172,7 @@
                             <input name="id_criterio_competencia[]" type="hidden" value="">
                             <div class="card">
                                 <div class="card-body">
-                                    <label><b>Texto label de ejemplo</b></label>
+                                    <label class="m-0"><b>Texto label de ejemplo</b></label>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="resultado" disabled
                                             value="1" id="resultado1">
@@ -209,8 +209,13 @@
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>
-
-
+        <div id="loader-lg" class="d-none">
+            <div class="text-center">
+                <div class="spinner-border spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
     </main>
 
 
@@ -324,8 +329,10 @@
     input_criterio = $('#plantilla_criterios').clone()
     $('.extender').on('click','.consulta_criterios',function() {
         boton_actividad = $(this);
+        $('#evaluacion').find('.modal-title').text('Criterios para: '+boton_actividad.data('row').nombre);
+        $('#evaluacion').find('.modal-body').text('');
+        $('#evaluacion').find('.modal-body').append($('#loader-lg').html());
         consultar_criterios(boton_actividad.data('row').id).then((respuesta) => {
-            $('#evaluacion').find('.modal-title').text('Criterios para: '+boton_actividad.data('row').nombre);
             $('#evaluacion').find('.modal-body').text('');
             if (!respuesta.error) {
                 if (respuesta.success == true) {
@@ -334,7 +341,10 @@
                         input = input_criterio.clone()
                         input.find('label b').text(criterio.nombre)
                         if(boton_actividad.data('row').evaluada != 1){
-                            input.find('input').detach()
+                            input.find('.form-check').remove()
+                            input.find('.card-body').addClass('bg-light')
+                        }else{
+                            input.find(`input[type="radio"][value="${criterio.resultado}"]`).attr('checked',true)
                         }
                         input.find('input[type="hidden"]').attr('value',criterio.id)
                         input.find('input[type="radio"]').attr('name','resultado['+index+']')
@@ -347,7 +357,7 @@
         })
     })
     function consultar_criterios(id_actividad) {
-        return $.get('<?php echo IP_SERVER?>usuarios/criterios_por_actividad/' + id_actividad)
+        return $.get(`<?php echo IP_SERVER ?>usuarios/criterios_por_cargo/<?php echo $this->session->userdata('user_data')->id_cargo?>/${id_actividad}/<?php echo $this->session->userdata('user_data')->id?>`)
     }
     </script>
 

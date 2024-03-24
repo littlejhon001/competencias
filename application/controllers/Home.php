@@ -32,7 +32,7 @@ class Home extends CI_Controller
                 $this->vista('evaluador/usuarios_asignados', $data);
 
             } else if ($this->Usuario_model->has_role($user_data->id, 'Usuario')) {
-                $data['competencias_asignadas'] = $this->Competencias_model->competencias_por_usuario($user_data->id);
+                $data['competencias_asignadas'] = $this->Competencias_model->asignadas_por_cargo($user_data->id_cargo);
                 $this->vista('usuario/dashboard_usuario',$data);
             } else {
                 // Si el usuario no es administrador, podrías redirigirlo a otra vista o mostrar un mensaje de error
