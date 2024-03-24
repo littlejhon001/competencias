@@ -32,5 +32,13 @@ class Criterios_model extends MY_Model
             return array();
         }
     }
-
+    public function asignados_por_cargo($id_cargo,$id_actividad=""){
+        $this->db->select('criterio.nombre')
+        ->join('asignacion_cargo_competencia asignacion','asignacion.id_criterio = criterio.id','INNER')
+        ->where('asignacion.id_cargo',$id_cargo);
+        if(!empty($id_actividad)){
+            $this->db->where('criterio.id_actividad',$id_actividad);
+        }
+        return $this->db->get("$this->table criterio")->result();
+    }
 }

@@ -130,7 +130,13 @@
             </div>
         </div>
     </div>
-
+    <div id="loader" class="d-none">
+        <div class="text-center">
+            <div class="spinner-border spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
 
 </div>
 
@@ -142,20 +148,33 @@
     $('.consulta_criterios').click(function () {
         $('#evaluacion').find('.modal-title').text($(this).data('row').nombre);
         $('#evaluacion').find('.modal-body').text('');
-        criterios = $(this).data('row').criterios
-        $.each(criterios, (index, criterio) => {
-            input = input_criterio
-            input.find('label b').text(criterio.nombre)
-            input.find('input[type="radio"]').each(function (posicion){
-                $(this).attr('id', 'resultado' + index + posicion)
-                $(this).next('label').attr('for', 'resultado' + index + posicion)
-            })
-            input.find('input[type="hidden"]').attr('value', criterio.id)
-            input.find('input[type="radio"]').attr('name', 'resultado[' + index + ']')
-            $('#evaluacion').find('.modal-body').append(`<p>${input.html()}</p>`)
+        $('#evaluacion').find('.modal-body').append($('#loader').html());
+        consultar_criterios($(this).data('row').id).then((respuesta) => {
+            $('#evaluacion').find('.modal-body').text('');
+            if (!respuesta.error) {
+                if (respuesta.success == true) {
+                    criterios = respuesta.criterios
+                    $.each(criterios, (index, criterio) => {
+                        input = input_criterio
+                        input.find('label b').text(criterio.nombre)
+                        input.find('input[type="radio"]').each(function (posicion){
+                            $(this).attr('id', 'resultado' + index + posicion)
+                            $(this).next('label').attr('for', 'resultado' + index + posicion)
+                        })
+                        input.find('input[type="hidden"]').attr('value', criterio.id)
+                        input.find('input[type="radio"]').attr('name', 'resultado[' + index + ']')
+                        $('#evaluacion').find('.modal-body').append(`<p>${input.html()}</p>`)
+                    })
+                }
+            } else {
+                alert(respuesta.error)
+            }
         })
     })
 
+    function consultar_criterios(id_actividad) {
+        return $.get(`<?php echo IP_SERVER ?>usuarios/criterios_por_cargo/<?php echo $usuarios->id_cargo?>/${id_actividad}`)
+    }
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
     const forms = document.querySelectorAll('.needs-validation')
 

@@ -44,5 +44,19 @@ class Actividad_competencia extends MY_Model
             return array();
         }
     }
-
+    public function asignadas_por_cargo($id_cargo,$id_competencia="",$id_usuario=""){
+        $this->db->select('actividad.nombre, actividad.id')
+        ->join("criterios criterio", "criterio.id_actividad = actividad.id", "LEFT")
+        ->join('asignacion_cargo_competencia asignacion','asignacion.id_criterio = criterio.id','INNER')
+        ->where('asignacion.id_cargo',$id_cargo);
+        if(!empty($id_competencia)){
+            $this->db->where('actividad.id_competencia',$id_competencia);
+        }
+        if(!empty($id_usuario)){
+             $this->db->select("(count(evaluacion.id) > 0) evaluada, count(criterio.id) as criterio")
+             ->join("evaluacion_usuario evaluacion", "evaluacion.id_criterio_competencia = criterio.id AND evaluacion.id_usuario = $id_usuario", "LEFT");
+        }
+        $this->db->group_by("actividad.id");
+        return $this->db->get("$this->table actividad")->result();
+    }
 }

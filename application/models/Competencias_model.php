@@ -28,6 +28,14 @@ class Competencias_model extends MY_Model
         ->get($this->table)->result();
     }
 
-
+    public function asignadas_por_cargo($id_cargo){
+        $this->db->select('competencia.id,competencia.nombre,competencia.descripcion,competencia.codigo')
+        ->join("actividad_competencia actividad", "actividad.id_competencia = competencia.id", "LEFT")
+        ->join("criterios criterio", "criterio.id_actividad = actividad.id", "LEFT")
+        ->join('asignacion_cargo_competencia asignacion','asignacion.id_criterio = criterio.id','INNER')
+        ->where('asignacion.id_cargo',$id_cargo);
+        $this->db->group_by("competencia.id");
+        return $this->db->get("$this->table competencia")->result();
+    }
 
 }

@@ -177,7 +177,7 @@ class Usuarios extends CI_Controller
         $data['usuario'] = $this->Usuario_model->find($id);
 
         // Obtener todas las entradas de usuarios_competencias para el usuario dado
-        $data['competencias_cargo'] = $this->Asignacion_cargo_model->findAllWithCompetencia(['id_cargo' => $user_data->id_cargo]);
+        $data['competencias_cargo'] = $this->Competencias_model->asignadas_por_cargo($user_data->id_cargo);
         $data['competencias'] = $this->Competencias_model->competencias_por_usuario($id);
 
         // var_dump(     $data['competencias_cargo']);
@@ -201,34 +201,18 @@ class Usuarios extends CI_Controller
 
         $data['competencia'] = $this->Competencias_model->find(['id' => $id_competencia]);
         // $data['resultado'] = $this->Evaluacion_usuario_model->find(['id_usuario' => $id],'resultado')->resultado;
-        $data['actividades_clave'] = $this->Asignacion_cargo_model->findActividadesCargoCompetencia($data['usuarios']->id_cargo,$id_competencia);
-
-        $arreglo = [];
-        foreach ($data['actividades_clave'] as $registro) {
-            $actividad = (object)[
-                'id' => $registro->id_actividad,
-                'nombre' => $registro->nombre_actividad,
-            ];
-            $criterio = (object)[
-                'id' => $registro->id_criterio,
-                'nombre' => $registro->nombre_criterio,
-            ];
-            $arreglo[$registro->id_actividad] = (object) array_merge((array) (!empty($arreglo[$registro->id_actividad])? $arreglo[$registro->id_actividad]:[]), (array) $actividad);
-            $arreglo[$registro->id_actividad]->criterios[] = $criterio;
-        }
-        $data['actividades_clave'] = $arreglo;
-
+        $data['actividades_clave'] = $this->Actividad_competencia->asignadas_por_cargo($data['usuarios']->id_cargo,$id_competencia);
 
         $this->load->view('layouts/header');
         $this->load->view('evaluador/evaluacion', $data);
 
     }
 
-    public function criterios_por_actividad($id_actividad)
+    public function criterios_por_cargo($id_cargo,$id_actividad="")
     {
         if (!empty ($id_actividad) && intval($id_actividad) > 0) {
             $this->load->model('Criterios_model', 'criterios');
-            $this->reques->criterios = $this->criterios->listado_por_actividad($id_actividad);
+            $this->reques->criterios = $this->criterios->asignados_por_cargo($id_cargo,$id_actividad);
             if (!empty ($this->reques->criterios)) {
                 $this->reques->success = true;
             }
