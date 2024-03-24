@@ -72,8 +72,8 @@ class Competencias extends CI_Controller
 	public function competencia_personalizada($id_cargo)
 	{
 		// Recibe los datos enviados por AJAX
-		$competencia_id = $this->input->post('competencia_id');
-		$actividad_id = $this->input->post('actividad_id');
+		// $competencia_id = $this->input->post('competencia_id');
+		// $actividad_id = $this->input->post('actividad_id');
 		$criterios_seleccionados = $this->input->post('criterio_id');
 
 		$criterios_ids = implode(',', $criterios_seleccionados);
@@ -81,9 +81,9 @@ class Competencias extends CI_Controller
 		$data = array();
 		foreach ($criterios_seleccionados as $criterio_id) {
 			$data[] = array(
-				'id_competencia' => $competencia_id,
+				// 'id_competencia' => $competencia_id,
 				'id_cargo' => $id_cargo,
-				'id_actividad' => $actividad_id,
+				// 'id_actividad' => $actividad_id,
 				'id_criterio' => $criterio_id
 			);
 		}
