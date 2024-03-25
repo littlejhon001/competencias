@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') or exit ('No direct script access allowed');
 
 class Usuario_model extends MY_Model
 {
@@ -24,7 +24,7 @@ class Usuario_model extends MY_Model
     {
         $rol_usuario = $this->obtener_rol($user_id);
         $rol_consultado = $this->db->get_where('roles', array('nombre' => $role_name))->row()->id;
-        return($rol_usuario == $rol_consultado);
+        return ($rol_usuario == $rol_consultado);
     }
 
     public function datos_evaluadores()
@@ -64,7 +64,7 @@ class Usuario_model extends MY_Model
 
     public function existe($email)
     {
-        return !empty($this->findName('email', $email, 'email'));
+        return !empty ($this->findName('email', $email, 'email'));
     }
 
     public function obtener_usuarios_por_evaluador($id_evaluador)
@@ -74,7 +74,16 @@ class Usuario_model extends MY_Model
 
     public function usuarios_asignar()
     {
-        return $this->findAll(['id_grupo' => $this->session->userdata('user_data')->id_grupo, 'Rol_ID' => 4]);
+        $id_grupo = $this->session->userdata('user_data')->id_grupo;
+
+        // Realizar la consulta
+        $query = $this->db->select('usuarios.*, cargos.nombre AS nombre_cargo')
+            ->from('usuarios')
+            ->join('cargos', 'usuarios.id_cargo = cargos.id')
+            ->where('usuarios.id_grupo', $id_grupo)
+            ->where('usuarios.Rol_ID', 4)
+            ->get();
+        return $query->result();
     }
 
 }
