@@ -54,7 +54,7 @@ class Usuarios extends CI_Controller
 
                 $data['usuarios'] = $this->Usuario_model->findAll();
                 $data['roles'] = $this->Rol_model->listado();
-                $data['areas'] = $this->Area_model->findAll();
+                // $data['areas'] = $this->Area_model->findAll();
                 $data['user_data'] = $user_data;
 
                 $this->load->view('layouts/header', $data);

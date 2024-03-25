@@ -130,19 +130,19 @@
                                     <thead>
                                         <tr>
                                             <th
-                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                class=" m-0 p-0 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                                 Nombre</th>
                                             <th
-                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                class=" m-0 p-0 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">
                                                 Apellido</th>
                                             <th
-                                                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                class="  m-0 p-0 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                                 Cargo</th>
                                             <th
-                                                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                class="  m-0 p-0 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                                 Asignado</th>
                                             <th
-                                                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                class=" m-0 p-0  text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                                 Acciones</th>
                                             <!-- <th class="text-secondary opacity-7"></th> -->
                                         </tr>
@@ -174,13 +174,13 @@
                                                             <?php echo $row->apellido ?>
                                                         </h6>
                                                     </td>
-                                                    <td class="align-middle text-center text-sm">
+                                                    <td class="  text-sm w-25" >
                                                         <?php echo $row->cargo ?>
                                                     </td>
-                                                    <td class="align-middle text-center">
+                                                    <td class=" ">
                                                         <?php echo ($row->id_evaluador != "") ? '<i class="bi bi-check-circle text-success"></i>' : '<i class="bi bi-info-circle-fill text-warning"></i>'; ?>
                                                     </td>
-                                                    <td class="align-middle text-center">
+                                                    <td class=" ">
                                                         <button class="border rounded bg-primary" type="button"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#ver_mas<?php echo $row->id ?>">
@@ -214,7 +214,7 @@
                                                                             <?php echo $row->email ?>
                                                                         </a>
                                                                     </h6>
-                                                                    <h6 class="text-md">
+                                                                    <h6 class="text-md  " >
                                                                         Cargo:
                                                                         <?php echo $row->cargo ?>
                                                                     </h6>
@@ -272,33 +272,33 @@
                     <form action="agregar" method="post">
                         <div class="mb-3">
                             <label for="identificacion" class="form-label">Numero de documento</label>
-                            <input type="text" class="form-control ps-2" id="identificacion" minlength="8"
+                            <input type="text" class="form-control " id="identificacion" minlength="8"
                                 pattern="^[0-9]+$" maxlength="10" placeholder="Numero de documento"
                                 name="identificacion" required>
                         </div>
                         <div class="mb-3">
                             <label for="nombre" class="form-label">Nombre</label>
-                            <input type="text" placeholder="Nombre" class="form-control ps-2" id="nombre" name="nombre"
+                            <input type="text" placeholder="Nombre" class="form-control " id="nombre" name="nombre"
                                 required>
                         </div>
                         <div class="mb-3">
                             <label for="apellido" class="form-label">Apellido</label>
-                            <input type="text" placeholder="Apellido" class="form-control ps-2" id="apellido"
+                            <input type="text" placeholder="Apellido" class="form-control " id="apellido"
                                 name="apellido" required>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Correo</label>
-                            <input type="email" class="form-control ps-2" id="email"
+                            <input type="email" class="form-control " id="email"
                                 pattern="^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$" placeholder="Correo"
                                 name="email" required>
                         </div>
                         <div class="mb-3">
                             <label for="cargo" class="form-label">Cargo</label>
-                            <input type="text" class="form-control ps-2" id="cargo" placeholder="Cargo" name="cargo">
+                            <input type="text" class="form-control " id="cargo" placeholder="Cargo" name="cargo">
                         </div>
                         <div class="mb-3">
                             <label for="id_area" class="form-label">Área</label>
-                            <select class="form-select ps-2" id="id_area" name="id_area" required>
+                            <select class="form-select " id="id_area" name="id_area" required>
                                 <option selected disabled value="">Seleccione ---</option>
                                 <?php foreach ($areas as $row): ?>
                                     <option value="<?php echo $row->id ?>">
@@ -309,7 +309,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="Rol_ID" class="form-label">Seleccione el tipo de usuario</label>
-                            <select class="form-select ps-2" id="Rol_ID" name="Rol_ID" required>
+                            <select class="form-select " id="Rol_ID" name="Rol_ID" required>
                                 <option selected disabled value="">Seleccione ---</option>
                                 <?php foreach ($roles as $rol): ?>
                                     <option value="<?php echo $rol->id ?>">
