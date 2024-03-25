@@ -1,10 +1,10 @@
 <!-- <pre><?php  // echo  print_r($resultado, true)       ?> </pre> -->
 <div class="row py-5">
     <div class="row">
-        <div class="col-md-2 ">
+        <div class="col-md-2  col-2">
 
         </div>
-        <div class="col-md-9 mx-auto ">
+        <div class="col-md-9 col-9 mx-auto ">
             <!-- Profile widget -->
             <div class=" shadow  mb-4 rounded overflow-hidden">
                 <div class=" d-flex border bg-perfil justify-content-center cover">

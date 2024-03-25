@@ -129,8 +129,7 @@
                                     </div>
 
                                     <div class="col-6 mt-2">
-                                        <select class="form-select" id="select-criterios"
-                                            aria-label="Criterios">
+                                        <select class="form-select" id="select-criterios" aria-label="Criterios">
                                             <option selected>Seleccione uno o más criterios</option>
                                         </select>
                                     </div>
@@ -139,6 +138,9 @@
                                         <button class="btn btn-success w-100" id="guardar-seleccion">Guardar
                                             competencia</button>
                                     </div>
+
+                                    <div id="seleccion" class="mt-3 "></div>
+
 
                                 </div>
                             </div>
@@ -227,16 +229,19 @@
             $('#select-competencias').change(function () {
                 seleccion.competencia_id = $(this).val();
                 console.log(seleccion);
+                mostrarSeleccion();
             });
 
             $('#select-actividades').change(function () {
                 seleccion.actividad_id = $(this).val();
                 console.log(seleccion);
+                mostrarSeleccion();
             });
 
             $('#select-criterios').change(function () {
                 seleccion.criterio_id = $(this).val();
                 console.log(seleccion);
+                mostrarSeleccion();
             });
 
 
@@ -299,6 +304,24 @@
                     }
                 });
             }
+            function mostrarSeleccion() {
+                var competenciaSeleccionada = $('#select-competencias option:selected').text();
+                var actividadSeleccionada = $('#select-actividades option:selected').text();
+                var criterios_seleccionados = $('#select-criterios option:selected').map(function () {
+                    return $(this).text();
+                }).get().join(', '); // Se separan los criterios por comas
+
+                var seleccionHTML = '<p><b>Competencia seleccionada:</b><br> ' + competenciaSeleccionada + '</p>';
+                seleccionHTML += '<p><b>Actividad seleccionada:</b> <br>' + actividadSeleccionada + '</p>';
+                seleccionHTML += '<p><b>Criterios seleccionados:</b> <br>' + criterios_seleccionados + '</p>';
+
+                // Agregar animación a #seleccion
+                $('#seleccion').addClass('animate__animated animate__fadeInUp').html(seleccionHTML);
+
+                // Eliminar la clase de animación después de un tiempo para que pueda repetirse si se realiza otra selección
+          // Ajusta el tiempo según la duración de la animación
+            }
+
 
         });
 
