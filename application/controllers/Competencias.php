@@ -51,9 +51,7 @@ class Competencias extends CI_Controller
 	{
 		$data['cargo'] = $this->Cargos_model->find($id);
 		$data['competencias'] = $this->Competencias_model->findAll();
-
-
-
+		$data['competencias_asignadas'] = $this->Asignacion_cargo_model->obtener_asignaciones_con_actividad_y_competencia($id);
 		$this->vista('admin/asignar_competencia_cargo', $data);
 	}
 
@@ -102,7 +100,7 @@ class Competencias extends CI_Controller
 		if (!empty ($id_competencia) && intval($id_competencia) > 0) {
 			$this->load->model('Actividad_competencia');
 			if ($this->Usuario_model->has_role($this->session->userdata('user_data')->id, 'Usuario')) {
-				$this->reques->actividades = $this->Actividad_competencia->asignadas_por_cargo($this->session->userdata('user_data')->id_cargo,$id_competencia, $this->session->userdata('user_data')->id);
+				$this->reques->actividades = $this->Actividad_competencia->asignadas_por_cargo($this->session->userdata('user_data')->id_cargo, $id_competencia, $this->session->userdata('user_data')->id);
 			} else {
 				$this->reques->actividades = $this->Actividad_competencia->listado_por_competencia($id_competencia);
 			}

@@ -141,6 +141,33 @@
 
                                     <div id="seleccion" class="mt-3 "></div>
 
+                                    <!-- <pre><?php // echo print_r($competencias_asignadas, true) ?></pre> -->
+                                    <?php foreach ($competencias_asignadas as $competencia): ?>
+                                        <div class="px-4 py-3">
+                                            <div class="p-4 card-competencia rounded shadow-sm">
+                                                <a href="#">
+                                                    <h6 class="mb-0">
+                                                        Competencia:
+                                                        <?php echo $competencia->nombre_competencia; ?>
+                                                    </h6>
+                                                    <p class="my-2">
+                                                        Actividad clave:
+                                                        <?php echo $competencia->nombre_actividad; ?>
+                                                    </p>
+                                                    <p class="my-2">
+                                                        Criterios:
+                                                        <?php foreach ($competencia->nombres_criterios as $criterio): ?>
+                                                            <li>
+                                                                <?php echo $criterio; ?>,
+                                                            </li>
+                                                        <?php endforeach; ?>
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+
+
 
                                 </div>
                             </div>
@@ -319,7 +346,7 @@
                 $('#seleccion').addClass('animate__animated animate__fadeInUp').html(seleccionHTML);
 
                 // Eliminar la clase de animación después de un tiempo para que pueda repetirse si se realiza otra selección
-          // Ajusta el tiempo según la duración de la animación
+                // Ajusta el tiempo según la duración de la animación
             }
 
 

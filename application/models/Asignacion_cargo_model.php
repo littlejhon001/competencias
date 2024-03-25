@@ -43,11 +43,46 @@ class Asignacion_cargo_model extends MY_Model
         }
     }
 
-    public function findActividadesCargoCompetencia($id_cargo,$id_competencia){
+    public function findActividadesCargoCompetencia($id_cargo, $id_competencia)
+    {
         return $this->db->select('asignacion.id_actividad, actividad.nombre nombre_actividad, asignacion.id_criterio, criterio.nombre nombre_criterio')
-        ->join('actividad_competencia actividad','actividad.id = asignacion.id_actividad','INNER')
-        ->join('criterios criterio','criterio.id = asignacion.id_criterio','INNER')
-        ->where(['asignacion.id_cargo' => $id_cargo, 'asignacion.id_competencia' => $id_competencia])
-        ->get("$this->table asignacion")->result();
+            ->join('actividad_competencia actividad', 'actividad.id = asignacion.id_actividad', 'INNER')
+            ->join('criterios criterio', 'criterio.id = asignacion.id_criterio', 'INNER')
+            ->where(['asignacion.id_cargo' => $id_cargo, 'asignacion.id_competencia' => $id_competencia])
+            ->get("$this->table asignacion")->result();
     }
+
+    public function obtener_asignaciones_con_actividad_y_competencia($id_cargo)
+    {
+        $this->db->select('asignacion.id_cargo, GROUP_CONCAT(asignacion.id_criterio) as id_criterios, actividad_competencia.nombre AS nombre_actividad, competencia.nombre AS nombre_competencia');
+        $this->db->from('asignacion_cargo_competencia as asignacion');
+        $this->db->join('criterios', 'asignacion.id_criterio = criterios.id');
+        $this->db->join('actividad_competencia', 'criterios.id_actividad = actividad_competencia.id');
+        $this->db->join('competencia', 'actividad_competencia.id_competencia = competencia.id');
+        $this->db->where('asignacion.id_cargo', $id_cargo); // Filtrar por el cargo especificado
+        $this->db->group_by('competencia.id'); // Agrupar por ID de competencia
+        $query = $this->db->get();
+
+        $resultados = $query->result();
+
+        // Obtener los nombres de los criterios
+        foreach ($resultados as $resultado) {
+            $id_criterios = explode(',', $resultado->id_criterios);
+            $this->db->select('nombre');
+            $this->db->from('criterios');
+            $this->db->where_in('id', $id_criterios);
+            $query = $this->db->get();
+            $criterios = $query->result_array();
+
+            // Agregar los nombres de los criterios al resultado
+            $resultado->nombres_criterios = array_column($criterios, 'nombre');
+        }
+
+        return $resultados;
+    }
+
+
+
+
+
 }
