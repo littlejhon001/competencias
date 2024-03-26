@@ -187,13 +187,6 @@
                                             No
                                         </label>
                                     </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="resultado" disabled value="3"
-                                            id="resultado3">
-                                        <label class="form-check-label" for="resultado3">
-                                            No aplica
-                                        </label>
-                                    </div>
                                 </div>
                             </div>
                         </div>

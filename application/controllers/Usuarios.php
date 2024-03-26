@@ -205,6 +205,7 @@ class Usuarios extends CI_Controller
 
         $this->load->view('layouts/header');
         $this->load->view('evaluador/evaluacion', $data);
+        $this->load->view('layouts/footer');
 
     }
 
@@ -222,27 +223,31 @@ class Usuarios extends CI_Controller
         $this->json();
     }
 
-    public function guardar_evaluacion()
+    public function guardar_evaluacion($id_actividad)
     {
         if (!empty ($this->formData)) {
             $this->load->model('Evaluacion_usuario_model', 'evaluacion_usuario');
-            foreach ($this->formData->id_criterio_competencia as $indice => $id_criterio_competencia) {
-                $data[] = (object) [
-                    'id_criterio_competencia' => $id_criterio_competencia,
-                    'id_usuario' => $this->formData->id_usuario,
-                    'resultado' => $this->formData->resultado[$indice]
-                ];
-            }
-            if ($this->evaluacion_usuario->insertar_evaluacion($data)) {
-                $this->session->set_flashdata([
-                    'success' => true,
-                    'message' => 'El usuario ha sido evaluado con éxito'
-                ]);
-                $this->reques = (object) [
-                    'success' => true,
-                    'message' => 'El usuario ha sido evaluado con éxito'
-                ];
-                redirect('usuarios/evaluacion_usuario/' . $this->formData->id_usuario);
+            if($this->Actividad_competencia->evaluada($id_actividad,$this->formData->id_usuario)){ //VALIDAR SI YA SE EVALUÓ LA ACTIVIDAD
+                $this->iffalse('Esta actividad clave ya ha sido evaluada');
+            }else{
+                foreach ($this->formData->id_criterio_competencia as $indice => $id_criterio_competencia) {
+                    $data[] = (object) [
+                        'id_criterio_competencia' => $id_criterio_competencia,
+                        'id_usuario' => $this->formData->id_usuario,
+                        'resultado' => $this->formData->resultado[$indice]
+                    ];
+                }
+                if ($this->evaluacion_usuario->insertar_evaluacion($data)) {
+                    $this->session->set_flashdata([
+                        'success' => true,
+                        'message' => 'El usuario ha sido evaluado con éxito'
+                    ]);
+                    $this->reques = (object) [
+                        'success' => true,
+                        'message' => 'El usuario ha sido evaluado con éxito'
+                    ];
+                    // redirect('usuarios/evaluacion_usuario/' . $this->formData->id_usuario);
+                }
             }
         } else {
             $this->iffalse('No ingresó ningún valor');

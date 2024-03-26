@@ -58,9 +58,9 @@
                                             Comenzar evaluación
                                         </a>
                                     <?php } else { ?>
-                                        <a type="button" class="btn btn-primary consulta_criterios disabled" data-bs-toggle="modal"
+                                        <a type="button" class="btn btn-success consulta_criterios" data-bs-toggle="modal"
                                             data-bs-target="#evaluacion" data-row='<?php echo json_encode($row); ?>'>
-                                            Evaluación finalizada
+                                            Ver resultados
                                         </a>
                                     <?php } ?>
                                 </div>
@@ -75,7 +75,7 @@
                             aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
-                                    <form novalidate class="needs-validation"
+                                    <form id="form-evaluacion" novalidate class="needs-validation"
                                         action="<?php echo IP_SERVER ?>usuarios/guardar_evaluacion" method="post">
                                         <input name="id_usuario" type="hidden" value="<?php echo $usuarios->id ?>">
                                         <div class="modal-header">
@@ -103,13 +103,6 @@
                                                                 name="resultado" value="2" id="resultado2">
                                                             <label class="form-check-label" for="resultado2">
                                                                 No
-                                                            </label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio"
-                                                                name="resultado" value="3" id="resultado3">
-                                                            <label class="form-check-label" for="resultado3">
-                                                                No aplica
                                                             </label>
                                                             <div class="invalid-feedback">Evalúe este criterio, por favor.</div>
                                                         </div>
@@ -143,10 +136,12 @@
 
 </div>
 <script src="<?php echo IP_SERVER ?>assets/jquery/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     input_criterio = $('#plantilla_criterios')
     $('.consulta_criterios').click(function () {
+        boton_actividad = $(this);
         $('#evaluacion').find('.modal-title').text($(this).data('row').nombre);
         $('#evaluacion').find('.modal-body').text('');
         $('#evaluacion').find('.modal-body').append($('#loader').html());
@@ -154,9 +149,16 @@
             $('#evaluacion').find('.modal-body').text('');
             if (!respuesta.error) {
                 if (respuesta.success == true) {
+                    accion = "<?php echo IP_SERVER ?>usuarios/guardar_evaluacion";
+                    $('#evaluacion').find('form').attr('action', accion + '/'+ boton_actividad.data('row').id);
                     criterios = respuesta.criterios
                     $.each(criterios, (index, criterio) => {
-                        input = input_criterio
+                        input = input_criterio.clone()
+                        // SI YA ESTÁ EVALUADA, DESHABILITA LOS INPUTS
+                        if(boton_actividad.data('row').evaluada == 1){
+                            input.find(`.form-check-input`).attr('disabled',true)
+                            input.find(`input[type="radio"][value="${criterio.resultado}"]`).attr('checked',true)
+                        }
                         input.find('label b').text(criterio.nombre)
                         input.find('input[type="radio"]').each(function (posicion){
                             $(this).attr('id', 'resultado' + index + posicion)
@@ -174,20 +176,43 @@
     })
 
     function consultar_criterios(id_actividad) {
-        return $.get(`<?php echo IP_SERVER ?>usuarios/criterios_por_cargo/<?php echo $usuarios->id_cargo?>/${id_actividad}`)
+        return $.get(`<?php echo IP_SERVER ?>usuarios/criterios_por_cargo/<?php echo $usuarios->id_cargo?>/${id_actividad}/<?php echo $usuarios->id?>`)
     }
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    const forms = document.querySelectorAll('.needs-validation')
 
     // Loop over them and prevent submission
-    Array.from(forms).forEach(form => {
-        form.addEventListener('submit', event => {
-            if (!form.checkValidity()) {
-                event.preventDefault()
-                event.stopPropagation()
+    $.each($('form.needs-validation'), (index,form) => {
+        $(form).on('submit', function (event) {
+            event.preventDefault()
+            event.stopPropagation()
+            if (form.checkValidity()) {
+                $.ajax({
+                    method: $(this).attr('method'),
+                    url: $(this).attr('action'),
+                    data: $(this).serialize()
+                }).done(function( respuesta ) {
+                    if(respuesta.success == true){
+                        if(respuesta.url){
+                            location.replace(respuesta.url)
+                        }else{
+                            location.reload()
+                        }
+                    }else{
+                        console.log(respuesta.error)
+                        respuesta.message = respuesta.error.join('<br>')
+                        Swal.fire({
+                            toast: true,
+                            position: "top-end",
+                            timer: 3000,
+                            timerProgressBar: true,
+                            title: respuesta.message,
+                            icon: "error",
+                            showConfirmButton: false,
+                        })
+                    }
+                });
             }
-
-            form.classList.add('was-validated')
-        }, false)
+            $(this).addClass('was-validated')
+        })
     })
 </script>

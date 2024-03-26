@@ -59,4 +59,12 @@ class Actividad_competencia extends MY_Model
         $this->db->group_by("actividad.id");
         return $this->db->get("$this->table actividad")->result();
     }
+    public function evaluada($id_actividad,$id_usuario){
+        return $this->db->select("(count(evaluacion.id) > 0) evaluada")
+        ->join("criterios criterio", "criterio.id_actividad = actividad.id", "LEFT")
+        ->join("evaluacion_usuario evaluacion", "evaluacion.id_criterio_competencia = criterio.id AND evaluacion.id_usuario = $id_usuario", "LEFT")
+        ->where('actividad.id',$id_actividad)
+        ->get("$this->table actividad")->row()->evaluada;
+
+    }
 }
