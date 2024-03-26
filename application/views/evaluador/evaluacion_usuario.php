@@ -1,10 +1,10 @@
 <!-- <pre><?php // echo // print_r($usuario, true)          ?> </pre> -->
 <div class="row py-5 animate__animated animate__fadeIn ">
     <div class="row">
-        <div class="col-md-2 ">
+        <div class="col-md-2 col-2 ">
 
         </div>
-        <div class="col-md-9 mx-auto"> <!-- Profile widget -->
+        <div class="col-md-9 col-9 mx-auto"> <!-- Profile widget -->
             <div class="bg-white shadow  mb-4 rounded overflow-hidden">
                 <div class=" d-flex border bg-perfil justify-content-center cover">
                     <div class="media text-center mt-2  profile-head">

@@ -15,7 +15,7 @@
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">index</li>
           </ol> -->
-                    <!-- <pre><?php // echo print_r($evaluadores, true)                                                                    ?></pre> -->
+                    <!-- <pre><?php  // echo print_r($cargo, true)    ?></pre> -->
 
 
                     <h6 class="font-weight-bolder mb-0">Bienvenido de nuevo
@@ -88,7 +88,7 @@
             <h2>Bienvenidos líderes '' </h2>
             <div class="row">
                 <!-- <h2 class="font-weight-bolder my-3 mb-4">Asignar evaluadores a
-                    <?php // echo $area  ?>
+                    <?php // echo $area        ?>
                 </h2> -->
                 <p>
                     Gracias por ayudarnos en el proceso de evaluación de competencias de nuestros colaboradores. Por
@@ -122,11 +122,11 @@
                                     <!-- <select class="form-select" id="competencia" aria-label="Seleccionar opción"
                                         name="competencia">
                                         <option selected value="">Selecciona la competencia ---</option>
-                                        <?php // foreach ($competencias as $row) { ?>
+                                        <?php // foreach ($competencias as $row) {       ?>
                                             <option value=" <?php echo $row->id ?>">
-                                                <?php // echo $row->nombre ?>
+                                                <?php // echo $row->nombre       ?>
                                             </option>
-                                        <?php // } ?>
+                                        <?php // }       ?>
 
                                     </select> -->
                                     <button id="asignar" type="submit"
@@ -161,7 +161,6 @@
                                             <tbody>
 
                                                 <?php foreach ($usuarios as $row) { ?>
-
                                                     <tr
                                                         class="<?php echo $row->id_evaluador == '' ? "bg-sin_asignar" : "bg-asignado" ?>">
 
@@ -186,10 +185,10 @@
                                                             </h6>
                                                         </td>
                                                         <td class="align-middle text-center text-sm">
-                                                            <?php echo $row->cargo ?>
+                                                            <?php echo $row->nombre_cargo ?>
                                                         </td>
                                                         <!-- <td class="align-middle text-center text-sm">
-                                                            <?php // echo $row->numero_competencias ?>
+                                                            <?php // echo $row->numero_competencias       ?>
                                                         </td> -->
                                                         <td class="align-middle text-center">
                                                             <a type="button" class=" " data-bs-toggle="modal"

@@ -19,6 +19,7 @@ class Usuarios extends CI_Controller
         $this->load->model('Actividad_competencia');
         $this->load->model('Evaluacion_usuario_model');
         $this->load->model('Asignacion_cargo_model');
+        $this->load->model('Cargos_model');
     }
     public function index()
     {
@@ -54,7 +55,7 @@ class Usuarios extends CI_Controller
 
                 $data['usuarios'] = $this->Usuario_model->findAll();
                 $data['roles'] = $this->Rol_model->listado();
-                $data['areas'] = $this->Area_model->findAll();
+                // $data['areas'] = $this->Area_model->findAll();
                 $data['user_data'] = $user_data;
 
                 $this->load->view('layouts/header', $data);
@@ -81,14 +82,9 @@ class Usuarios extends CI_Controller
             if ($this->Usuario_model->has_role($user_data->id, 'Administrador') || $this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
 
                 $data['usuarios'] = $this->Usuario_model->usuarios_asignar();
-
+                $data['competencia_cargo'] = $this->Asignacion_cargo_model->findAll();
 
                 $data['evaluadores'] = $this->Usuario_model->datos_evaluadores();
-
-                // $data['evaluadores'] = $this->Usuario_model->findAll(['Rol_id' => 3,], 'id,nombre,apellido,cargo,identificacion,email');
-
-                // $data['area'] = $this->Area_model->find(['id' => $, 'nombre')->nombre;
-                // $data['competencias'] = $this->Competencias_model->competencias_por_area();
 
                 $data['user_data'] = $user_data;
                 $this->load->view('layouts/header', $data);
@@ -180,10 +176,7 @@ class Usuarios extends CI_Controller
         $data['competencias_cargo'] = $this->Competencias_model->asignadas_por_cargo($user_data->id_cargo);
         $data['competencias'] = $this->Competencias_model->competencias_por_usuario($id);
 
-        // var_dump(     $data['competencias_cargo']);
-        // die;
-
-        // $data['area'] = $this->Area_model->find(['id' => $user_data->id_area], 'nombre')->nombre;
+   // $data['area'] = $this->Area_model->find(['id' => $user_data->id_area], 'nombre')->nombre;
 
         // var_dump( $data['area']);
         // die;
@@ -201,7 +194,7 @@ class Usuarios extends CI_Controller
 
         $data['competencia'] = $this->Competencias_model->find(['id' => $id_competencia]);
         // $data['resultado'] = $this->Evaluacion_usuario_model->find(['id_usuario' => $id],'resultado')->resultado;
-        $data['actividades_clave'] = $this->Actividad_competencia->asignadas_por_cargo($data['usuarios']->id_cargo,$id_competencia,$id);
+        $data['actividades_clave'] = $this->Actividad_competencia->asignadas_por_cargo($data['usuarios']->id_cargo, $id_competencia, $id);
 
         $this->load->view('layouts/header');
         $this->load->view('evaluador/evaluacion', $data);
@@ -209,11 +202,11 @@ class Usuarios extends CI_Controller
 
     }
 
-    public function criterios_por_cargo($id_cargo,$id_actividad="",$id_usuario="")
+    public function criterios_por_cargo($id_cargo, $id_actividad = "", $id_usuario = "")
     {
         if (!empty ($id_actividad) && intval($id_actividad) > 0) {
             $this->load->model('Criterios_model', 'criterios');
-            $this->reques->criterios = $this->criterios->asignados_por_cargo($id_cargo,$id_actividad,$id_usuario);
+            $this->reques->criterios = $this->criterios->asignados_por_cargo($id_cargo, $id_actividad, $id_usuario);
             if (!empty ($this->reques->criterios)) {
                 $this->reques->success = true;
             }
