@@ -81,8 +81,16 @@ class Asignacion_cargo_model extends MY_Model
         return $resultados;
     }
 
+    public function eliminar_asignacion($id_cargo, $id_criterio)
+    {
+        // Eliminar la asignación de la tabla asignacion_cargo_competencia
+        $this->db->where('id_cargo', $id_cargo);
+        $this->db->where('id_criterio', $id_criterio);
+        $this->db->delete('asignacion_cargo_competencia');
 
-
+        // Verificar si se eliminó correctamente
+        return $this->db->affected_rows() > 0;
+    }
 
 
 }

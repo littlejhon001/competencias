@@ -141,11 +141,16 @@
 
                                     <div id="seleccion" class="mt-3 "></div>
 
-                                    <!-- <pre><?php // echo print_r($competencias_asignadas, true) ?></pre> -->
-                                    <?php foreach ($competencias_asignadas as $competencia): ?>
-                                        <div class="px-4 py-3">
-                                            <div class="p-4 card-competencia rounded shadow-sm">
-                                                <a href="#">
+                                    <!-- <pre><?php // echo print_r($competencias_asignadas, true)             ?></pre> -->
+                                    <?php if (empty ($competencias_asignadas)): ?>
+                                        <div class="alert alert-warning text-center" role="alert">
+                                            No hay competencias asignadas para este cargo.
+                                        </div>
+                                    <?php else: ?>
+                                        <?php foreach ($competencias_asignadas as $competencia): ?>
+                                            <div class="px-4 py-3">
+                                                <div class="p-4 card-competencia rounded shadow-sm">
+
                                                     <h6 class="mb-0">
                                                         Competencia:
                                                         <?php echo $competencia->nombre_competencia; ?>
@@ -158,15 +163,17 @@
                                                         Criterios:
                                                         <?php foreach ($competencia->nombres_criterios as $criterio): ?>
                                                             <li>
-                                                                <?php echo $criterio; ?>,
+                                                                <?php echo $criterio; ?>
                                                             </li>
                                                         <?php endforeach; ?>
                                                     </p>
-                                                </a>
+                                                    <button class="btn btn-danger btn-sm btn-eliminar"
+                                                        data-id-cargo="<?php echo $competencia->id_cargo; ?>"
+                                                        data-id-criterios="<?php echo $competencia->id_criterios; ?>">Eliminar</button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    <?php endforeach; ?>
-
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
 
 
                                 </div>
@@ -281,7 +288,7 @@
                     icon: 'question',
                     showCancelButton: true,
                     confirmButtonText: 'Sí, guardar',
-                    confirmButtonColor: '#4caf50', // Cambia el color del botón de confirmación
+                    confirmButtonColor: 'F', // Cambia el color del botón de confirmación
                     cancelButtonText: 'Cancelar',
                     cancelButtonColor: '#d33'
                 }).then((result) => {
@@ -311,6 +318,7 @@
                             showConfirmButton: false,
                             timer: 3000,
                             timerProgressBar: true,
+                            allowOutsideClick: false,
                             showClass: {
                                 popup: `
       animate__animated
@@ -325,6 +333,10 @@
     `
                             }
                         });
+                        setTimeout(function () {
+                            location.reload();
+                        }, 3000);
+
                     },
                     error: function (xhr, status, error) {
                         console.error('Error al guardar la selección:', xhr.responseText);
@@ -335,12 +347,12 @@
                 var competenciaSeleccionada = $('#select-competencias option:selected').text();
                 var actividadSeleccionada = $('#select-actividades option:selected').text();
                 var criterios_seleccionados = $('#select-criterios option:selected').map(function () {
-                    return $(this).text();
-                }).get().join(', '); // Se separan los criterios por comas
+                    return '<li>' + $(this).text() + '</li>'; // Envuelve cada criterio seleccionado en <li>
+                }).get().join(''); // Une los elementos de la lista sin separador
 
                 var seleccionHTML = '<p><b>Competencia seleccionada:</b><br> ' + competenciaSeleccionada + '</p>';
                 seleccionHTML += '<p><b>Actividad seleccionada:</b> <br>' + actividadSeleccionada + '</p>';
-                seleccionHTML += '<p><b>Criterios seleccionados:</b> <br>' + criterios_seleccionados + '</p>';
+                seleccionHTML += '<p><b>Criterios seleccionados:</b></p><ul>' + criterios_seleccionados + '</ul>'; // Agrega <ul> para la lista
 
                 // Agregar animación a #seleccion
                 $('#seleccion').addClass('animate__animated animate__fadeInUp').html(seleccionHTML);
@@ -350,9 +362,76 @@
             }
 
 
+
         });
 
+        $(document).ready(function () {
+            $('.btn-eliminar').click(function () {
+                var id_cargo = $(this).data('id-cargo');
+                var id_criterios = $(this).data('id-criterios').split(',');
+
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: 'Esta acción no se puede revertir',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#f44335',
+                    cancelButtonColor: '#5f687f',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Realizar la solicitud AJAX para eliminar la asignación
+                        id_criterios.forEach(function (id_criterio) {
+                            $.ajax({
+                                url: '<?php echo IP_SERVER; ?>AsignacionCargoCompetencia/eliminar_asignacion',
+                                type: 'POST',
+                                data: { id_cargo: id_cargo, id_criterio: id_criterio },
+                                dataType: 'json',
+                                success: function (response) {
+                                    if (response.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: '¡Éxito!',
+                                            timer: 3000,
+                                            timerProgressBar: true,
+                                            allowOutsideClick: false,
+                                            showConfirmButton: false,
+                                            text: response.message
+                                        }).then(() => {
+                                            // Recargar la página después de la eliminación
+                                            setTimeout(function () {
+                                                location.reload();
+                                            }, 3000);
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error',
+                                            text: response.message
+                                        });
+                                    }
+                                },
+                                error: function (xhr, status, error) {
+                                    console.error(xhr.responseText);
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: 'Hubo un problema al realizar la solicitud'
+                                    });
+                                }
+                            });
+                        });
+                    }
+                });
+            });
+        });
+
+
+
     </script>
+
+
 
 
 
