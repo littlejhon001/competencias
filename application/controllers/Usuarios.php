@@ -173,8 +173,8 @@ class Usuarios extends CI_Controller
         $data['usuario'] = $this->Usuario_model->find($id);
 
         // Obtener todas las entradas de usuarios_competencias para el usuario dado
-        $data['competencias_cargo'] = $this->Competencias_model->asignadas_por_cargo($user_data->id_cargo);
-        $data['competencias'] = $this->Competencias_model->competencias_por_usuario($id);
+        $data['competencias_cargo'] = $this->Competencias_model->asignadas_por_cargo($data['usuario']->id_cargo);
+        // $data['competencias'] = $this->Competencias_model->competencias_por_usuario($id);
 
    // $data['area'] = $this->Area_model->find(['id' => $user_data->id_area], 'nombre')->nombre;
 

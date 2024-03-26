@@ -36,7 +36,7 @@
                 <h5 class="mb-2 ms-2 mt-3">Competencias asignadas al colaborador:
                     <?php echo $usuario->nombre . ' ' . $usuario->apellido ?>
                 </h5>
-                <?php foreach ($competencias_cargo as $row) { ?>
+                <?php if(!empty($competencias_cargo)){ foreach ($competencias_cargo as $row) { ?>
                     <div class="px-4 py-3">
                         <div class="p-4 card-competencia rounded shadow-sm">
                             <a
@@ -52,7 +52,17 @@
                             </a>
                         </div>
                     </div>
-                <?php } ?>
+                <?php }}else{?>
+                    <div class="px-4 py-3">
+                        <div class="p-4 card-competencia rounded shadow-sm">
+                            <a>
+                                <h6 class="text-center my-2">
+                                    No hay competencias asignadas para evaluar
+                                </h6>
+                            </a>
+                        </div>
+                    </div>
+                <?php }?>
             </div>
         </div>
     </div>
