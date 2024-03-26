@@ -133,7 +133,7 @@
                         </div>
                     </div>
                     <!-- --- -->
-                    <?php foreach ($competencias_asignadas as $row) { ?>
+                    <?php if(!empty($competencias_asignadas)){ foreach ($competencias_asignadas as $row) { ?>
                     <div>
                         <div class="px-4 py-3 ">
                             <div class="p-4 card-competencia rounded shadow-sm ">
@@ -153,7 +153,17 @@
                             </div>
                         </div>
                     </div>
-                    <?php } ?>
+                    <?php }}else{?>
+                    <div class="px-4 py-3">
+                        <div class="p-4 card-competencia rounded shadow-sm">
+                            <a>
+                                <h6 class="text-center my-2">
+                                    No tiene competencias asignadas en este momento
+                                </h6>
+                            </a>
+                        </div>
+                    </div>
+                <?php }?>
                 </div>
             </div>
         </div>
