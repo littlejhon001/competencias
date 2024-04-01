@@ -54,13 +54,13 @@ class Asignacion_cargo_model extends MY_Model
 
     public function obtener_asignaciones_con_actividad_y_competencia($id_cargo)
     {
-        $this->db->select('asignacion.id_cargo, GROUP_CONCAT(asignacion.id_criterio) as id_criterios, actividad_competencia.nombre AS nombre_actividad, competencia.nombre AS nombre_competencia');
+        $this->db->select('asignacion.id_cargo, GROUP_CONCAT(asignacion.id_criterio) as id_criterios, GROUP_CONCAT(DISTINCT actividad_competencia.nombre) as nombre_actividades, competencia.nombre AS nombre_competencia');
         $this->db->from('asignacion_cargo_competencia as asignacion');
         $this->db->join('criterios', 'asignacion.id_criterio = criterios.id');
         $this->db->join('actividad_competencia', 'criterios.id_actividad = actividad_competencia.id');
         $this->db->join('competencia', 'actividad_competencia.id_competencia = competencia.id');
         $this->db->where('asignacion.id_cargo', $id_cargo); // Filtrar por el cargo especificado
-        $this->db->group_by('competencia.id'); // Agrupar por ID de competencia
+        //$this->db->group_by('competencia.id'); // Eliminar la agrupación por ID de competencia
         $query = $this->db->get();
 
         $resultados = $query->result();
@@ -81,6 +81,8 @@ class Asignacion_cargo_model extends MY_Model
         return $resultados;
     }
 
+
+
     public function eliminar_asignacion($id_cargo, $id_criterio)
     {
         // Eliminar la asignación de la tabla asignacion_cargo_competencia
@@ -91,6 +93,9 @@ class Asignacion_cargo_model extends MY_Model
         // Verificar si se eliminó correctamente
         return $this->db->affected_rows() > 0;
     }
+
+
+
 
 
 }

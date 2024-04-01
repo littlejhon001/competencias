@@ -141,8 +141,9 @@
 
                                     <div id="seleccion" class="mt-3 "></div>
 
-                                    <!-- <pre><?php // echo print_r($competencias_asignadas, true)             ?></pre> -->
-                                    <?php if (empty ($competencias_asignadas)): ?>
+                                    <!-- <pre><?php // echo print_r($competencias_asignadas, true)     ?></pre> -->
+                                    <?php if (count($competencias_asignadas) == 0 || !isset($competencias_asignadas[0]->id_cargo) || !isset($competencias_asignadas[0]->nombre_competencia) || !isset($competencias_asignadas[0]->nombre_actividades) || !isset($competencias_asignadas[0]->nombres_criterios)): ?>
+
                                         <div class="alert alert-warning text-center" role="alert">
                                             No hay competencias asignadas para este cargo.
                                         </div>
@@ -150,30 +151,41 @@
                                         <?php foreach ($competencias_asignadas as $competencia): ?>
                                             <div class="px-4 py-3">
                                                 <div class="p-4 card-competencia rounded shadow-sm">
-
                                                     <h6 class="mb-0">
                                                         Competencia:
                                                         <?php echo $competencia->nombre_competencia; ?>
                                                     </h6>
                                                     <p class="my-2">
-                                                        Actividad clave:
-                                                        <?php echo $competencia->nombre_actividad; ?>
+                                                        Actividades clave:
                                                     </p>
+                                                    <?php $actividades = explode(',', $competencia->nombre_actividades); ?>
+                                                    <ul>
+                                                        <?php foreach ($actividades as $actividad): ?>
+                                                            <li>
+                                                                <?php echo trim($actividad); ?>
+                                                            </li>
+                                                        <?php endforeach; ?>
+                                                    </ul>
                                                     <p class="my-2">
                                                         Criterios:
+                                                    </p>
+                                                    <ul>
                                                         <?php foreach ($competencia->nombres_criterios as $criterio): ?>
                                                             <li>
                                                                 <?php echo $criterio; ?>
                                                             </li>
                                                         <?php endforeach; ?>
-                                                    </p>
+                                                    </ul>
                                                     <button class="btn btn-danger btn-sm btn-eliminar"
                                                         data-id-cargo="<?php echo $competencia->id_cargo; ?>"
-                                                        data-id-criterios="<?php echo $competencia->id_criterios; ?>">Eliminar</button>
+                                                        data-id-criterios="<?php echo $competencia->id_criterios; ?>">Eliminar
+                                                    </button>
                                                 </div>
                                             </div>
                                         <?php endforeach; ?>
                                     <?php endif; ?>
+
+
 
 
                                 </div>
@@ -354,11 +366,9 @@
                 seleccionHTML += '<p><b>Actividad seleccionada:</b> <br>' + actividadSeleccionada + '</p>';
                 seleccionHTML += '<p><b>Criterios seleccionados:</b></p><ul>' + criterios_seleccionados + '</ul>'; // Agrega <ul> para la lista
 
-                // Agregar animación a #seleccion
                 $('#seleccion').addClass('animate__animated animate__fadeInUp').html(seleccionHTML);
 
-                // Eliminar la clase de animación después de un tiempo para que pueda repetirse si se realiza otra selección
-                // Ajusta el tiempo según la duración de la animación
+
             }
 
 

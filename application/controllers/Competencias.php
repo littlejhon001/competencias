@@ -52,6 +52,8 @@ class Competencias extends CI_Controller
 		$data['cargo'] = $this->Cargos_model->find($id);
 		$data['competencias'] = $this->Competencias_model->findAll();
 		$data['competencias_asignadas'] = $this->Asignacion_cargo_model->obtener_asignaciones_con_actividad_y_competencia($id);
+		// var_dump($data['competencias_asignadas']);
+		// die;
 		$this->vista('admin/asignar_competencia_cargo', $data);
 	}
 
