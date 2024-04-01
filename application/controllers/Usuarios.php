@@ -20,6 +20,9 @@ class Usuarios extends CI_Controller
         $this->load->model('Evaluacion_usuario_model');
         $this->load->model('Asignacion_cargo_model');
         $this->load->model('Cargos_model');
+        if(empty($this->session->userdata('user_data'))){
+            redirect('/login');
+        }
     }
     public function index()
     {
