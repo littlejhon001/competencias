@@ -13,7 +13,7 @@
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">index</li>
           </ol> -->
-                    <!-- <pre><?php // echo print_r($this->session->userdata('user_data'), true)                                                             ?></pre> -->
+                    <!-- <pre><?php // echo print_r($this->session->userdata('user_data'), true)                                                                 ?></pre> -->
 
 
                     <h6 class="font-weight-bolder mb-0">Bienvenido de nuevo
@@ -108,57 +108,31 @@
                         <div class="card-body px-0 pb-2">
 
                             <div class="table-responsive p-0">
-                                <table class="table align-items-center mb-0">
+                                <table id="tabla-cargos" class="table">
                                     <thead>
                                         <tr>
-
-                                            <th
-                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                id</th>
-                                            <th
-                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                Nombre cargo</th>
-                                            <th
-                                                class="text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7">
-                                                Acciones</th>
-
+                                            <th>ID</th>
+                                            <th>Nombre</th>
+                                            <th>Acción</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!--
-                                        <pre><?php // echo print_r($usuarios, true)                          ?></pre> -->
-
-                                        <?php foreach ($cargos as $row) { ?>
+                                        <?php foreach ($cargos as $row): ?>
                                             <tr>
                                                 <td>
-                                                    <div class="d-flex px-2 py-1">
-
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <?php echo $row->id ?>
-
-                                                        </div>
-                                                    </div>
+                                                    <?php echo $row->id ?>
                                                 </td>
                                                 <td>
-                                                    <div class="d-flex px-2 py-1">
-                                                        <div>
-                                                            <i class="me-2 bi bi-person-circle"></i>
-                                                        </div>
-                                                        <div class="d-flex flex-column justify-content-center">
-                                                            <?php echo $row->nombre ?>
-
-                                                        </div>
-                                                    </div>
+                                                    <?php echo $row->nombre ?>
                                                 </td>
-
-                                                <td class="align-middle  text-center">
-                                                    <a href="<?php echo IP_SERVER ?>Competencias/asignar_competencia/<?php echo $row->id ?>"
-                                                        class=" ">
-                                                        <i class=" text-success bi bi-clipboard2-plus"></i>
+                                                <td class="text-center">
+                                                    <a
+                                                        href="<?php echo IP_SERVER ?>Competencias/asignar_competencia/<?php echo $row->id ?>">
+                                                        <i class="text-success bi bi-clipboard2-plus"></i>
                                                     </a>
                                                 </td>
                                             </tr>
-                                        <?php } ?>
+                                        <?php endforeach; ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -284,6 +258,13 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="../assets/js/material-dashboard.min.js?v=3.1.0"></script>
+    <!-- CSS de DataTables -->
+
+    <script>
+        $(document).ready(function () {
+            $('#tabla-cargos').DataTable();
+        });
+    </script>
 </body>
 
 </html>

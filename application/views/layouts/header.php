@@ -50,16 +50,22 @@
 
     <link id="pagestyle" href="<?php echo IP_SERVER ?>assets/css/material-dashboard.css" rel="stylesheet" />
 
-    <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
-    <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
+    <script src="<?php  echo IP_SERVER ?>assets/jquery/jquery.slim.min.js"></script>
 
-    <script src="<?php echo IP_SERVER ?>assets/jquery/jquery.slim.min.js"></script>
-    <!-- <script src="<?php //  echo IP_SERVER            ?>assets/bootstrap/js/bootstrap.bundle.min.js"></script> -->
+     <script src="<?php  echo IP_SERVER  ?>assets/datatables/dataTables.js"></script>
+    <script src="<?php  echo IP_SERVER  ?>assets/datatables/dataTables.min"></script>
+    <!-- <script src="<?php  echo IP_SERVER  ?>assets/datatables/dataTables.bootstrap4.js"></script> -->
+    <link href="<?php  echo IP_SERVER  ?>assets/datatables/datatables.css" rel="stylesheet" />
+    <link href="<?php  echo IP_SERVER  ?>assets/datatables/dataTables.min.css" rel="stylesheet" />
+
+    <!-- <script src="<?php //  echo IP_SERVER              ?>assets/bootstrap/js/bootstrap.bundle.min.js"></script> -->
     <script src="<?php echo IP_SERVER ?>assets/js/material-dashboard.min.js"></script>
+
     <script src="<?php echo IP_SERVER ?>assets/js/core/popper.min.js"></script>
     <script src="<?php echo IP_SERVER ?>assets/js/core/bootstrap.min.js"></script>
     <script src="<?php echo IP_SERVER ?>assets/js/plugins/perfect-scrollbar.min.js"></script>
     <script src="<?php echo IP_SERVER ?>assets/js/plugins/smooth-scrollbar.min.js"></script>
+
 
 
 </head>
