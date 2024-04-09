@@ -24,6 +24,24 @@ class Asignacion_cargo_model extends MY_Model
         }
     }
 
+    public function guardar_seleccion_varios_cargos($data)
+    {
+        // Recorre los IDs seleccionados y los criterios correspondientes
+        foreach ($data['idsSeleccionados'] as $id) {
+            foreach ($data['criterio_id'] as $criterio_id) {
+                // Crea un registro para cada cargo seleccionado y cada criterio
+                $insertData[] = array(
+                    'id_cargo' => $id,
+                    'id_criterio' => $criterio_id,
+                    // Aquí puedes agregar más columnas si es necesario
+                );
+            }
+        }
+
+        // Inserta los datos en la base de datos
+        $this->db->insert_batch('asignacion_cargo_competencia', $insertData);
+    }
+
 
     // En el modelo Asignacion_cargo_model
 

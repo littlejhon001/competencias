@@ -1,0 +1,28 @@
+
+    @import url('https://fonts.googleapis.com/css2?family=Arimo&family=Montserrat&family=Poppins&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600&display=swap');
+
+    * {
+        font-family: 'Montserrat', sans-serif !important;
+    }
+
+    .login,
+    .image {
+        min-height: 100vh;
+    }
+
+    .img_bg {
+/* height: auto; */
+/* position: absolute; */
+margin-top: 10px;
+width: 100vw;
+height: 100vh;
+}
+
+    .color-text {
+        color: #f77245;
+    }
+
+    .btn-bg {
+        background-color: #2351a7;
+    }

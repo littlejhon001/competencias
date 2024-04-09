@@ -12,7 +12,7 @@
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">index</li>
           </ol> -->
-                    <!-- <pre><?php // echo print_r($this->session->userdata('user_data'), true)                   ?></pre> -->
+                    <!-- <pre><?php // echo print_r($this->session->userdata('user_data'), true)                    ?></pre> -->
 
 
                     <h6 class="font-weight-bolder mb-0">Bienvenido de nuevo
@@ -87,7 +87,7 @@
                                     <a class="dropdown-item border-radius-md" href="javascript:;">
                                         <div class="d-flex py-1">
                                             <div class="my-auto">
-                                                <img src="./assets/img/small-logos/logo-spotify.svg"
+                                                <!-- <img src="./assets/img/small-logos/logo-spotify.svg" -->
                                                     class="avatar avatar-sm bg-gradient-dark  me-3 ">
                                             </div>
                                         </div>
@@ -253,6 +253,8 @@
 
     <!-- Github buttons -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
 
 
 </body>

@@ -1,5 +1,3 @@
-
-
 <body class="g-sidenav-show  bg-gray-200 animate__fadeIn animate__animated">
 
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
@@ -13,7 +11,7 @@
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">index</li>
           </ol> -->
-                    <!-- <pre><?php // echo print_r($this->session->userdata('user_data'), true)                                                                 ?></pre> -->
+                    <!-- <pre><?php // echo print_r($competencias, true)                          ?></pre> -->
 
 
                     <h6 class="font-weight-bolder mb-0">Bienvenido de nuevo
@@ -52,29 +50,7 @@
                                 <i class="fa fa-bell cursor-pointer"></i>
                             </a>
 
-                            <ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4"
-                                aria-labelledby="dropdownMenuButton">
-                                <li class="mb-2">
-                                    <a class="dropdown-item border-radius-md" href="javascript:;">
-                                        <div class="d-flex py-1">
-                                            <div class="my-auto">
-                                                <img src="./assets/img/team-2.jpg" class="avatar avatar-sm  me-3 ">
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="mb-2">
-                                    <a class="dropdown-item border-radius-md" href="javascript:;">
-                                        <div class="d-flex py-1">
-                                            <div class="my-auto">
-                                                <img src="./assets/img/small-logos/logo-spotify.svg"
-                                                    class="avatar avatar-sm bg-gradient-dark  me-3 ">
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
 
-                            </ul>
                         </li>
                         <li class="nav-item d-flex align-items-center">
                             <a href="./pages/sign-in.html" class="nav-link text-body font-weight-bold px-0">
@@ -106,12 +82,54 @@
                             </div>
                         </div>
                         <div class="card-body px-0 pb-2">
+                            <div id="loader" class="text-center" style="display: none;">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                            <div id="loader-criterios" class="text-center" style="display: none;">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                            <div class="row m-3">
+                                <div class="col-6">
+                                    <select class="form-select" id="select-competencias" aria-label="Competencias">
+                                        <option selected>Selecciona la competencia</option>
+                                        <?php foreach ($competencias as $row) { ?>
+                                            <option value="<?php echo $row->id ?>">
+                                                <?php echo $row->nombre ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <select class="form-select" id="select-actividades" aria-label="Actividades Clave">
+                                        <option selected>Selecciona la actividad clave</option>
+                                    </select>
+                                </div>
 
-                            <div class="table-responsive p-0">
+                                <div class="col-6 mt-2">
+                                    <select class="form-select" id="select-criterios" aria-label="Criterios">
+                                        <option selected>Seleccione uno o más criterios</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-6 mt-2">
+                                    <button class="btn btn-success w-100" id="guardar-competencia-cargos">Crear
+                                        y asignar competencia para varios cargos</button>
+                                </div>
+
+                                <div id="seleccion" class="mt-3 "></div>
+
+                                <!-- <pre><?php // echo print_r($competencias_asignadas, true)                             ?></pre> -->
+
+                            </div>
+                            <div class="table-responsive mx-4 p-0">
                                 <table id="tabla-cargos" class="table">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
+                                            <th>Seleccionar</th>
                                             <th>Nombre</th>
                                             <th>Acción</th>
                                         </tr>
@@ -119,9 +137,12 @@
                                     <tbody>
                                         <?php foreach ($cargos as $row): ?>
                                             <tr>
-                                                <td>
-                                                    <?php echo $row->id ?>
-                                                </td>
+
+                                                <th>
+                                                    <input type="checkbox" class="checkbox-cargos"
+                                                        value="<?php echo $row->id ?>">
+                                                </th>
+
                                                 <td>
                                                     <?php echo $row->nombre ?>
                                                 </td>
@@ -131,6 +152,7 @@
                                                         <i class="text-success bi bi-clipboard2-plus"></i>
                                                     </a>
                                                 </td>
+
                                             </tr>
                                         <?php endforeach; ?>
                                     </tbody>
@@ -141,10 +163,14 @@
                 </div>
             </div>
 
-
-
         </div>
     </main>
+
+
+
+    <script>
+
+    </script>
 
 
 
@@ -241,30 +267,288 @@
         </div>
     </div>
     <!--   Core JS Files   -->
-    <script src="../assets/js/core/popper.min.js"></script>
-    <script src="../assets/js/core/bootstrap.min.js"></script>
-    <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
-    <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
-    <script>
-        var win = navigator.platform.indexOf('Win') > -1;
-        if (win && document.querySelector('#sidenav-scrollbar')) {
-            var options = {
-                damping: '0.5'
-            }
-            Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
-        }
-    </script>
-    <!-- Github buttons -->
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
-    <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
-    <script src="../assets/js/material-dashboard.min.js?v=3.1.0"></script>
-    <!-- CSS de DataTables -->
 
     <script>
+
         $(document).ready(function () {
-            $('#tabla-cargos').DataTable();
+
+            $('#select-competencias').change(function () {
+                var competencia_id = $(this).val();
+                // Mostrar el loader
+                $('#loader').show();
+                $.ajax({
+                    url: '<?php echo IP_SERVER ?>Competencias/obtener_actividades',
+                    type: 'POST',
+                    data: { competencia_id: competencia_id },
+                    dataType: 'json',
+                    success: function (data) {
+                        // Limpiar opciones anteriores
+                        $('#select-actividades').empty();
+
+                        // Agregar la opción "Seleccione una competencia" al principio
+                        $('#select-actividades').append('<option selected>Seleccione una competencia</option>');
+                        // Agregar las nuevas opciones
+                        $.each(data, function (index, actividad) {
+                            $('#select-actividades').append('<option value="' + actividad.id + '">' + actividad.nombre + '</option>');
+                        });
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    },
+                    complete: function () {
+                        // Ocultar el loader cuando la solicitud AJAX haya finalizado (ya sea con éxito o con error)
+                        $('#loader').hide();
+                    }
+                });
+            });
+
+            $('#select-actividades').change(function () {
+                var actividad_id = $(this).val();
+                $('#loader-criterios').show(); // Mostrar el loader
+
+                $.ajax({
+                    url: '<?php echo base_url('Competencias/obtener_criterios'); ?>',
+                    type: 'POST',
+                    data: { actividad_id: actividad_id },
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#select-criterios').empty(); // Limpiar opciones anteriores
+                        $('#select-criterios').append('<option selected disabled>Seleccione un criterio</option>');
+                        $('#select-criterios').attr('multiple', 'multiple');
+
+                        $.each(data, function (index, criterio) {
+                            $('#select-criterios').append('<option value="' + criterio.id + '">' + criterio.nombre + '</option>');
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    },
+                    complete: function () {
+                        $('#loader-criterios').hide(); // Ocultar el loader
+                    }
+                });
+            });
+
+
+            var seleccion = {
+                competencia_id: null,
+                actividad_id: null,
+                criterio_id: null,
+                idsSeleccionados: null
+            };
+
+            $('#select-competencias').change(function () {
+                seleccion.competencia_id = $(this).val();
+                console.log(seleccion);
+                mostrarSeleccion();
+            });
+
+            $('#select-actividades').change(function () {
+                seleccion.actividad_id = $(this).val();
+                console.log(seleccion);
+                mostrarSeleccion();
+            });
+
+            $('#select-criterios').change(function () {
+                seleccion.criterio_id = $(this).val();
+                // console.log(seleccion);
+                mostrarSeleccion();
+            });
+
+            function mostrarSeleccion() {
+                var competenciaSeleccionada = $('#select-competencias option:selected').text();
+                var actividadSeleccionada = $('#select-actividades option:selected').text();
+                var criterios_seleccionados = $('#select-criterios option:selected').map(function () {
+                    return '<li>' + $(this).text() + '</li>'; // Envuelve cada criterio seleccionado en <li>
+                }).get().join(''); // Une los elementos de la lista sin separador
+
+                var seleccionHTML = '<p><b>Competencia seleccionada:</b><br> ' + competenciaSeleccionada + '</p>';
+                seleccionHTML += '<p><b>Actividad seleccionada:</b> <br>' + actividadSeleccionada + '</p>';
+                seleccionHTML += '<p><b>Criterios seleccionados:</b></p><ul>' + criterios_seleccionados + '</ul>'; // Agrega <ul> para la lista
+
+                $('#seleccion').addClass('animate__animated animate__fadeInUp').html(seleccionHTML);
+
+
+            }
+
+
+            const checkboxes = document.querySelectorAll('.checkbox-cargos');
+
+            // Array para almacenar los identificadores de los elementos seleccionados
+            let idsSeleccionados = [];
+
+            // Función para actualizar los IDs seleccionados
+            function actualizarIDsSeleccionados() {
+                idsSeleccionados = []; // Limpiar el array
+                // Iterar sobre los checkboxes y agregar los IDs de los checkboxes seleccionados al array
+                checkboxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        idsSeleccionados.push(checkbox.value);
+                    }
+                });
+                // Imprimir en consola los IDs seleccionados (para propósitos de demostración)
+                // console.log("IDs seleccionados:", idsSeleccionados);
+            }
+
+            // Adjuntar un controlador de eventos de cambio a cada checkbox
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', actualizarIDsSeleccionados);
+            });
+
+            // Llamar a la función para actualizar los IDs seleccionados inicialmente
+            actualizarIDsSeleccionados();
+
+            $('#guardar-competencia-cargos').click(function () {
+                // Verificar si hay más de un check seleccionado
+                if (idsSeleccionados.length < 2) {
+                    // Mostrar un mensaje de advertencia si no hay suficientes checks seleccionados
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Seleccione más de un cargo',
+                        text: 'Por favor, seleccione al menos dos cargos para guardar la competencia',
+                    });
+                    return; // Detener el flujo si no hay suficientes checks seleccionados
+                }
+
+                // Verificar si se ha seleccionado una competencia, actividad y criterio
+                if (!seleccion.competencia_id || !seleccion.actividad_id || !seleccion.criterio_id) {
+                    // Mostrar un mensaje de advertencia si no se han seleccionado los elementos necesarios
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Seleccione una competencia, actividad y criterio',
+                        text: 'Por favor, seleccione una competencia, actividad y criterio para guardar la competencia',
+                    });
+                    return; // Detener el flujo si no se han seleccionado los elementos necesarios
+                }
+
+                // Si hay suficientes checks seleccionados y se han seleccionado los elementos necesarios, mostrar el diálogo de confirmación
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: '¿Quieres guardar la competencia para los cargos seleccionados?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, guardar',
+                    confirmButtonColor: 'F', // Cambia el color del botón de confirmación
+                    cancelButtonText: 'Cancelar',
+                    cancelButtonColor: '#d33'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Actualizar los IDs seleccionados antes de guardar
+                        actualizarIDsSeleccionados();
+
+                        // Si el usuario confirma, llamar a la función para guardar la selección
+                        guardarSeleccion();
+                    }
+                });
+            });
+
+
+
+            function guardarSeleccion() {
+                seleccion.idsSeleccionados = idsSeleccionados;
+                $.ajax({
+                    url: '<?php echo IP_SERVER; ?>Competencias/competencia_personalizada_cargos',
+                    type: 'POST',
+                    data: seleccion,
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success) {
+                            // Si la respuesta es exitosa, muestra un mensaje de éxito
+                            Swal.fire({
+                                position: "top-end",
+                                icon: 'success',
+                                title: response.message,
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                allowOutsideClick: false,
+                                showClass: {
+                                    popup: `
+                            animate__animated
+                            animate__fadeInRight
+                            animate__faster
+                            `
+                                },
+                                hideClass: {
+                                    popup: `
+                            animate__animated
+                            animate__fadeOutRight
+                            `
+                                }
+                            });
+                            // Recarga la página después de 3 segundos
+                            setTimeout(function () {
+                                location.reload();
+                            }, 5000);
+                        } else {
+                            // Si hay un error en la respuesta, muestra un mensaje de error
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Si hay un error en la solicitud AJAX, muestra un mensaje de error
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Ocurrió un error al procesar la solicitud'
+                        });
+                    }
+                });
+            }
+
+
+        });
+
+
+
+
+    </script>
+
+
+    <script>
+
+        $('#tabla-cargos').DataTable({
+            "paging": true,
+            "pageLength": 20,
+            "language": {
+                "decimal": "",
+                "emptyTable": "No hay datos disponibles en la tabla",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+                "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+                "infoFiltered": "(filtrado de _MAX_ entradas totales)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ entradas",
+                "loadingRecords": "Cargando...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": "No se encontraron registros coincidentes",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "aria": {
+                    "sortAscending": ": activar para ordenar la columna en orden ascendente",
+                    "sortDescending": ": activar para ordenar la columna en orden descendente"
+                }
+            }
         });
     </script>
+
+    <script>
+
+    </script>
+
+
+
+
 </body>
 
 </html>

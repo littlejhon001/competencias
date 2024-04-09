@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') or exit ('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 // require_once 'application/third_party/Autoloader.php';
 // require_once 'application/third_party/psr/Autoloader.php';
 class Competencias extends CI_Controller
@@ -25,13 +25,14 @@ class Competencias extends CI_Controller
 		// Obtener toda la información de sesión del usuario actual
 		$user_data = $this->session->userdata('user_data');
 		// Verificar si el usuario está logeado
-		if (!empty ($user_data)) {
+		if (!empty($user_data)) {
 			if ($this->Usuario_model->has_role($user_data->id, 'Administrador') || $this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
 				// Si el usuario es administrador, cargar el header y la vista de dashboard
 				// $data['competencias'] = $this->Competencias_model->findAll();
 				$data['user_data'] = $user_data;
 				$data['cargos'] = $this->Cargos_model->findAll();
 
+				$data['competencias'] = $this->Competencias_model->findAll();
 				$this->vista('admin/competencias', $data);
 
 
@@ -50,6 +51,7 @@ class Competencias extends CI_Controller
 	public function asignar_competencia($id)
 	{
 		$data['cargo'] = $this->Cargos_model->find($id);
+
 		$data['competencias'] = $this->Competencias_model->findAll();
 		$data['competencias_asignadas'] = $this->Asignacion_cargo_model->obtener_asignaciones_con_actividad_y_competencia($id);
 		// var_dump($data['competencias_asignadas']);
@@ -74,6 +76,7 @@ class Competencias extends CI_Controller
 		// Recibe los datos enviados por AJAX
 		// $competencia_id = $this->input->post('competencia_id');
 		// $actividad_id = $this->input->post('actividad_id');
+
 		$criterios_seleccionados = $this->input->post('criterio_id');
 
 		$criterios_ids = implode(',', $criterios_seleccionados);
@@ -87,9 +90,6 @@ class Competencias extends CI_Controller
 				'id_criterio' => $criterio_id
 			);
 		}
-
-
-
 		$this->Asignacion_cargo_model->guardar_seleccion($data);
 		echo json_encode(array('success' => 1));
 	}
@@ -99,7 +99,7 @@ class Competencias extends CI_Controller
 
 	public function listado_actividades($id_competencia)
 	{
-		if (!empty ($id_competencia) && intval($id_competencia) > 0) {
+		if (!empty($id_competencia) && intval($id_competencia) > 0) {
 			$this->load->model('Actividad_competencia');
 			if ($this->Usuario_model->has_role($this->session->userdata('user_data')->id, 'Usuario')) {
 				$this->reques->actividades = $this->Actividad_competencia->asignadas_por_cargo($this->session->userdata('user_data')->id_cargo, $id_competencia, $this->session->userdata('user_data')->id);
@@ -110,6 +110,37 @@ class Competencias extends CI_Controller
 			$this->iffalse('No ingresó una competencia válida');
 		}
 		$this->json();
+	}
+
+	public function competencia_personalizada_cargos()
+	{
+		// Accede a los datos enviados por AJAX
+		$data = $this->input->post();
+
+		// Verifica si hay datos recibidos
+		if (!empty($data)) {
+			// Accede a los IDs de los cargos seleccionados
+			$idsSeleccionados = $data['idsSeleccionados'];
+
+			// Puedes hacer cualquier otro procesamiento necesario con los IDs seleccionados
+
+			// Para propósitos de demostración, puedes devolver una respuesta JSON
+			$response = array(
+				'success' => true,
+				'message' => 'La competencia personalizada fue correctamente creada y asignada para los cargos seleccionados',
+				'idsSeleccionados' => $idsSeleccionados
+			);
+			echo json_encode($response);
+
+		} else {
+			// Si no se reciben datos, devuelve un mensaje de error
+			$response = array(
+				'success' => false,
+				'message' => 'No se recibieron datos'
+			);
+			echo json_encode($response);
+		}
+		 $this->Asignacion_cargo_model->guardar_seleccion_varios_cargos($data);
 	}
 
 }

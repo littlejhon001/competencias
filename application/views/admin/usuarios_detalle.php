@@ -60,7 +60,7 @@
                                     <a class="dropdown-item border-radius-md" href="javascript:;">
                                         <div class="d-flex py-1">
                                             <div class="my-auto">
-                                                <img src="./assets/img/team-2.jpg" class="avatar avatar-sm  me-3 ">
+                                                <!-- <img src="./assets/img/team-2.jpg" class="avatar avatar-sm  me-3 "> -->
                                             </div>
                                         </div>
                                     </a>
@@ -69,7 +69,7 @@
                                     <a class="dropdown-item border-radius-md" href="javascript:;">
                                         <div class="d-flex py-1">
                                             <div class="my-auto">
-                                                <img src="./assets/img/small-logos/logo-spotify.svg"
+                                                <!-- <img src="./assets/img/small-logos/logo-spotify.svg" -->
                                                     class="avatar avatar-sm bg-gradient-dark  me-3 ">
                                             </div>
                                         </div>
@@ -125,8 +125,8 @@
                         </div>
                         <div class="card-body px-0 pb-2">
 
-                            <div class="table-responsive p-0">
-                                <table class="table align-items-center mb-0">
+                            <div class="table-responsive mx-4 p-0">
+                                <table id="tabla-usuarios" class="table align-items-center mx-4 mb-0">
                                     <thead>
                                         <tr>
                                             <th
@@ -462,6 +462,38 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="../assets/js/material-dashboard.min.js?v=3.1.0"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#tabla-usuarios').DataTable({
+                "language": {
+                    "decimal": "",
+                    "emptyTable": "No hay datos disponibles en la tabla",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+                    "infoFiltered": "(filtrado de _MAX_ entradas totales)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "No se encontraron registros coincidentes",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Último",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    },
+                    "aria": {
+                        "sortAscending": ": activar para ordenar la columna en orden ascendente",
+                        "sortDescending": ": activar para ordenar la columna en orden descendente"
+                    }
+                }
+            });
+        });
+
+    </script>
 </body>
 
 </html>

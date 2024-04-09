@@ -47,7 +47,7 @@
                                     <a class="dropdown-item border-radius-md" href="javascript:;">
                                         <div class="d-flex py-1">
                                             <div class="my-auto">
-                                                <img src="./assets/img/team-2.jpg" class="avatar avatar-sm  me-3 ">
+                                                <!-- <img src="./assets/img/team-2.jpg" class="avatar avatar-sm  me-3 "> -->
                                             </div>
                                         </div>
                                     </a>
@@ -56,7 +56,7 @@
                                     <a class="dropdown-item border-radius-md" href="javascript:;">
                                         <div class="d-flex py-1">
                                             <div class="my-auto">
-                                                <img src="./assets/img/small-logos/logo-spotify.svg"
+                                                <!-- <img src="./assets/img/small-logos/logo-spotify.svg" -->
                                                     class="avatar avatar-sm bg-gradient-dark  me-3 ">
                                             </div>
                                         </div>
@@ -198,9 +198,6 @@
     </main>
 
 
-    <script src="<?php echo IP_SERVER ?>assets/jquery/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 
 
     <script>
@@ -211,7 +208,7 @@
                 // Mostrar el loader
                 $('#loader').show();
                 $.ajax({
-                    url: '<?php echo base_url('Competencias/obtener_actividades'); ?>',
+                    url: '<?php echo IP_SERVER?>Competencias/obtener_actividades',
                     type: 'POST',
                     data: { competencia_id: competencia_id },
                     dataType: 'json',
@@ -243,7 +240,7 @@
                 $('#loader-criterios').show(); // Mostrar el loader
 
                 $.ajax({
-                    url: '<?php echo base_url('Competencias/obtener_criterios'); ?>',
+                    url: '<?php echo IP_SERVER ?>Competencias/obtener_criterios',
                     type: 'POST',
                     data: { actividad_id: actividad_id },
                     dataType: 'json',
@@ -274,19 +271,19 @@
 
             $('#select-competencias').change(function () {
                 seleccion.competencia_id = $(this).val();
-                console.log(seleccion);
+                // console.log(seleccion);
                 mostrarSeleccion();
             });
 
             $('#select-actividades').change(function () {
                 seleccion.actividad_id = $(this).val();
-                console.log(seleccion);
+                // console.log(seleccion);
                 mostrarSeleccion();
             });
 
             $('#select-criterios').change(function () {
                 seleccion.criterio_id = $(this).val();
-                console.log(seleccion);
+                // console.log(seleccion);
                 mostrarSeleccion();
             });
 
@@ -377,6 +374,7 @@
 
         $(document).ready(function () {
             $('.btn-eliminar').click(function () {
+
                 var id_cargo = $(this).data('id-cargo');
                 var id_criterios = $(this).data('id-criterios').split(',');
 

@@ -530,7 +530,7 @@ div.dt-container {
 div.dt-container div.dt-layout-row {
   display: table;
   clear: both;
-  width: 95%!important;
+  width: 100%!important;
 }
 div.dt-container div.dt-layout-row.dt-layout-table {
   display: block;

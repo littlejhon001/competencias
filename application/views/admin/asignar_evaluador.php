@@ -2,6 +2,7 @@
 <html lang="en">
 
 
+
 <body class="g-sidenav-show  bg-gray-200 animate__fadeIn animate__animated">
 
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
@@ -15,7 +16,7 @@
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">index</li>
           </ol> -->
-                    <!-- <pre><?php  // echo print_r($cargo, true)    ?></pre> -->
+                    <!-- <pre><?php  // echo print_r($cargo, true)        ?></pre> -->
 
 
                     <h6 class="font-weight-bolder mb-0">Bienvenido de nuevo
@@ -88,7 +89,7 @@
             <h2>Bienvenidos líderes '' </h2>
             <div class="row">
                 <!-- <h2 class="font-weight-bolder my-3 mb-4">Asignar evaluadores a
-                    <?php // echo $area        ?>
+                    <?php // echo $area            ?>
                 </h2> -->
                 <p>
                     Gracias por ayudarnos en el proceso de evaluación de competencias de nuestros colaboradores. Por
@@ -122,19 +123,19 @@
                                     <!-- <select class="form-select" id="competencia" aria-label="Seleccionar opción"
                                         name="competencia">
                                         <option selected value="">Selecciona la competencia ---</option>
-                                        <?php // foreach ($competencias as $row) {       ?>
+                                        <?php // foreach ($competencias as $row) {           ?>
                                             <option value=" <?php echo $row->id ?>">
-                                                <?php // echo $row->nombre       ?>
+                                                <?php // echo $row->nombre           ?>
                                             </option>
-                                        <?php // }       ?>
+                                        <?php // }           ?>
 
                                     </select> -->
                                     <button id="asignar" type="submit"
                                         class="btn btn-success w-75 m-0 ms-3">Asignar</button>
                                 </div>
                                 <div class="card-body px-0 pb-2">
-                                    <div class="table-responsive p-0">
-                                        <table class="table align-items-center mb-0!">
+                                    <div class="table-responsive mx-4 p-0">
+                                        <table id="tabla-usuarios-asignar" class="table mx-4 align-items-center mb-0!">
                                             <thead>
                                                 <tr>
                                                     <th
@@ -188,7 +189,7 @@
                                                             <?php echo $row->nombre_cargo ?>
                                                         </td>
                                                         <!-- <td class="align-middle text-center text-sm">
-                                                            <?php // echo $row->numero_competencias       ?>
+                                                            <?php // echo $row->numero_competencias           ?>
                                                         </td> -->
                                                         <td class="align-middle text-center">
                                                             <a type="button" class=" " data-bs-toggle="modal"
@@ -343,8 +344,10 @@
     </div>
 
 
-    <script src="<?php echo IP_SERVER ?>assets/jquery/jquery.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -378,15 +381,45 @@
     </script>
 
     <script>
+
         $(document).ready(function () {
+            $('#tabla-usuarios-asignar').DataTable({
+                "language": {
+                    "decimal": "",
+                    "emptyTable": "No hay datos disponibles en la tabla",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+                    "infoFiltered": "(filtrado de _MAX_ entradas totales)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "No se encontraron registros coincidentes",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Último",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    },
+                    "aria": {
+                        "sortAscending": ": activar para ordenar la columna en orden ascendente",
+                        "sortDescending": ": activar para ordenar la columna en orden descendente"
+                    }
+                }
+            });
+        });
+
+
+        $(document).ready(function () {
+
+
             $('#formulario-asignacion').submit(function (event) {
-
-
                 // Obtener el valor seleccionado del select de evaluador
                 var evaluador = $('#evaluador').val();
 
                 // Obtener el valor seleccionado del select de competencia
-                var competencia = $('#competencia').val();
 
                 // Verificar si el select de evaluador está vacío
                 if (evaluador == '') {
@@ -416,33 +449,6 @@
                     return;
                 }
 
-                // Verificar si el select de competencia está vacío
-                if (competencia == '') {
-                    event.preventDefault();
-                    Swal.fire({
-                        position: "top-end",
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Por favor selecciona una competencia.',
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        showClass: {
-                            popup: `
-                        animate__animated
-                        animate__fadeInRight
-                        animate__faster
-                    `
-                        },
-                        hideClass: {
-                            popup: `
-                        animate__animated
-                        animate__fadeOutRight
-                    `
-                        }
-                    });
-                    return;
-                }
 
                 if (!$('.checkbox-seleccion').is(':checked')) {
                     event.preventDefault();
@@ -484,6 +490,8 @@
         });
 
     </script>
+
+
 
     <!--   Core JS Files   -->
     <script src="../assets/js/core/popper.min.js"></script>

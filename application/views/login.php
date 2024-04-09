@@ -3,36 +3,10 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Arimo&family=Montserrat&family=Poppins&display=swap');
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600&display=swap');
 
-    * {
-        font-family: 'Montserrat', sans-serif !important;
-    }
 
-    .login,
-    .image {
-        min-height: 100vh;
-    }
+<link href="<?php echo IP_SERVER ?>assets/css/login.css" rel="stylesheet" type="text/css">
 
-    .img_bg {
-
-        height: auto;
-        position: absolute;
-        margin-top: 10px;
-        width: 1000px;
-
-    }
-
-    .color-text {
-        color: #f77245;
-    }
-
-    .btn-bg {
-        background-color: #2351a7;
-    }
-</style>
 
 <div class="container-fluid login-container">
     <div class="row no-gutter">

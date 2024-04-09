@@ -29,9 +29,15 @@
     <link rel="stylesheet" type="text/css"
         href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
     <!-- Nucleo Icons -->
     <link href="<?php echo IP_SERVER ?>assets/css/nucleo-icons.css" rel="stylesheet" />
     <link href="<?php echo IP_SERVER ?>assets/css/nucleo-svg.css" rel="stylesheet" />
+
+    <script src="<?php echo IP_SERVER ?>assets/jquery/jquery.min.js"></script>
+
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -50,15 +56,17 @@
 
     <link id="pagestyle" href="<?php echo IP_SERVER ?>assets/css/material-dashboard.css" rel="stylesheet" />
 
-    <script src="<?php  echo IP_SERVER ?>assets/jquery/jquery.slim.min.js"></script>
+    <script src="<?php echo IP_SERVER ?>assets/jquery/jquery.slim.min.js"></script>
+    <script src="<?php echo IP_SERVER ?>assets/jquery/jquery.min.js"></script>
 
-     <script src="<?php  echo IP_SERVER  ?>assets/datatables/dataTables.js"></script>
-    <script src="<?php  echo IP_SERVER  ?>assets/datatables/dataTables.min"></script>
-    <!-- <script src="<?php  echo IP_SERVER  ?>assets/datatables/dataTables.bootstrap4.js"></script> -->
-    <link href="<?php  echo IP_SERVER  ?>assets/datatables/datatables.css" rel="stylesheet" />
-    <link href="<?php  echo IP_SERVER  ?>assets/datatables/dataTables.min.css" rel="stylesheet" />
 
-    <!-- <script src="<?php //  echo IP_SERVER              ?>assets/bootstrap/js/bootstrap.bundle.min.js"></script> -->
+    <script src="<?php echo IP_SERVER ?>assets/datatables/dataTables.js"></script>
+    <script src="<?php echo IP_SERVER ?>assets/datatables/dataTables.min.css"></script>
+    <!-- <script src="<?php echo IP_SERVER ?>assets/datatables/dataTables.bootstrap4.js"></script> -->
+    <link href="<?php echo IP_SERVER ?>assets/datatables/datatables.css" rel="stylesheet" />
+    <link href="<?php echo IP_SERVER ?>assets/datatables/dataTables.min.css" rel="stylesheet" />
+
+    <!-- <script src="<?php //  echo IP_SERVER                ?>assets/bootstrap/js/bootstrap.bundle.min.js"></script> -->
     <script src="<?php echo IP_SERVER ?>assets/js/material-dashboard.min.js"></script>
 
     <script src="<?php echo IP_SERVER ?>assets/js/core/popper.min.js"></script>
