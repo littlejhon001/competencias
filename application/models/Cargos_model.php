@@ -11,4 +11,8 @@ class Cargos_model extends MY_Model {
 
     }
 
+    public function buscarExacto($nombre){
+        return $this->find(['nombre' => $nombre],'id')->id;
+    }
+
 }

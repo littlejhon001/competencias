@@ -1,7 +1,8 @@
 <?php
 defined('BASEPATH') or exit ('No direct script access allowed');
-// require_once 'application/third_party/Autoloader.php';
-// require_once 'application/third_party/psr/Autoloader.php';
+require_once 'application/third_party/Autoloader.php';
+require_once 'application/third_party/psr/Autoloader.php';
+use PhpOffice\PhpSpreadsheet\IOFactory;
 class Usuarios extends CI_Controller
 {
     public function __construct()
@@ -63,6 +64,7 @@ class Usuarios extends CI_Controller
 
                 $this->load->view('layouts/header', $data);
                 $this->view('admin/usuarios_detalle', $data);
+                $this->load->view('layouts/footer');
             } else {
                 // Si el usuario no es administrador, podrías redirigirlo a otra vista o mostrar un mensaje de error
                 redirect('Home');
@@ -203,6 +205,51 @@ class Usuarios extends CI_Controller
         $this->load->view('evaluador/evaluacion', $data);
         $this->load->view('layouts/footer');
 
+    }
+
+    public function importar_masivo(){
+        if(!empty($_FILES)){
+            try{
+                $spreadsheet = IOFactory::load($_FILES['usuarios']['tmp_name']);
+                // leer la hoja 1 del excel cargado
+                $worksheet = $spreadsheet->getSheetByName('usuarios'); // lectura por indice
+                $rows = $worksheet->toArray(null, true, true, true);
+                $usuarios = [];
+                foreach($rows as $row => $columns){
+                    if ($row >= 2) {
+                        $this->load->model('Rol_model');
+                        $this->load->model('Cargos_model');
+                        $usuarios[] = (object)[
+                            'nombre' => $columns['A'],
+                            'apellido' => $columns['B'],
+                            'email' => $columns['C'],
+                            'password' => hash("sha256", 'aula' . $columns['D']),
+                            'identificacion' => $columns['D'],
+                            'Rol_ID' => $this->Rol_model->buscarExacto($columns['E']),
+                            'id_cargo' => $this->Cargos_model->buscarExacto($columns['F']),
+                            'id_grupo' => $columns['G'],
+                        ];
+                    }
+                }
+                $this->db->trans_begin();
+                if($this->Usuario_model->insert_masivo($usuarios)){
+                    $this->db->trans_commit();
+                    $this->reques->message = "Se registraron ".count($usuarios)." usuarios";
+                    $this->session->set_flashdata([
+                        'message' => $this->reques->message,
+                        'success' => true,
+                    ]);
+                }else{
+                    $this->db->trans_rollback();
+                    $this->iffalse('Ocurrió un error al insertar los usuarios');
+                }
+            }catch(Exception $e){
+                $this->iffalse('Error al abrir el archivo');
+            }
+        }else{
+            $this->iffalse('Cargue un archivo');
+        }
+        $this->json();
     }
 
     public function criterios_por_cargo($id_cargo, $id_actividad = "", $id_usuario = "")

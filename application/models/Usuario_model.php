@@ -86,4 +86,8 @@ class Usuario_model extends MY_Model
         return $query->result();
     }
 
+    public function insert_masivo($data){
+        return $this->db->insert_batch($this->table,$data);
+    }
+
 }

@@ -15,4 +15,8 @@ class Rol_model extends MY_Model {
         return $this->findAll('','id,nombre');
     }
 
+    public function buscarExacto($nombre){
+        return $this->find(['nombre' => $nombre],'id')->id;
+    }
+
 }

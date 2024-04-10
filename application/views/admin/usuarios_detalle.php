@@ -338,12 +338,11 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
-                        <input type="file" class="form-control p-3" id="inputGroupFile04"
-                            aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                    <form id="form-importar" action="importar_masivo" method="POST">
+                        <input type="file" accept=".xlsx" class="form-control p-3" id="inputGroupFile04"
+                            aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="usuarios" required>
                         <div class="modal-footer">
-                            <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
-                            <button type="button" class="btn btn-success">Cargar</button>
+                            <button type="submit" class="btn btn-success">Cargar</button>
                         </div>
                     </form>
                 </div>
@@ -491,6 +490,34 @@
                     }
                 }
             });
+
+            $('#form-importar').submit(function(e){
+                e.preventDefault();
+                var formulario = this;
+                var formData = new FormData(formulario);
+
+                $.ajax({
+                    method: $(this).attr('method'),
+                    url: $(this).attr('action'),
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    success: function(respuesta) {
+                        if(respuesta.success == 1){
+                            location.reload();
+                        }else{
+                            console.error("Error:", respuesta.error);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error:", error);
+                    }
+                });
+            });
+
+
+
+
         });
 
     </script>
