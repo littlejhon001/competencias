@@ -26,7 +26,7 @@ class Competencias extends CI_Controller
 		$user_data = $this->session->userdata('user_data');
 		// Verificar si el usuario está logeado
 		if (!empty($user_data)) {
-			if ($this->Usuario_model->has_role($user_data->id, 'Administrador') || $this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
+			if ($this->Usuario_model->has_role($user_data->id, 'Administrador') ) {
 				// Si el usuario es administrador, cargar el header y la vista de dashboard
 				// $data['competencias'] = $this->Competencias_model->findAll();
 				$data['user_data'] = $user_data;

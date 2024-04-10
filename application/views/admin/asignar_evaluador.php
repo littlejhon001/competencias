@@ -16,7 +16,7 @@
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">index</li>
           </ol> -->
-                    <!-- <pre><?php  // echo print_r($cargo, true)        ?></pre> -->
+                    <!-- <pre><?php  // echo print_r($cargo, true)                        ?></pre> -->
 
 
                     <h6 class="font-weight-bolder mb-0">Bienvenido de nuevo
@@ -89,7 +89,7 @@
             <h2>Bienvenidos líderes '' </h2>
             <div class="row">
                 <!-- <h2 class="font-weight-bolder my-3 mb-4">Asignar evaluadores a
-                    <?php // echo $area            ?>
+                    <?php // echo $area                            ?>
                 </h2> -->
                 <p>
                     Gracias por ayudarnos en el proceso de evaluación de competencias de nuestros colaboradores. Por
@@ -123,11 +123,11 @@
                                     <!-- <select class="form-select" id="competencia" aria-label="Seleccionar opción"
                                         name="competencia">
                                         <option selected value="">Selecciona la competencia ---</option>
-                                        <?php // foreach ($competencias as $row) {           ?>
+                                        <?php // foreach ($competencias as $row) {                           ?>
                                             <option value=" <?php echo $row->id ?>">
-                                                <?php // echo $row->nombre           ?>
+                                                <?php // echo $row->nombre                           ?>
                                             </option>
-                                        <?php // }           ?>
+                                        <?php // }                           ?>
 
                                     </select> -->
                                     <button id="asignar" type="submit"
@@ -162,14 +162,19 @@
                                             <tbody>
 
                                                 <?php foreach ($usuarios as $row) { ?>
-                                                    <tr
-                                                        class="<?php echo $row->id_evaluador == '' ? "bg-sin_asignar" : "bg-asignado" ?>">
-
-                                                        <td class="align-middle text-center text-sm>">
-                                                            <input class="mt-2 text-center checkbox-seleccion"
-                                                                type="checkbox" name="usuarios_seleccionados[]"
-                                                                value="<?php echo $row->id ?>">
+                                                    <tr class="">
+                                                        <td class="align-middle text-center text-sm">
+                                                            <?php if (empty($row->id_evaluador)) { ?>
+                                                                <input class="mt-2 text-center checkbox-seleccion"
+                                                                    type="checkbox" name="usuarios_seleccionados[]"
+                                                                    value="<?php echo $row->id ?>">
+                                                            <?php } else { ?>
+                                                                <input class="mt-2 text-center checkbox-seleccion"
+                                                                    type="checkbox" name="usuarios_seleccionados[]"
+                                                                    value="<?php echo $row->id ?>" disabled>
+                                                            <?php } ?>
                                                         </td>
+
                                                         <td>
                                                             <div class="d-flex px-2 py-1">
                                                                 <div class="d-flex ms-2 flex-column justify-content-center">
@@ -189,18 +194,18 @@
                                                             <?php echo $row->nombre_cargo ?>
                                                         </td>
                                                         <!-- <td class="align-middle text-center text-sm">
-                                                            <?php // echo $row->numero_competencias           ?>
+                                                            <?php // echo $row->numero_competencias                           ?>
                                                         </td> -->
                                                         <td class="align-middle text-center">
                                                             <a type="button" class=" " data-bs-toggle="modal"
-                                                                data-bs-target="#detalles<?php $row->id ?>">
+                                                                data-bs-target="#detalles<?php echo $row->id ?>">
                                                                 <i class="text-warning bi bi-eye"></i>
                                                             </a>
 
                                                         </td>
                                                     </tr>
 
-                                                    <div class="modal fade" id="detalles<?php $row->id ?>" tabindex="-1"
+                                                    <div class="modal fade" id="detalles<?php echo $row->id?>" tabindex="-1"
                                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                         <div class="modal-dialog">
                                                             <div class="modal-content">
@@ -211,8 +216,6 @@
                                                                         data-bs-dismiss="modal" aria-label="Close"></button>
                                                                 </div>
                                                                 <div class="modal-body">
-
-
                                                                     <div class="card" style="width: auto;">
                                                                         <div class="card-body">
                                                                             <h5 class="card-title">Nombres:
@@ -224,6 +227,24 @@
                                                                                 <?php echo $row->cargo ?>
                                                                             </h6>
                                                                             <p class="card-text">Evaluador:</p>
+
+                                                                            <?php
+                                                                            // Buscar el nombre del evaluador basado en el id_evaluador
+                                                                            $nombre_evaluador = "No asignado";
+                                                                            foreach ($usuarios as $usuario) {
+                                                                               var_dump($usuario->id_evaluador);
+                                                                                if ($usuario->id == $row->id_evaluador) {
+                                                                                    $nombre_evaluador = $usuario->nombre . ' ' . $usuario->apellido;
+                                                                                    break; // Salir del bucle una vez encontrado el nombre del evaluador
+                                                                                }
+                                                                            }
+                                                                            ?>
+                                                                            <h6
+                                                                                class="text-md <?php echo ($nombre_evaluador != "No asignado") ? 'bg-asignado' : 'bg-sin_asignar'; ?>">
+                                                                                Evaluador asignado:
+                                                                                <?php echo $nombre_evaluador; ?>
+                                                                            </h6>
+
                                                                             <p class="card-text">Competencias:</p>
 
                                                                         </div>
@@ -382,38 +403,9 @@
 
     <script>
 
-        $(document).ready(function () {
-            $('#tabla-usuarios-asignar').DataTable({
-                "language": {
-                    "decimal": "",
-                    "emptyTable": "No hay datos disponibles en la tabla",
-                    "info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
-                    "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
-                    "infoFiltered": "(filtrado de _MAX_ entradas totales)",
-                    "infoPostFix": "",
-                    "thousands": ",",
-                    "lengthMenu": "Mostrar _MENU_ entradas",
-                    "loadingRecords": "Cargando...",
-                    "processing": "Procesando...",
-                    "search": "Buscar:",
-                    "zeroRecords": "No se encontraron registros coincidentes",
-                    "paginate": {
-                        "first": "Primero",
-                        "last": "Último",
-                        "next": "Siguiente",
-                        "previous": "Anterior"
-                    },
-                    "aria": {
-                        "sortAscending": ": activar para ordenar la columna en orden ascendente",
-                        "sortDescending": ": activar para ordenar la columna en orden descendente"
-                    }
-                }
-            });
-        });
 
 
         $(document).ready(function () {
-
 
             $('#formulario-asignacion').submit(function (event) {
                 // Obtener el valor seleccionado del select de evaluador
@@ -491,6 +483,48 @@
 
     </script>
 
+
+    <script>
+        $(document).ready(function () {
+            $('#tabla-usuarios-asignar').DataTable({
+                "language": {
+                    "decimal": "",
+                    "emptyTable": "No hay datos disponibles en la tabla",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+                    "infoFiltered": "(filtrado de _MAX_ entradas totales)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "No se encontraron registros coincidentes",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Último",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    },
+                    "aria": {
+                        "sortAscending": ": activar para ordenar la columna en orden ascendente",
+                        "sortDescending": ": activar para ordenar la columna en orden descendente"
+                    }
+                },
+                "rowCallback": function (row, data) {
+                    console.log(data.id_evaluador)
+                    // Aquí se aplica la lógica para colorear el row
+                    if (data.id_evaluador == '') {
+                        $(row).addClass('bg-sin_asignar'); // Agregar clase de color verde
+                    } else {
+                        $(row).addClass('bg-asignado'); // Agregar clase de color rojo
+                    }
+                }
+            });
+        });
+
+
+    </script>
 
 
     <!--   Core JS Files   -->
