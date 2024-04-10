@@ -116,8 +116,7 @@
                                 </div>
 
                                 <div class="col-6 mt-2">
-                                    <button class="btn btn-success w-100" id="guardar-competencia-cargos">Crear
-                                        y asignar competencia para varios cargos</button>
+                                    <button class="btn btn-success w-100" id="guardar-competencia-cargos">Asignar competencia para varios cargos</button>
                                 </div>
 
                                 <div id="seleccion" class="mt-3 "></div>

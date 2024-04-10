@@ -162,7 +162,7 @@
                                             <tbody>
 
                                                 <?php foreach ($usuarios as $row) { ?>
-                                                    <tr class="">
+                                                    <tr class="<?php echo ($row->id_evaluador != "") ? 'bg-asignado' : 'bg-sin_asignar'; ?>">
                                                         <td class="align-middle text-center text-sm">
                                                             <?php if (empty($row->id_evaluador)) { ?>
                                                                 <input class="mt-2 text-center checkbox-seleccion"
@@ -509,15 +509,6 @@
                     "aria": {
                         "sortAscending": ": activar para ordenar la columna en orden ascendente",
                         "sortDescending": ": activar para ordenar la columna en orden descendente"
-                    }
-                },
-                "rowCallback": function (row, data) {
-                    console.log(data.id_evaluador)
-                    // Aquí se aplica la lógica para colorear el row
-                    if (data.id_evaluador == '') {
-                        $(row).addClass('bg-sin_asignar'); // Agregar clase de color verde
-                    } else {
-                        $(row).addClass('bg-asignado'); // Agregar clase de color rojo
                     }
                 }
             });
