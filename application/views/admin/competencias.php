@@ -116,7 +116,8 @@
                                 </div>
 
                                 <div class="col-6 mt-2">
-                                    <button class="btn btn-success w-100" id="guardar-competencia-cargos">Asignar competencia para varios cargos</button>
+                                    <button class="btn btn-success w-100" id="guardar-competencia-cargos">Asignar
+                                        competencia para varios cargos</button>
                                 </div>
 
                                 <div id="seleccion" class="mt-3 "></div>
@@ -372,43 +373,53 @@
             }
 
 
-            const checkboxes = document.querySelectorAll('.checkbox-cargos');
+
+            const tablaCargos = document.getElementById('tabla-cargos');
 
             // Array para almacenar los identificadores de los elementos seleccionados
             let idsSeleccionados = [];
 
             // Función para actualizar los IDs seleccionados
             function actualizarIDsSeleccionados() {
-                idsSeleccionados = []; // Limpiar el array
+                const checkboxes = tablaCargos.querySelectorAll('.checkbox-cargos'); // Definir checkboxes dentro de esta función
                 // Iterar sobre los checkboxes y agregar los IDs de los checkboxes seleccionados al array
                 checkboxes.forEach(checkbox => {
-                    if (checkbox.checked) {
+                    if (checkbox.checked && !idsSeleccionados.includes(checkbox.value)) {
                         idsSeleccionados.push(checkbox.value);
+                    } else if (!checkbox.checked && idsSeleccionados.includes(checkbox.value)) {
+                        // Si el checkbox está desmarcado, eliminar el ID del array
+                        const index = idsSeleccionados.indexOf(checkbox.value);
+                        idsSeleccionados.splice(index, 1);
                     }
                 });
-                // Imprimir en consola los IDs seleccionados (para propósitos de demostración)
-                // console.log("IDs seleccionados:", idsSeleccionados);
+
             }
 
-            // Adjuntar un controlador de eventos de cambio a cada checkbox
-            checkboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', actualizarIDsSeleccionados);
+            // Adjuntar un controlador de eventos de cambio al contenedor de la tabla
+            tablaCargos.addEventListener('change', function (event) {
+                // Verificar si el cambio provino de un checkbox
+                if (event.target.classList.contains('checkbox-cargos')) {
+                    // Llamar a la función para actualizar los IDs seleccionados
+                    actualizarIDsSeleccionados();
+                }
             });
 
             // Llamar a la función para actualizar los IDs seleccionados inicialmente
             actualizarIDsSeleccionados();
 
+
             $('#guardar-competencia-cargos').click(function () {
-                // Verificar si hay más de un check seleccionado
+                // Verificar si hay al menos dos checks seleccionados
                 if (idsSeleccionados.length < 2) {
                     // Mostrar un mensaje de advertencia si no hay suficientes checks seleccionados
                     Swal.fire({
                         icon: 'warning',
-                        title: 'Seleccione más de un cargo',
+                        title: 'Seleccione al menos dos cargos',
                         text: 'Por favor, seleccione al menos dos cargos para guardar la competencia',
                     });
                     return; // Detener el flujo si no hay suficientes checks seleccionados
                 }
+
 
                 // Verificar si se ha seleccionado una competencia, actividad y criterio
                 if (!seleccion.competencia_id || !seleccion.actividad_id || !seleccion.criterio_id) {

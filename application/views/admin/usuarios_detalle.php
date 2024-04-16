@@ -339,7 +339,7 @@
                 </div>
                 <div class="modal-body">
                     <form id="form-importar" action="importar_masivo" method="POST">
-                        <input type="file" accept=".xlsx" class="form-control p-3" id="inputGroupFile04"
+                        <input type="file" accept=".xlsx" class="form-control border p-2" id="inputGroupFile04"
                             aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="usuarios" required>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-success">Cargar</button>
