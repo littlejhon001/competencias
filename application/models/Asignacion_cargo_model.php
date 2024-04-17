@@ -99,6 +99,40 @@ class Asignacion_cargo_model extends MY_Model
         return $resultados;
     }
 
+    public function obtener_asignacion_completa($id_cargo){
+        $this->db->select('competencia.id id_competencia,competencia.nombre nombre_competencia, competencia.descripcion descripcion_competencia, competencia.codigo codigo, actividad.id id_actividad,actividad.nombre nombre_actividad,criterio.id id_criterio,criterio.nombre nombre_criterio');
+        $this->db->join('criterios criterio', 'asignacion.id_criterio = criterio.id');
+        $this->db->join('actividad_competencia actividad', 'criterio.id_actividad = actividad.id');
+        $this->db->join('competencia', 'actividad.id_competencia = competencia.id');
+        $this->db->where('asignacion.id_cargo', $id_cargo); // Filtrar por el cargo especificado
+        $resultados = $this->db->get("$this->table asignacion")->result();
+        $respuesta=[];
+        foreach($resultados as $asignacion) {
+            if(empty($respuesta[$asignacion->id_competencia])){
+                $competencia = $respuesta[$asignacion->id_competencia] = (object)[
+                    'id' => $asignacion->id_competencia,
+                    'nombre' => $asignacion->nombre_competencia,
+                    'descripcion' => $asignacion->descripcion_competencia,
+                    'codigo' => $asignacion->codigo,
+                    'actividades' => []
+                ];
+            }
+            if(empty($competencia->actividades[$asignacion->id_actividad])){
+                $actividad = $competencia->actividades[$asignacion->id_actividad] = (object)[
+                    'id' => $asignacion->id_actividad,
+                    'nombre' => $asignacion->nombre_actividad,
+                    'criterios' => []
+                ];
+            }
+            if(empty($actividad->criterios[$asignacion->id_criterio])){
+                $actividad->criterios[$asignacion->id_criterio] = (object)[
+                    'id' => $asignacion->id_criterio,
+                    'nombre' => $asignacion->nombre_criterio
+                ];
+            }
+        }
+        return $respuesta;
+    } 
 
 
     public function eliminar_asignacion($id_cargo, $id_criterio)
