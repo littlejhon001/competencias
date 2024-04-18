@@ -63,11 +63,11 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
 
-    <script src="<?php echo IP_SERVER ?>assets/datatables/dataTables.js"></script>
-    <script src="<?php echo IP_SERVER ?>assets/datatables/dataTables.min.css"></script>
+    <script src="<?php echo IP_SERVER ?>assets/datatables/datatables.js"></script>
+    <script src="<?php echo IP_SERVER ?>assets/datatables/datatables.min.css"></script>
     <!-- <script src="<?php echo IP_SERVER ?>assets/datatables/dataTables.bootstrap4.js"></script> -->
     <link href="<?php echo IP_SERVER ?>assets/datatables/datatables.css" rel="stylesheet" />
-    <link href="<?php echo IP_SERVER ?>assets/datatables/dataTables.min.css" rel="stylesheet" />
+    <link href="<?php echo IP_SERVER ?>assets/datatables/datatables.min.css" rel="stylesheet" />
 
     <!-- <script src="<?php //  echo IP_SERVER                ?>assets/bootstrap/js/bootstrap.bundle.min.js"></script> -->
     <script src="<?php echo IP_SERVER ?>assets/js/material-dashboard.min.js"></script>
