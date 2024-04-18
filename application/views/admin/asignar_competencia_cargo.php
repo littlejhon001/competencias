@@ -129,7 +129,7 @@
                                     </div>
 
                                     <div class="col-6 mt-2">
-                                        <select class="form-select" id="select-criterios" aria-label="Criterios">
+                                        <select class="form-select js-example-basic-multiple-limit" id="select-criterios" aria-label="Criterios">
                                             <option selected>Seleccione uno o más criterios</option>
                                         </select>
                                     </div>
@@ -142,7 +142,7 @@
                                     <div id="seleccion" class="mt-3 "></div>
 
                                     <!-- <pre><?php // echo print_r($competencias_asignadas, true)     ?></pre> -->
-                                    <?php if (count($competencias_asignadas) == 0 || !isset($competencias_asignadas[0]->id_cargo) || !isset($competencias_asignadas[0]->nombre_competencia) || !isset($competencias_asignadas[0]->nombre_actividades) || !isset($competencias_asignadas[0]->nombres_criterios)): ?>
+                                    <?php if (empty($competencias_asignadas)): ?>
 
                                         <div class="alert alert-warning text-center" role="alert">
                                             No hay competencias asignadas para este cargo.
@@ -150,35 +150,42 @@
                                     <?php else: ?>
                                         <?php foreach ($competencias_asignadas as $competencia): ?>
                                             <div class="px-4 py-3">
-                                                <div class="p-4 card-competencia rounded shadow-sm">
+                                                <div class="p-4 card-competencia rounded shadow-sm" style="font-size:12px;">
                                                     <h6 class="mb-0">
                                                         Competencia:
-                                                        <?php echo $competencia->nombre_competencia; ?>
+                                                        <?php echo $competencia->nombre; ?>
                                                     </h6>
                                                     <p class="my-2">
-                                                        Actividades clave:
+                                                        <b>Actividades clave:</b>
                                                     </p>
-                                                    <?php $actividades = explode(',', $competencia->nombre_actividades); ?>
-                                                    <ul>
-                                                        <?php foreach ($actividades as $actividad): ?>
-                                                            <li>
-                                                                <?php echo trim($actividad); ?>
-                                                            </li>
-                                                        <?php endforeach; ?>
-                                                    </ul>
-                                                    <p class="my-2">
-                                                        Criterios:
-                                                    </p>
-                                                    <ul>
-                                                        <?php foreach ($competencia->nombres_criterios as $criterio): ?>
-                                                            <li>
-                                                                <?php echo $criterio; ?>
-                                                            </li>
-                                                        <?php endforeach; ?>
-                                                    </ul>
+                                                    <?php foreach ($competencia->actividades as $actividad): ?>
+                                                        <div class="card my-2 shadow-sm border-2">
+                                                            <div class="card-header p-2">
+                                                                <div class="row justify-content-between">
+                                                                    <div class="col-auto">
+                                                                        <b><?php echo $actividad->nombre; ?></b>
+                                                                    </div>
+                                                                    <div class="col-auto">
+                                                                        <button type="button" class="btn btn-danger p-2 py-0 eliminar_actividad" aria-label="Close" data-actividad="<?php echo $actividad->id; ?>"><i class="bi bi-x-lg"></i></button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body bg-light p-2">
+                                                                <p>
+                                                                    <b>Criterios:</b>
+                                                                </p>
+                                                                <ul>
+                                                                    <?php foreach ($actividad->criterios as $criterio): ?>
+                                                                        <li>
+                                                                            <?php echo $criterio->nombre; ?>
+                                                                        </li>
+                                                                    <?php endforeach; ?>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    <?php endforeach; ?>
                                                     <button class="btn btn-danger btn-sm btn-eliminar"
-                                                        data-id-cargo="<?php echo $competencia->id_cargo; ?>"
-                                                        data-id-criterios="<?php echo $competencia->id_criterios; ?>">Eliminar
+                                                        data-competencia="<?php echo $competencia->id; ?>">Eliminar
                                                     </button>
                                                 </div>
                                             </div>
@@ -373,6 +380,38 @@
         });
 
         $(document).ready(function () {
+
+
+            $('.eliminar_actividad').click(function(){
+                boton = $(this);
+                data = {
+                    id_cargo: '<?php echo $cargo->id ?>',
+                    id_actividad: $(this).data('actividad')
+                };
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: 'Se eliminarán los criterios asociados con esta actividad clave',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#f44335',
+                    cancelButtonColor: '#5f687f',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.post('<?php echo IP_SERVER; ?>AsignacionCargoCompetencia/eliminar_actividad',data,function(respuesta){
+                            if(respuesta.success){
+                                if(respuesta.actividades > 0){
+                                    boton.closest('.card').hide('fast')
+                                }else{
+                                    boton.closest('.card-competencia').hide('fast')
+                                }
+                            }
+                        })
+                    }
+                });
+            });
+
             $('.btn-eliminar').click(function () {
 
                 var id_cargo = $(this).data('id-cargo');
@@ -555,4 +594,13 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="../assets/js/material-dashboard.min.js?v=3.1.0"></script>
+    <script>
+        $(document).ready(function() {
+            $('#select-competencias').select2({
+                placeholder: 'Seleccionar...',
+                allowClear: true,
+                width: '100%',
+            });
+        });
+    </script>
 </body>
