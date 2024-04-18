@@ -553,7 +553,13 @@
     </script>
 
     <script>
-
+        $(document).ready(function () {
+            $('#select-competencias').select2({
+                placeholder: 'Seleccionar...',
+                allowClear: true,
+                width: '100%',
+            });
+        });
     </script>
 
 
