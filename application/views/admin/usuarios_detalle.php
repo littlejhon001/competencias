@@ -175,7 +175,7 @@
                                                         </h6>
                                                     </td>
                                                     <td class="  text-sm w-25" >
-                                                        <?php echo $row->cargo ?>
+
                                                     </td>
                                                     <td class=" ">
                                                         <?php echo ($row->id_evaluador != "") ? '<i class="bi bi-check-circle text-success"></i>' : '<i class="bi bi-info-circle-fill text-warning"></i>'; ?>
