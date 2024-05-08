@@ -57,7 +57,7 @@
                                         <div class="d-flex py-1">
                                             <div class="my-auto">
                                                 <!-- <img src="./assets/img/small-logos/logo-spotify.svg" -->
-                                                    class="avatar avatar-sm bg-gradient-dark  me-3 ">
+                                                class="avatar avatar-sm bg-gradient-dark me-3 ">
                                             </div>
                                         </div>
                                     </a>
@@ -116,7 +116,7 @@
                                             <option selected>Selecciona la competencia</option>
                                             <?php foreach ($competencias as $row) { ?>
                                                 <option value="<?php echo $row->id ?>">
-                                                    <?php echo $row->nombre ?>
+                                                    <?php echo $row->codigo . ' - ' . $row->nombre ?>
                                                 </option>
                                             <?php } ?>
                                         </select>
@@ -129,7 +129,8 @@
                                     </div>
 
                                     <div class="col-6 mt-2">
-                                        <select class="form-select js-example-basic-multiple-limit" id="select-criterios" aria-label="Criterios">
+                                        <select class="form-select js-example-basic-multiple-limit"
+                                            id="select-criterios" aria-label="Criterios">
                                             <option selected>Seleccione uno o más criterios</option>
                                         </select>
                                     </div>
@@ -166,7 +167,11 @@
                                                                         <b><?php echo $actividad->nombre; ?></b>
                                                                     </div>
                                                                     <div class="col-auto">
-                                                                        <button type="button" class="btn btn-danger p-2 py-0 eliminar_actividad" aria-label="Close" data-actividad="<?php echo $actividad->id; ?>"><i class="bi bi-x-lg"></i></button>
+                                                                        <button type="button"
+                                                                            class="btn p-2 py-0 eliminar_actividad"
+                                                                            aria-label="Close"
+                                                                            data-actividad="<?php echo $actividad->id; ?>"><i
+                                                                                class="bi bi-x-circle fs-5 text-danger"></i></button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -215,7 +220,7 @@
                 // Mostrar el loader
                 $('#loader').show();
                 $.ajax({
-                    url: '<?php echo IP_SERVER?>Competencias/obtener_actividades',
+                    url: '<?php echo IP_SERVER ?>Competencias/obtener_actividades',
                     type: 'POST',
                     data: { competencia_id: competencia_id },
                     dataType: 'json',
@@ -382,7 +387,7 @@
         $(document).ready(function () {
 
 
-            $('.eliminar_actividad').click(function(){
+            $('.eliminar_actividad').click(function () {
                 boton = $(this);
                 data = {
                     id_cargo: '<?php echo $cargo->id ?>',
@@ -390,7 +395,7 @@
                 };
                 Swal.fire({
                     title: '¿Estás seguro?',
-                    text: 'Se eliminarán los criterios asociados con esta actividad clave',
+                    text: 'Se eliminara la actividad y criterios asociados con esta actividad clave',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#f44335',
@@ -399,11 +404,11 @@
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        $.post('<?php echo IP_SERVER; ?>AsignacionCargoCompetencia/eliminar_actividad',data,function(respuesta){
-                            if(respuesta.success){
-                                if(respuesta.actividades > 0){
+                        $.post('<?php echo IP_SERVER; ?>AsignacionCargoCompetencia/eliminar_actividad', data, function (respuesta) {
+                            if (respuesta.success) {
+                                if (respuesta.actividades > 0) {
                                     boton.closest('.card').hide('fast')
-                                }else{
+                                } else {
                                     boton.closest('.card-competencia').hide('fast')
                                 }
                             }
@@ -496,7 +501,7 @@
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="../assets/js/material-dashboard.min.js?v=3.1.0"></script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('#select-competencias').select2({
                 placeholder: 'Seleccionar...',
                 allowClear: true,
