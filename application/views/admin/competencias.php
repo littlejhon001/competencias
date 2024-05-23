@@ -71,13 +71,14 @@
         <div class="container-fluid py-4">
             <h2>Aula competencias</h2>
             <div class="row">
-                <h2 class="font-weight-bolder my-3 mb-4">Vista general de competencias</h2>
+                <h2 class="font-weight-bolder my-3 mb-4">Asignar competencias por cargos</h2>
                 <div class="col-12">
                     <div class="card my-4">
                         <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                             <div class="bg-info shadow-primary border-radius-lg pt-4 pb-3">
                                 <div class="d-flex ">
-                                    <h6 class="text-white  ps-5 mt-2">Lista de competencias</h6>
+                                    <h6 class="text-white  ps-5 mt-2">Seleccione un cargo o asigne competencias desde esta sección</h6>
+
                                 </div>
                             </div>
                         </div>

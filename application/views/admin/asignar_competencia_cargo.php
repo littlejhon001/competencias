@@ -85,7 +85,7 @@
             <h2>Aula competencias</h2>
             <div class="row">
                 <!-- <h2 class="font-weight-bolder my-3 mb-4">Personalizar competencias al cargo</h2> -->
-                <p>en esta seccion se debe detallar que el administrador puede armar la competencia como el la considere
+                <p>en esta sección se debe detallar que el administrador puede armar la competencia como el la considere
                     para cargo puntual</p>
                 <div class="col-12">
                     <div class="card my-4">

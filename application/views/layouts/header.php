@@ -116,7 +116,7 @@
                     <a class="nav-link text-dark " href="<?php echo IP_SERVER ?>Usuarios">
 
                         <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
-                            <i class="bi bi-people"></i>
+                        <i class="bi bi-person-badge-fill"></i>
                         </div>
                         <span class="nav-link-text ms-1">Usuarios</span>
                     </a>
@@ -129,10 +129,23 @@
                     <a class="nav-link text-dark " href="<?php echo IP_SERVER ?>Competencias">
 
                         <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
-                            <i class="material-icons opacity-10">receipt_long</i>
+                            <i class="bi bi-people-fill"></i>
                         </div>
 
-                        <span class="nav-link-text ms-1">Competencias</span>
+                        <span class="nav-link-text ms-1">Competencias por cargo</span>
+                    </a>
+                </li>
+            <?php } ?>
+
+            <?php if ($this->session->userdata('user_data')->Rol_ID == 1 || $this->session->userdata('user_data')->Rol_ID == 2) { ?>
+                <li class="nav-item">
+                    <a class="nav-link text-dark " href="#">
+
+                        <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="bi bi-boxes"></i>
+                        </div>
+
+                        <span class="nav-link-text ms-1">Bibliotecas <br> de Competencias</span>
                     </a>
                 </li>
             <?php } ?>
