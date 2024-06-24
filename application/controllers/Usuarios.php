@@ -278,7 +278,7 @@ class Usuarios extends CI_Controller
                 $rows = $worksheet->toArray(null, true, true, true);
                 $usuarios = [];
                 foreach($rows as $row => $columns){
-                    if ($row >= 2) {
+                    if ($row >= 2 && $columns['A'] != null) {
                         $this->load->model('Rol_model');
                         $this->load->model('Cargos_model');
                         $usuarios[] = (object)[
