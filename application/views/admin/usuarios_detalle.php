@@ -106,8 +106,8 @@
                                     <h6 class="text-white text-capitalize ps-5 mt-2">Lista de usuarios</h6>
                                     <div class="ms-auto">
                                         <?php if ($user_data->Rol_ID == 1) { ?>
-                                            <button type="button" class="me-3 btn btn-success" data-bs-toggle="modal"
-                                                data-bs-target="#staticBackdrop">
+                                            <button type="button" id="btn-agregar-usuario" class="me-3 btn btn-success" data-bs-toggle="modal"
+                                                data-bs-target="#modal-form-usuario">
                                                 Agregar nuevo usuario <i class="fs-6 bi bi-plus-circle"></i>
                                             </button>
                                             <button type="button" class="me-3 btn btn-success" data-bs-toggle="modal"
@@ -129,21 +129,21 @@
                                 <table id="tabla-usuarios" class="table align-items-center mx-4 mb-0">
                                     <thead>
                                         <tr>
-                                            <th
-                                                class=" m-0 p-0 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                Nombre</th>
-                                            <th
-                                                class=" m-0 p-0 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">
-                                                Apellido</th>
-                                            <th
-                                                class="  m-0 p-0 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                Cargo</th>
-                                            <th
-                                                class="  m-0 p-0 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                Asignado</th>
-                                            <th
-                                                class=" m-0 p-0  text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                Acciones</th>
+                                            <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
+                                                Nombre
+                                            </th>
+                                            <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7 ">
+                                                Rol
+                                            </th>
+                                            <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
+                                                Cargo
+                                            </th>
+                                            <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
+                                                Asignado
+                                            </th>
+                                            <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
+                                                Acciones
+                                            </th>
                                             <!-- <th class="text-secondary opacity-7"></th> -->
                                         </tr>
                                     </thead>
@@ -151,101 +151,46 @@
                                         <!--
                                         <pre><?php // echo print_r($usuarios, true)                               ?></pre> -->
 
-                                        <?php foreach ($usuarios as $row) {
-                                            if ($row->Rol_ID == 4) {
-                                                ?>
-                                                <tr
-                                                    class="<?php echo ($row->id_evaluador != "") ? 'bg-asignado' : 'bg-sin_asignar'; ?>">
-                                                    <td>
-                                                        <div class="d-flex px-2 py-1">
-                                                            <div>
-                                                                <i class="me-2 bi bi-person-circle"></i>
-                                                            </div>
-                                                            <div class="d-flex flex-column justify-content-center">
-                                                                <?php echo $row->nombre ?>
-                                                                <p class="text-xs text-secondary mb-0">
-                                                                    <?php echo $row->email ?>
-                                                                </p>
-                                                            </div>
+                                        <?php foreach ($usuarios as $row) { ?>
+                                            <tr class="<?php echo ($row->Rol_ID != '4')? '' : (($row->id_evaluador != "") ? 'bg-asignado' : 'bg-sin_asignar'); ?>" data-row='<?php echo json_encode($row)?>'>
+                                                <td class="col">
+                                                    <div class="row g-0 align-items-center">
+                                                        <div class="col-2 text-center">
+                                                            <i class="bi bi-person-circle"></i>
                                                         </div>
-                                                    </td>
-                                                    <td>
-                                                        <h6 class="mb-0 text-sm">
-                                                            <?php echo $row->apellido ?>
-                                                        </h6>
-                                                    </td>
-                                                    <td class="  text-sm w-25" >
-                                                        <?php echo $row->cargo ?>
-                                                    </td>
-                                                    <td class=" ">
-                                                        <?php echo ($row->id_evaluador != "") ? '<i class="bi bi-check-circle text-success"></i>' : '<i class="bi bi-info-circle-fill text-warning"></i>'; ?>
-                                                    </td>
-                                                    <td class=" ">
-                                                        <button class="border rounded bg-primary" type="button"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#ver_mas<?php echo $row->id ?>">
-                                                            <i class="text-light bi bi-eye"></i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                <!-- Modal -->
-                                                <div class="modal fade" id="ver_mas<?php echo $row->id ?>" tabindex="-1"
-                                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Información
-                                                                    del usuario
-                                                                </h1>
-                                                                <button type="button" class="btn-close bg-danger"
-                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <h4>
-                                                                    Nombres y apellidos usuario:
-                                                                </h4>
-                                                                <h4>
-                                                                    <?php echo $row->nombre . ' ' . $row->apellido ?>
-                                                                </h4>
-                                                                <div class="text-md">
-                                                                    <h6>
-                                                                        Correo:
-                                                                        <a href="mailto:<?php echo $row->email ?>">
-                                                                            <?php echo $row->email ?>
-                                                                        </a>
-                                                                    </h6>
-                                                                    <h6 class="text-md  " >
-                                                                        Cargo:
-                                                                        <?php echo $row->cargo ?>
-                                                                    </h6>
-
-                                                                    <?php
-                                                                    // Buscar el nombre del evaluador basado en el id_evaluador
-                                                                    $nombre_evaluador = "No asignado";
-                                                                    foreach ($usuarios as $usuario) {
-                                                                        if ($usuario->id == $row->id_evaluador) {
-                                                                            $nombre_evaluador = $usuario->nombre . ' ' . $usuario->apellido;
-                                                                            break; // Salir del bucle una vez encontrado el nombre del evaluador
-                                                                        }
-                                                                    }
-                                                                    ?>
-                                                                    <h6
-                                                                        class="text-md <?php echo ($nombre_evaluador != "No asignado") ? 'bg-asignado' : 'bg-sin_asignar'; ?>">
-                                                                        Evaluador asignado:
-                                                                        <?php echo $nombre_evaluador; ?>
-                                                                    </h6>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="modal-footer border-0">
-                                                                <button type="button"
-                                                                    class="btn btn-primary m-0">Guardar</button>
-                                                            </div>
+                                                        <div class="col-10 text-wrap">
+                                                            <h6><?php echo $row->nombre . ' ' . $row->apellido ?></h6>
+                                                            <p class="text-xs text-secondary mb-0">
+                                                                <?php echo $row->email ?>
+                                                            </p>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            <?php }
-                                        } ?>
+                                                </td>
+                                                <td class="col-2 text-wrap">
+                                                    <div class="mb-0 text-sm">
+                                                        <?php echo ($row->rol)?:'---' ?>
+                                                    </div>
+                                                </td>
+                                                <td class="col-2 text-wrap text-sm" >
+                                                    <?php echo ($row->cargo)?:'---' ?>
+                                                </td>
+                                                <td class="col-1 text-center">
+                                                    <?php echo ($row->Rol_ID != '4')? '' : (($row->id_evaluador != "") ? '<i class="bi bi-check-circle text-success"></i>' : '<i class="bi bi-info-circle-fill text-warning"></i>'); ?>
+                                                </td>
+                                                <td class="col-2 text-center">
+                                                    <button class="border rounded bg-primary btn-info-usuario" type="button"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#info_usuario">
+                                                        <i class="text-light bi bi-eye"></i>
+                                                    </button>
+                                                    <button class="border rounded bg-secondary btn-editar-usuario" type="button"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#modal-form-usuario">
+                                                        <i class="text-light bi bi-pencil"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -259,55 +204,118 @@
         </div>
     </main>
 
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <!-- Modal ver información -->
+    <div class="modal fade" id="info_usuario" tabindex="-1"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Información del usuario</h1>
+                    <button type="button" class="btn-close bg-danger" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h4 id="titulo-nombres">Nombres y apellidos</h4>
+                    <div class="text-md">
+                        <h6 class="text-md">
+                            <b>Cargo:</b>
+                            <p id="titulo-cargo">Ejemplo</p>
+                        </h6>
+                        <h6>
+                            <b>Correo:</b>
+                            <a id="titulo-email" href="">ejemplo@gmail.com</a>
+                        </h6>
+                        <h6>
+                            <b>Grupo(s):</b>
+                            <p id="titulo-grupo">Grupo</p>
+                        </h6>
+                        <h6>
+                            <b>Rol:</b>
+                            <p id="titulo-rol">Rol</p>
+                        </h6>
+                        <?php
+                        // Buscar el nombre del evaluador basado en el id_evaluador
+                        $nombre_evaluador = "No asignado";
+                        foreach ($usuarios as $usuario) {
+                            if ($usuario->id == $row->id_evaluador) {
+                                $nombre_evaluador = $usuario->nombre . ' ' . $usuario->apellido;
+                                break; // Salir del bucle una vez encontrado el nombre del evaluador
+                            }
+                        }
+                        ?>
+                        <h6 style="display:none;"
+                            class="text-md <?php echo ($nombre_evaluador != "No asignado") ? 'bg-asignado' : 'bg-sin_asignar'; ?>">
+                            Evaluador asignado:
+                            <?php echo $nombre_evaluador; ?>
+                        </h6>
+                    </div>
+                </div>
+
+                <div class="modal-footer border-0">
+                    <button type="button"
+                        class="btn btn-secondary m-0" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal registro y actualización de usuarios -->
+
+    <div class="modal modal-lg fade" id="modal-form-usuario" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="modal-form-usuarioLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header border-0">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Agregar nuevo usuario</h1>
+                    <h1 class="modal-title fs-5" id="modal-form-usuarioLabel">Agregar nuevo usuario</h1>
                     <button type="button" class="bg-danger btn-close" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="agregar" method="post">
-                        <div class="mb-3">
+                    <form id="form-usuario" action="agregar" method="post" class="row">
+                        <div class="col-4 mb-3">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" placeholder="Nombre" class="form-control " id="nombre" name="nombre"
+                            required>
+                        </div>
+                        <div class="col-4 mb-3">
+                            <label for="apellido" class="form-label">Apellido</label>
+                            <input type="text" placeholder="Apellido" class="form-control " id="apellido"
+                            name="apellido" required>
+                        </div>
+                        <div class="col-4 mb-3">
                             <label for="identificacion" class="form-label">Numero de documento</label>
                             <input type="text" class="form-control " id="identificacion" minlength="8"
                                 pattern="^[0-9]+$" maxlength="10" placeholder="Numero de documento"
                                 name="identificacion" required>
                         </div>
-                        <div class="mb-3">
-                            <label for="nombre" class="form-label">Nombre</label>
-                            <input type="text" placeholder="Nombre" class="form-control " id="nombre" name="nombre"
-                                required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="apellido" class="form-label">Apellido</label>
-                            <input type="text" placeholder="Apellido" class="form-control " id="apellido"
-                                name="apellido" required>
-                        </div>
-                        <div class="mb-3">
+                        <div class="col-6 mb-3">
                             <label for="email" class="form-label">Correo</label>
-                            <input type="email" class="form-control " id="email"
+                            <input type="email" class="form-control" id="email"
                                 pattern="^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$" placeholder="Correo"
                                 name="email" required>
                         </div>
-                        <div class="mb-3">
-                            <label for="cargo" class="form-label">Cargo</label>
-                            <input type="text" class="form-control " id="cargo" placeholder="Cargo" name="cargo">
-                        </div>
-                        <div class="mb-3">
-                            <label for="id_area" class="form-label">Área</label>
-                            <select class="form-select " id="id_area" name="id_area" required>
+                        <div class="col-6 mb-3">
+                            <label for="id_cargo" class="form-label">Cargo</label>
+                            <select class="form-select " id="id_cargo" name="id_cargo" required>
                                 <option selected disabled value="">Seleccione ---</option>
-                                <?php foreach ($areas as $row): ?>
+                                <?php foreach ($cargos as $row): ?>
                                     <option value="<?php echo $row->id ?>">
                                         <?php echo $row->nombre ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                        <div class="mb-3">
+                        <div class="col-6 mb-3">
+                            <label for="id_grupo" class="form-label">Grupo</label>
+                            <select class="form-select " id="id_grupo" name="id_grupo[]" required>
+                                <option selected disabled value="">Seleccione ---</option>
+                                <?php foreach ($grupos as $row): ?>
+                                    <option value="<?php echo $row->id ?>">
+                                        <?php echo $row->nombre ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="col-6 mb-3">
                             <label for="Rol_ID" class="form-label">Seleccione el tipo de usuario</label>
                             <select class="form-select " id="Rol_ID" name="Rol_ID" required>
                                 <option selected disabled value="">Seleccione ---</option>
@@ -319,7 +327,7 @@
                             </select>
                         </div>
                         <div class="modal-footer">
-                            <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+                            <input id="id_usuario" type="hidden" name="id_usuario">
                             <button type="submit" class="btn btn-success">Guardar</button>
                         </div>
                     </form>
@@ -329,11 +337,11 @@
     </div>
 
     <div class="modal fade" id="importar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        aria-labelledby="modal-form-usuarioLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header border-0">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Importar usuarios</h1>
+                    <h1 class="modal-title fs-5" id="modal-form-usuarioLabel">Importar usuarios</h1>
                     <button type="button" class="bg-danger btn-close" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
@@ -488,7 +496,9 @@
                         "sortAscending": ": activar para ordenar la columna en orden ascendente",
                         "sortDescending": ": activar para ordenar la columna en orden descendente"
                     }
-                }
+                },
+                responsive: true,
+                ordering: false,
             });
 
             $('#form-importar').submit(function(e){
@@ -515,8 +525,60 @@
                 });
             });
 
+            $('#Rol_ID').change(function(){
+                if($(this).val() == '2'){
+                    $('#id_grupo').attr('multiple',true)
+                    // $('#id_grupo').attr('name','id_grupo[]')
+                }else{
+                    $('#id_grupo').attr('multiple',false)
+                }
+            })
 
+            $('.btn-info-usuario').click(function(){
+                usuario = $(this).parents('tr').data('row');
+                // Actualización del modal con los datos del usuario
+                $('#titulo-nombres').text(usuario.nombre + ' ' + usuario.apellido);
+                $('#titulo-apellido').text(usuario.apellido);
+                $('#titulo-email').text(usuario.email);
+                $('#titulo-cargo').text(usuario.cargo);
+                $('#titulo-grupo').html('<ul>' +$.map(usuario.grupos,function(valor){  // Se seleccionan todos los grupos que vengan de la base de datos
+                    return '<li>' + valor.grupos + '</li>';
+                }).join('') + '</ul>');
+                $('#titulo-rol').text(usuario.rol);
+            })
 
+            $('.btn-editar-usuario').click(function(){
+                usuario = $(this).parents('tr').data('row');
+                // Actualización de formulario con los datos del usuario
+                $('#modal-form-usuarioLabel').text('Editar usuario');
+                $('#id_usuario').val(usuario.id);
+                $('#nombre').val(usuario.nombre);
+                $('#apellido').val(usuario.apellido);
+                $('#email').val(usuario.email);
+                $('#cargo').val(usuario.cargo);
+                $('#identificacion').val(usuario.identificacion);
+                $('#Rol_ID').val(usuario.Rol_ID);
+                $('#Rol_ID').change();
+                $('#id_grupo').val($.map(usuario.grupos,function(valor){  // Se seleccionan todos los grupos que vengan de la base de datos
+                    return valor.id_grupo;
+                }));
+                $('#id_cargo').val(usuario.id_cargo);
+            })
+
+            $('#btn-agregar-usuario').click(function(){
+                //Reinicio de modal para agregar usuario
+                $('#modal-form-usuarioLabel').text('Agregar nuevo usuario');
+                $('#id_usuario').val('');
+                $('#nombre').val('');
+                $('#apellido').val('');
+                $('#email').val('');
+                $('#cargo').val('');
+                $('#identificacion').val('');
+                $('#id_grupo').val('');
+                $('#id_cargo').val('');
+                $('#Rol_ID').val('');
+                $('#Rol_ID').change();
+            })
 
         });
 

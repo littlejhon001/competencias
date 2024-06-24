@@ -432,6 +432,70 @@ if ( ! function_exists('auto_link'))
 
 // ------------------------------------------------------------------------
 
+if (!function_exists('console')) {
+	/**
+	 * CMS_Controller::console()
+	 *
+	 * @param mixed $level
+	 * @param mixed $msg
+	 * @return
+	 */
+	function console($level = '', $msg = '') {
+		if (empty($msg)) {
+			$msg = $level;
+			$level = '';}
+		if (is_array($level) || !is_string($level)) {
+			$level = log_mesage($level);
+		}
+		if (is_array($msg) || !is_string($msg)) {
+			$msg = log_mesage($msg);
+		}
+		$filepath = str_replace('\\', '/', APPPATH) . '/../log-' . date('Y-m-d') . '.php';
+		$newfile = false;
+		if (!file_exists($filepath)) {
+			$newfile = true;
+		}
+		if (!$fp = @fopen($filepath, FOPEN_WRITE_CREATE)) {
+			return FALSE;
+		}
+		$message = date('Y-m-d H:i:s') . ' --> ' . $msg . "\n";
+		flock($fp, LOCK_EX);
+		if ($newfile) {
+			fwrite($fp, $titulo);
+		}
+        if($level){
+            fwrite($fp, $level);
+        }
+		fwrite($fp, $message);
+		flock($fp, LOCK_UN);
+		fclose($fp);
+		if ($newfile) {
+			@chmod($filepath, FILE_WRITE_MODE);
+		}
+		return TRUE;
+	}
+}
+
+// ------------------------------------------------------------------------
+
+if (!function_exists('log_mesage')) {
+	/**
+	 * CMS_Controller::log_mesage()
+	 *
+	 * @return
+	 */
+	function log_mesage($data = '') {
+		if (is_string($data) || is_numeric($data)) {
+			$cadena = $data;
+		} else {
+			$cadena = "\n" . print_r($data, 1);
+		}
+		return rtrim($cadena, ', ');
+	}
+}
+
+// ------------------------------------------------------------------------
+
 if ( ! function_exists('prep_url'))
 {
 	/**

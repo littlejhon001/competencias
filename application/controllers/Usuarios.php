@@ -14,7 +14,7 @@ class Usuarios extends CI_Controller
         //     die();
         $this->load->model('Usuario_model');
         $this->load->model('Rol_model');
-        $this->load->model('Area_model');
+        $this->load->model('Grupo_asignado_model');
         $this->load->model('Competencias_model');
         $this->load->model('Usuario_competencia');
         $this->load->model('Actividad_competencia');
@@ -57,9 +57,10 @@ class Usuarios extends CI_Controller
             // Si el usuario es administrador, cargar el header y la vista de usuarios
             if ($this->Usuario_model->has_role($user_data->id, 'Administrador') || $this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
 
-                $data['usuarios'] = $this->Usuario_model->findAll();
+                $data['usuarios'] = $this->Usuario_model->listado_general();
                 $data['roles'] = $this->Rol_model->listado();
-                // $data['areas'] = $this->Area_model->findAll();
+                $data['cargos'] = $this->Cargos_model->listado();
+                $data['grupos'] = $this->Grupo_asignado_model->findAll();
                 $data['user_data'] = $user_data;
 
                 $this->load->view('layouts/header', $data);
@@ -130,29 +131,90 @@ class Usuarios extends CI_Controller
     public function agregar()
     {
         if (!empty ($this->formData)) {
-            $this->formData->password = hash("sha256", 'aula' . $this->formData->identificacion);      //cifrado de contraseña
-            if (!$this->Usuario_model->existe($this->formData->email)) {
+            if(empty($this->formData->id_usuario)){
+                $this->formData->password = hash("sha256", 'aula' . $this->formData->identificacion);      //cifrado de contraseña
+                if (!$this->Usuario_model->existe($this->formData->email)) {
+                    $this->db->trans_begin();
+                    if ($this->Usuario_model->insert($this->formData) > 0) {
+                        if($this->asignar_grupos($id_usuario, $grupos)){
+                            // $envio_correo = $this->enviar_credenciales($this->formData);     //Descomentar para enviar correo
+                            $envio_correo = $this->emular_correo();     //Comentar esta línea y descomentar la de arriba para efectuar el envío de correo
+                            if (!empty ($envio_correo->error)) {
+                                $this->session->set_flashdata([
+                                    'success' => false,
+                                    'message' => 'Error al notificar al usuario'
+                                ]);
+                                $this->db->trans_rollback();
+                            } else {
+                                $this->session->set_flashdata([
+                                    'success' => true,
+                                    'message' => 'Usuario agregado con éxito'
+                                ]);
+                                $this->db->trans_commit();
+                            }
+                        }else{
+                            $this->session->set_flashdata([
+                                'success' => false,
+                                'message' => 'Error al asignar grupos'
+                            ]);
+                            $this->db->trans_rollback();
+                        }
+                    }
+                }
+            }else{
+                // Si llega un id de usuario, se actualiza el registro
                 $this->db->trans_begin();
-                if ($this->Usuario_model->insert($this->formData) > 0) {
-                    // $envio_correo = $this->enviar_credenciales($this->formData);     //Descomentar para enviar correo
-                    $envio_correo = $this->emular_correo();     //Comentar esta línea y descomentar la de arriba para efectuar el envío de correo
-                    if (!empty ($envio_correo->error)) {
-                        $this->session->set_flashdata([
-                            'success' => false,
-                            'message' => 'Error al notificar al usuario'
-                        ]);
-                        $this->db->trans_rollback();
-                    } else {
+                $usuario_encontrado = $this->Usuario_model->usuario_por_correo($this->formData->email);
+                if (empty($usuario_encontrado) ||(!empty($usuario_encontrado) && $usuario_encontrado->id == $this->formData->id_usuario)) {
+                    $id_usuario = $this->formData->id_usuario;
+                    unset($this->formData->id_usuario);
+                    if($this->asignar_grupos($id_usuario, $this->formData->id_grupo)){
+                        unset($this->formData->id_grupo);
+                        $this->Usuario_model->update($id_usuario, $this->formData);
                         $this->session->set_flashdata([
                             'success' => true,
-                            'message' => 'Usuario agregado con éxito'
+                            'message' => 'Usuario actualizado con éxito'
                         ]);
                         $this->db->trans_commit();
+                    }else{
+                        $this->session->set_flashdata([
+                            'success' => false,
+                            'message' => 'Error al asignar grupos'
+                        ]);
+                        $this->db->trans_rollback();
                     }
+                }else{
+                    $this->session->set_flashdata([
+                        'success' => false,
+                        'message' => 'Ya existe un usuario con ese correo'
+                    ]);
+                    $this->db->trans_rollback();
                 }
             }
         }
         return redirect($_SERVER['HTTP_REFERER']);
+    }
+
+    protected function asignar_grupos($id_usuario,$grupos){
+        $asignaciones=[];
+        if(is_array($grupos)){
+            foreach($grupos as $grupo){
+                $asignaciones[] = (object)[
+                    'id_usuario' => $id_usuario,
+                    'id_grupo' => $grupo
+                ];
+            }
+        }else{
+            $asignaciones = [
+                (object)[
+                    'id_usuario' => $id_usuario,
+                    'id_grupo' => $grupos
+                ]
+            ];
+        }
+        $this->load->model('Asignaciones_grupos_model');
+        $this->Asignaciones_grupos_model->delete(['id_usuario' => $id_usuario]);   // elimina los registros del usuario para sobreescribirlos
+        return $this->Asignaciones_grupos_model->asignar_grupos($asignaciones);
     }
     protected function enviar_credenciales($usuario)
     {

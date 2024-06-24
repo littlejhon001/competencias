@@ -15,6 +15,17 @@ class Usuario_model extends MY_Model
         parent::__construct();
     }
 
+    public function listado_general(){
+        $this->db->join('roles rol',"$this->table.Rol_ID = rol.id",'left');
+        $this->db->join('cargos cargo',"$this->table.id_cargo = cargo.id",'left');
+        $this->db->join('asignaciones_grupos asignacion',"$this->table.id = asignacion.id_usuario",'left');
+        $this->db->join('grupo_asignado grupo',"asignacion.id_grupo = grupo.id",'left');
+        $data = $this->findAll('',"$this->table.id, $this->table.nombre, $this->table.apellido, $this->table.email, $this->table.identificacion, $this->table.id_cargo, $this->table.id_evaluador, grupo.id AS id_grupo, grupo.nombre AS grupos, $this->table.Rol_ID, rol.nombre AS rol, cargo.nombre AS cargo");
+        $this->load->helper('array');
+        $data = group_by(['id_grupo','grupos'],'grupos',$data,'id');
+        return $data;
+    }
+
     public function obtener_rol($user_id)
     {
         return $this->find($user_id, 'Rol_ID')->Rol_ID;
@@ -65,6 +76,10 @@ class Usuario_model extends MY_Model
     public function existe($email)
     {
         return !empty ($this->findName('email', $email, 'email'));
+    }
+
+    public function usuario_por_correo($email){
+        return $this->find(['email' => $email],'id');
     }
 
     public function obtener_usuarios_por_evaluador($id_evaluador)

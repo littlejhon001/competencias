@@ -114,3 +114,49 @@ if ( ! function_exists('elements'))
 		return $return;
 	}
 }
+
+// ------------------------------------------------------------------------
+
+if ( ! function_exists('group_by'))
+{
+	/**
+	 * Group_by
+	 *
+	 * Agrupa un arreglo de objetos repetidos por los valores que tengan en una columna en específico
+     * Útil para consultas en base de datos con Join()
+	 *
+	 * @param	mixed
+     * @param	array
+	 * @param	string
+	 * @return	array
+	 */
+	function group_by($items, $column_name="", array $array, $key){
+        $return = [];
+        foreach ($array as $row){
+            if(is_array($items)){
+                if(empty($column_name)){
+                    $column_name = reset($items);
+                }
+                $item_value = (object)[];
+                foreach ($items as $item){
+                    $item_value->{$item} = $row->{$item};
+                    unset($row->{$item});
+                }
+            }else if(is_string($items)){
+                if(empty($column_name)){
+                    $column_name = $items;
+                }
+                $item_value = $row->{$items};
+                unset($row->{$items});
+            }else{
+                return null;
+            }
+            if (!array_key_exists($row->{$key}, $return)) {
+                $return[$row->{$key}] = $row;
+                $return[$row->{$key}]->{$column_name} = [];
+            }
+            $return[$row->{$key}]->{$column_name}[] = $item_value;
+        }
+		return $return;
+	}
+}
