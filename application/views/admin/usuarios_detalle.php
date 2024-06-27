@@ -310,7 +310,7 @@
                                 <option selected disabled value="">Seleccione ---</option>
                                 <?php foreach ($grupos as $row): ?>
                                     <option value="<?php echo $row->id ?>">
-                                        <?php echo $row->nombre ?>
+                                        <?php echo $row->id ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
