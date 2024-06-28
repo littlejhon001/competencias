@@ -1,8 +1,9 @@
 <?php
-defined('BASEPATH') or exit ('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 require_once 'application/third_party/Autoloader.php';
 require_once 'application/third_party/psr/Autoloader.php';
 use PhpOffice\PhpSpreadsheet\IOFactory;
+
 class Usuarios extends CI_Controller
 {
     public function __construct()
@@ -21,7 +22,9 @@ class Usuarios extends CI_Controller
         $this->load->model('Evaluacion_usuario_model');
         $this->load->model('Asignacion_cargo_model');
         $this->load->model('Cargos_model');
-        if(empty($this->session->userdata('user_data'))){
+        $this->load->model('Asignaciones_grupos_model');
+
+        if (empty($this->session->userdata('user_data'))) {
             redirect('/login');
         }
     }
@@ -30,11 +33,14 @@ class Usuarios extends CI_Controller
         $user_data = $this->session->userdata('user_data');
 
         // Verificar si el usuario está logeado
-        if (!empty ($user_data)) {
+        if (!empty($user_data)) {
             // Si el usuario es administrador, cargar el header y la vista de usuarios
             if ($this->Usuario_model->has_role($user_data->id, 'Administrador') || $this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
                 $data['user_data'] = $user_data;
 
+                $data['grupos'] = $this->Asignaciones_grupos_model->listado_GE($user_data->id);
+                var_dump($data['grupos']);
+                die;
                 $this->load->view('layouts/header', $data);
                 $this->view('admin/usuarios', $data);
             } else {
@@ -53,11 +59,13 @@ class Usuarios extends CI_Controller
         $user_data = $this->session->userdata('user_data');
 
         // Verificar si el usuario está logeado
-        if (!empty ($user_data)) {
+        if (!empty($user_data)) {
             // Si el usuario es administrador, cargar el header y la vista de usuarios
             if ($this->Usuario_model->has_role($user_data->id, 'Administrador') || $this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
 
                 $data['usuarios'] = $this->Usuario_model->listado_general();
+                // var_dump($data['usuarios']);
+                // die;
                 $data['roles'] = $this->Rol_model->listado();
                 $data['cargos'] = $this->Cargos_model->listado();
                 $data['grupos'] = $this->Grupo_asignado_model->findAll();
@@ -83,7 +91,7 @@ class Usuarios extends CI_Controller
         // var_dump($user_data);
 
         // Verificar si el usuario está logeado
-        if (!empty ($user_data)) {
+        if (!empty($user_data)) {
             // Si el usuario es administrador, cargar el header y la vista de usuarios
             if ($this->Usuario_model->has_role($user_data->id, 'Administrador') || $this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
 
@@ -130,16 +138,16 @@ class Usuarios extends CI_Controller
 
     public function agregar()
     {
-        if (!empty ($this->formData)) {
-            if(empty($this->formData->id_usuario)){
+        if (!empty($this->formData)) {
+            if (empty($this->formData->id_usuario)) {
                 $this->formData->password = hash("sha256", 'aula' . $this->formData->identificacion);      //cifrado de contraseña
                 if (!$this->Usuario_model->existe($this->formData->email)) {
                     $this->db->trans_begin();
                     if ($this->Usuario_model->insert($this->formData) > 0) {
-                        if($this->asignar_grupos($id_usuario, $grupos)){
+                        if ($this->asignar_grupos($id_usuario, $grupos)) {
                             // $envio_correo = $this->enviar_credenciales($this->formData);     //Descomentar para enviar correo
                             $envio_correo = $this->emular_correo();     //Comentar esta línea y descomentar la de arriba para efectuar el envío de correo
-                            if (!empty ($envio_correo->error)) {
+                            if (!empty($envio_correo->error)) {
                                 $this->session->set_flashdata([
                                     'success' => false,
                                     'message' => 'Error al notificar al usuario'
@@ -152,7 +160,7 @@ class Usuarios extends CI_Controller
                                 ]);
                                 $this->db->trans_commit();
                             }
-                        }else{
+                        } else {
                             $this->session->set_flashdata([
                                 'success' => false,
                                 'message' => 'Error al asignar grupos'
@@ -161,14 +169,14 @@ class Usuarios extends CI_Controller
                         }
                     }
                 }
-            }else{
+            } else {
                 // Si llega un id de usuario, se actualiza el registro
                 $this->db->trans_begin();
                 $usuario_encontrado = $this->Usuario_model->usuario_por_correo($this->formData->email);
-                if (empty($usuario_encontrado) ||(!empty($usuario_encontrado) && $usuario_encontrado->id == $this->formData->id_usuario)) {
+                if (empty($usuario_encontrado) || (!empty($usuario_encontrado) && $usuario_encontrado->id == $this->formData->id_usuario)) {
                     $id_usuario = $this->formData->id_usuario;
                     unset($this->formData->id_usuario);
-                    if($this->asignar_grupos($id_usuario, $this->formData->id_grupo)){
+                    if ($this->asignar_grupos($id_usuario, $this->formData->id_grupo)) {
                         unset($this->formData->id_grupo);
                         $this->Usuario_model->update($id_usuario, $this->formData);
                         $this->session->set_flashdata([
@@ -176,14 +184,14 @@ class Usuarios extends CI_Controller
                             'message' => 'Usuario actualizado con éxito'
                         ]);
                         $this->db->trans_commit();
-                    }else{
+                    } else {
                         $this->session->set_flashdata([
                             'success' => false,
                             'message' => 'Error al asignar grupos'
                         ]);
                         $this->db->trans_rollback();
                     }
-                }else{
+                } else {
                     $this->session->set_flashdata([
                         'success' => false,
                         'message' => 'Ya existe un usuario con ese correo'
@@ -195,18 +203,19 @@ class Usuarios extends CI_Controller
         return redirect($_SERVER['HTTP_REFERER']);
     }
 
-    protected function asignar_grupos($id_usuario,$grupos){
-        $asignaciones=[];
-        if(is_array($grupos)){
-            foreach($grupos as $grupo){
-                $asignaciones[] = (object)[
+    protected function asignar_grupos($id_usuario, $grupos)
+    {
+        $asignaciones = [];
+        if (is_array($grupos)) {
+            foreach ($grupos as $grupo) {
+                $asignaciones[] = (object) [
                     'id_usuario' => $id_usuario,
                     'id_grupo' => $grupo
                 ];
             }
-        }else{
+        } else {
             $asignaciones = [
-                (object)[
+                (object) [
                     'id_usuario' => $id_usuario,
                     'id_grupo' => $grupos
                 ]
@@ -243,7 +252,7 @@ class Usuarios extends CI_Controller
         $data['competencias_cargo'] = $this->Competencias_model->asignadas_por_cargo($data['usuario']->id_cargo);
         // $data['competencias'] = $this->Competencias_model->competencias_por_usuario($id);
 
-   // $data['area'] = $this->Area_model->find(['id' => $user_data->id_area], 'nombre')->nombre;
+        // $data['area'] = $this->Area_model->find(['id' => $user_data->id_area], 'nombre')->nombre;
 
         // var_dump( $data['area']);
         // die;
@@ -269,19 +278,20 @@ class Usuarios extends CI_Controller
 
     }
 
-    public function importar_masivo(){
-        if(!empty($_FILES)){
-            try{
+    public function importar_masivo()
+    {
+        if (!empty($_FILES)) {
+            try {
                 $spreadsheet = IOFactory::load($_FILES['usuarios']['tmp_name']);
                 // leer la hoja 1 del excel cargado
                 $worksheet = $spreadsheet->getSheetByName('usuarios'); // lectura por indice
                 $rows = $worksheet->toArray(null, true, true, true);
                 $usuarios = [];
-                foreach($rows as $row => $columns){
+                foreach ($rows as $row => $columns) {
                     if ($row >= 2 && $columns['A'] != null) {
                         $this->load->model('Rol_model');
                         $this->load->model('Cargos_model');
-                        $usuarios[] = (object)[
+                        $usuarios[] = (object) [
                             'nombre' => $columns['A'],
                             'apellido' => $columns['B'],
                             'email' => $columns['C'],
@@ -294,21 +304,21 @@ class Usuarios extends CI_Controller
                     }
                 }
                 $this->db->trans_begin();
-                if($this->Usuario_model->insert_masivo($usuarios)){
+                if ($this->Usuario_model->insert_masivo($usuarios)) {
                     $this->db->trans_commit();
-                    $this->reques->message = "Se registraron ".count($usuarios)." usuarios";
+                    $this->reques->message = "Se registraron " . count($usuarios) . " usuarios";
                     $this->session->set_flashdata([
                         'message' => $this->reques->message,
                         'success' => true,
                     ]);
-                }else{
+                } else {
                     $this->db->trans_rollback();
                     $this->iffalse('Ocurrió un error al insertar los usuarios');
                 }
-            }catch(Exception $e){
+            } catch (Exception $e) {
                 $this->iffalse('Error al abrir el archivo');
             }
-        }else{
+        } else {
             $this->iffalse('Cargue un archivo');
         }
         $this->json();
@@ -316,10 +326,10 @@ class Usuarios extends CI_Controller
 
     public function criterios_por_cargo($id_cargo, $id_actividad = "", $id_usuario = "")
     {
-        if (!empty ($id_actividad) && intval($id_actividad) > 0) {
+        if (!empty($id_actividad) && intval($id_actividad) > 0) {
             $this->load->model('Criterios_model', 'criterios');
             $this->reques->criterios = $this->criterios->asignados_por_cargo($id_cargo, $id_actividad, $id_usuario);
-            if (!empty ($this->reques->criterios)) {
+            if (!empty($this->reques->criterios)) {
                 $this->reques->success = true;
             }
         } else {
@@ -330,11 +340,11 @@ class Usuarios extends CI_Controller
 
     public function guardar_evaluacion($id_actividad)
     {
-        if (!empty ($this->formData)) {
+        if (!empty($this->formData)) {
             $this->load->model('Evaluacion_usuario_model', 'evaluacion_usuario');
-            if($this->Actividad_competencia->evaluada($id_actividad,$this->formData->id_usuario)){ //VALIDAR SI YA SE EVALUÓ LA ACTIVIDAD
+            if ($this->Actividad_competencia->evaluada($id_actividad, $this->formData->id_usuario)) { //VALIDAR SI YA SE EVALUÓ LA ACTIVIDAD
                 $this->iffalse('Esta actividad clave ya ha sido evaluada');
-            }else{
+            } else {
                 foreach ($this->formData->id_criterio_competencia as $indice => $id_criterio_competencia) {
                     $data[] = (object) [
                         'id_criterio_competencia' => $id_criterio_competencia,

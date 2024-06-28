@@ -32,35 +32,12 @@
 
                     </h6>
 
+
+
+
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-                        <!--
-            <div class="input-group input-group-outline">
-              <label class="form-label">Type here...</label>
-              <input type="text" class="form-control">
-            </div> -->
-
-                    </div>
-                    <ul class="navbar-nav  justify-content-end">
-                        <!-- <li class="nav-item d-flex align-items-center">
-              <a class="btn btn-outline-primary btn-sm mb-0 me-3" target="_blank"
-                href="https://www.creative-tim.com/builder?ref=navbar-material-dashboard">Online Builder</a>
-            </li> -->
-                        <!-- <li class="mt-2">
-              <a class="github-button" href="https://github.com/creativetimofficial/material-dashboard"
-                data-icon="octicon-star" data-size="large" data-show-count="true"
-                aria-label="Star creativetimofficial/material-dashboard on GitHub">Star</a>
-            </li> -->
-                        <!-- <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
-              <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
-                <div class="sidenav-toggler-inner">
-                  <i class="sidenav-toggler-line"></i>
-                  <i class="sidenav-toggler-line"></i>
-                  <i class="sidenav-toggler-line"></i>
-                </div>
-              </a>
-            </li> -->
                         <li class="nav-item px-3 d-flex align-items-center">
                             <a href="javascript:;" class="nav-link text-body p-0">
                                 <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
@@ -88,7 +65,7 @@
                                         <div class="d-flex py-1">
                                             <div class="my-auto">
                                                 <!-- <img src="./assets/img/small-logos/logo-spotify.svg" -->
-                                                    class="avatar avatar-sm bg-gradient-dark  me-3 ">
+                                                class="avatar avatar-sm bg-gradient-dark me-3 ">
                                             </div>
                                         </div>
                                     </a>
@@ -107,9 +84,9 @@
 
                             </a>
                         </li>
-                    </ul>
+                        </ul>
+                    </div>
                 </div>
-            </div>
         </nav>
 
         <!-- End Navbar -->
@@ -123,7 +100,9 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="d-flex flex-column h-100">
-                                        <h2 class="font-weight-bolder my-3 mb-4">Vista general de usuarios</h2>
+                                        <h2 class="font-weight-bolder my-3 mb-4">
+                                            <?php echo ($this->session->userdata('user_data')->Rol_ID == 1) ? ' Vista general de usuarios' : 'Grupos de usuarios' ?>
+                                        </h2>
                                     </div>
                                 </div>
                             </div>
@@ -131,57 +110,91 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-4 col-sm-5">
 
-                            <div class="card card-users  mb-2">
-                                <a href="<?php echo IP_SERVER ?>Usuarios/detalle_usuarios" class="">
-                                    <div class="card-header rounded-4 p-3 pt-2">
-                                        <div
-                                            class="icon icon-lg icon-shape bs-orange shadow-dark shadow text-center border-radius-xl mt-n4 position-absolute">
-                                            <i class=" material-icons  bi bi-people-fill"></i>
+                        <?php if (($this->session->userdata('user_data')->Rol_ID == 1)) { ?>
+                            <div class="col-md-4 col-sm-5">
+                                <div class="card card-users  mb-2">
+                                    <a href="<?php echo IP_SERVER ?>Usuarios/detalle_usuarios" class="">
+                                        <div class="card-header rounded-4 p-3 pt-2">
+                                            <div
+                                                class="icon icon-lg icon-shape bs-orange shadow-dark shadow text-center border-radius-xl mt-n4 position-absolute">
+                                                <i class=" material-icons  bi bi-people-fill"></i>
+                                            </div>
+                                            <div class="text-end pt-1">
+                                                <a href="<?php echo IP_SERVER ?>Usuarios/detalle_usuarios">
+                                                    <p class="text-sm mb-0 text-capitalize">Usuarios registrados</p>
+                                                </a>
+                                                <h4 class="mb-0"></h4>
+                                            </div>
                                         </div>
-                                        <div class="text-end pt-1">
-                                            <a href="<?php echo IP_SERVER ?>Usuarios/detalle_usuarios">
-                                                <p class="text-sm mb-0 text-capitalize">Usuarios registrados</p>
-                                            </a>
-                                            <h4 class="mb-0"></h4>
-                                        </div>
-                                    </div>
 
-                                    <hr class="dark horizontal my-0">
-                                    <div class="card-footer p-3">
-                                        <p class="mb-0"><span class="text-success text-sm font-weight-bolder">
-                                            </span>Examinar lista de ususarios</p>
-                                    </div>
-                                </a>
+                                        <hr class="dark horizontal my-0">
+                                        <div class="card-footer p-3">
+                                            <p class="mb-0"><span class="text-success text-sm font-weight-bolder">
+                                                </span>Examinar lista de ususarios</p>
+                                        </div>
+                                    </a>
+                                </div>
                             </div>
 
 
 
-                        </div>
-                        <div class="col-lg-4 col-sm-5 mt-sm-0 mt-4">
-                            <div class="card card-users mb-2">
-                                <a href="<?php echo IP_SERVER ?>Usuarios/asignar">
-                                    <div class="card-header p-3 pt-2 bg-transparent">
-                                        <div
-                                            class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
-                                            <i class="material-icons  bi bi-person-badge"></i>
+                            <div class="col-lg-4 col-sm-5 mt-sm-0 mt-4">
+                                <div class="card card-users mb-2">
+                                    <a href="<?php echo IP_SERVER ?>Usuarios/asignar">
+                                        <div class="card-header p-3 pt-2 bg-transparent">
+                                            <div
+                                                class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
+                                                <i class="material-icons  bi bi-person-badge"></i>
+                                            </div>
+                                            <div class="text-end pt-1">
+                                                <p class="text-sm mb-0 text-capitalize ">Asignar competencias y evaluadores
+                                                </p>
+                                                <h4 class="mb-0 "></h4>
+                                            </div>
                                         </div>
-                                        <div class="text-end pt-1">
-                                            <p class="text-sm mb-0 text-capitalize ">Asignar competencias y evaluadores
-                                            </p>
-                                            <h4 class="mb-0 "></h4>
-                                        </div>
-                                    </div>
 
-                                    <hr class="horizontal my-0 dark">
-                                    <div class="card-footer p-3">
-                                        <p class="mb-0 "><span class="text-success text-sm font-weight-bolder">+1%
-                                            </span>than yesterday</p>
-                                    </div>
-                                </a>
+                                        <hr class="horizontal my-0 dark">
+                                        <div class="card-footer p-3">
+                                            <p class="mb-0 "><span class="text-success text-sm font-weight-bolder">+1%
+                                                </span>than yesterday</p>
+                                        </div>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
+                        <?php } else {
+                            foreach ($grupos as $grupo) { ?>
+                                <div class="col-lg-3  col-sm-5 mt-sm-0 my-4">
+                                    <div class="card card-users mb-2">
+                                        <a href="<?php echo IP_SERVER ?>Usuarios/asignar">
+                                            <div class="card-header p-3 pt-2 bg-transparent">
+                                                <div
+                                                    class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
+                                                    <i class="material-icons  bi bi-person-badge"></i>
+                                                </div>
+                                                <div class="text-end pt-1">
+                                                    <h2>
+                                                        Grupo :  <?php echo $grupo->id_grupo ?>
+                                                    </h2>
+                                                    <p class="text-sm mb-0 text-capitalize ">
+                                                        Asignar competencias y evaluadores
+                                                    </p>
+                                                    <h4 class="mb-0 "></h4>
+                                                </div>
+                                            </div>
+                                            <hr class="horizontal my-0 dark">
+                                            <div class="card-footer p-3">
+                                                <p class="mb-0 "><span class="text-success text-sm font-weight-bolder">
+                                                        cantidad:
+                                                    </span> </p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                        <?php } ?>
+
+
                     </div>
 
 

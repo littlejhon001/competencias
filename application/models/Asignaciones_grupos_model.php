@@ -20,4 +20,14 @@ class Asignaciones_grupos_model extends MY_Model {
         return $this->db->insert_batch($this->table,$grupos);
     }
 
+    public function listado_GE($id_usuario){
+        return $this->db->select('asignacion.id_grupo, COUNT(usuario.id)')
+        ->from("$this->table as asignacion")
+        ->join("usuarios as usuario", "usuario.id = asignacion.id_usuario AND usuario.Rol_ID = 4", 'inner' )
+        ->where("usuario.id", $id_usuario)
+        ->group_by('asignacion.id_grupo')
+        ->get()
+        ->result();
+    }
+
 }

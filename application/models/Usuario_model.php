@@ -20,9 +20,9 @@ class Usuario_model extends MY_Model
         $this->db->join('cargos cargo',"$this->table.id_cargo = cargo.id",'left');
         $this->db->join('asignaciones_grupos asignacion',"$this->table.id = asignacion.id_usuario",'left');
         $this->db->join('grupo_asignado grupo',"asignacion.id_grupo = grupo.id",'left');
-        $data = $this->findAll('',"$this->table.id, $this->table.nombre, $this->table.apellido, $this->table.email, $this->table.identificacion, $this->table.id_cargo, $this->table.id_evaluador, grupo.id AS id_grupo, grupo.nombre AS grupos, $this->table.Rol_ID, rol.nombre AS rol, cargo.nombre AS cargo");
+        $data = $this->findAll('',"$this->table.id, $this->table.nombre, $this->table.apellido, $this->table.email, $this->table.identificacion, $this->table.id_cargo, $this->table.id_evaluador, grupo.id AS id_grupo, $this->table.Rol_ID, rol.nombre AS rol, cargo.nombre AS cargo");
         $this->load->helper('array');
-        $data = group_by(['id_grupo','grupos'],'grupos',$data,'id');
+        $data = group_by(['id_grupo'],'',$data,'id');
         return $data;
     }
 

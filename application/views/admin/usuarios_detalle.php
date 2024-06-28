@@ -1,7 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-
-
 <body class="g-sidenav-show  bg-gray-200 animate__fadeIn animate__animated">
 
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
@@ -70,7 +66,7 @@
                                         <div class="d-flex py-1">
                                             <div class="my-auto">
                                                 <!-- <img src="./assets/img/small-logos/logo-spotify.svg" -->
-                                                    class="avatar avatar-sm bg-gradient-dark  me-3 ">
+                                                class="avatar avatar-sm bg-gradient-dark me-3 ">
                                             </div>
                                         </div>
                                     </a>
@@ -106,8 +102,8 @@
                                     <h6 class="text-white text-capitalize ps-5 mt-2">Lista de usuarios</h6>
                                     <div class="ms-auto">
                                         <?php if ($user_data->Rol_ID == 1) { ?>
-                                            <button type="button" id="btn-agregar-usuario" class="me-3 btn btn-success" data-bs-toggle="modal"
-                                                data-bs-target="#modal-form-usuario">
+                                            <button type="button" id="btn-agregar-usuario" class="me-3 btn btn-success"
+                                                data-bs-toggle="modal" data-bs-target="#modal-form-usuario">
                                                 Agregar nuevo usuario <i class="fs-6 bi bi-plus-circle"></i>
                                             </button>
                                             <button type="button" class="me-3 btn btn-success" data-bs-toggle="modal"
@@ -148,11 +144,12 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!--
-                                        <pre><?php // echo print_r($usuarios, true)                               ?></pre> -->
+
+                                        <!-- <pre><?php // echo print_r($usuarios, true) ?></pre> -->
 
                                         <?php foreach ($usuarios as $row) { ?>
-                                            <tr class="<?php echo ($row->Rol_ID != '4')? '' : (($row->id_evaluador != "") ? 'bg-asignado' : 'bg-sin_asignar'); ?>" data-row='<?php echo json_encode($row)?>'>
+                                            <tr class="<?php echo ($row->Rol_ID != '4') ? '' : (($row->id_evaluador != "") ? 'bg-asignado' : 'bg-sin_asignar'); ?>"
+                                                data-row='<?php echo json_encode($row) ?>'>
                                                 <td class="col">
                                                     <div class="row g-0 align-items-center">
                                                         <div class="col-2 text-center">
@@ -168,23 +165,22 @@
                                                 </td>
                                                 <td class="col-2 text-wrap">
                                                     <div class="mb-0 text-sm">
-                                                        <?php echo ($row->rol)?:'---' ?>
+                                                        <?php echo ($row->rol) ?: '---' ?>
                                                     </div>
                                                 </td>
-                                                <td class="col-2 text-wrap text-sm" >
-                                                    <?php echo ($row->cargo)?:'---' ?>
+                                                <td class="col-2 text-wrap text-sm">
+                                                    <?php echo ($row->cargo) ?: '---' ?>
                                                 </td>
                                                 <td class="col-1 text-center">
-                                                    <?php echo ($row->Rol_ID != '4')? '' : (($row->id_evaluador != "") ? '<i class="bi bi-check-circle text-success"></i>' : '<i class="bi bi-info-circle-fill text-warning"></i>'); ?>
+                                                    <?php echo ($row->Rol_ID != '4') ? '' : (($row->id_evaluador != "") ? '<i class="bi bi-check-circle text-success"></i>' : '<i class="bi bi-info-circle-fill text-warning"></i>'); ?>
                                                 </td>
                                                 <td class="col-2 text-center">
                                                     <button class="border rounded bg-primary btn-info-usuario" type="button"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#info_usuario">
+                                                        data-bs-toggle="modal" data-bs-target="#info_usuario">
                                                         <i class="text-light bi bi-eye"></i>
                                                     </button>
-                                                    <button class="border rounded bg-secondary btn-editar-usuario" type="button"
-                                                        data-bs-toggle="modal"
+                                                    <button class="border rounded bg-secondary btn-editar-usuario"
+                                                        type="button" data-bs-toggle="modal"
                                                         data-bs-target="#modal-form-usuario">
                                                         <i class="text-light bi bi-pencil"></i>
                                                     </button>
@@ -205,13 +201,13 @@
     </main>
 
     <!-- Modal ver información -->
-    <div class="modal fade" id="info_usuario" tabindex="-1"
-        aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="info_usuario" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Información del usuario</h1>
-                    <button type="button" class="btn-close bg-danger" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close bg-danger" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <h4 id="titulo-nombres">Nombres y apellidos</h4>
@@ -251,8 +247,7 @@
                 </div>
 
                 <div class="modal-footer border-0">
-                    <button type="button"
-                        class="btn btn-secondary m-0" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-secondary m-0" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
@@ -260,8 +255,8 @@
 
     <!-- Modal registro y actualización de usuarios -->
 
-    <div class="modal modal-lg fade" id="modal-form-usuario" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="modal-form-usuarioLabel" aria-hidden="true">
+    <div class="modal modal-lg fade" id="modal-form-usuario" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="modal-form-usuarioLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header border-0">
@@ -274,12 +269,12 @@
                         <div class="col-4 mb-3">
                             <label for="nombre" class="form-label">Nombre</label>
                             <input type="text" placeholder="Nombre" class="form-control " id="nombre" name="nombre"
-                            required>
+                                required>
                         </div>
                         <div class="col-4 mb-3">
                             <label for="apellido" class="form-label">Apellido</label>
                             <input type="text" placeholder="Apellido" class="form-control " id="apellido"
-                            name="apellido" required>
+                                name="apellido" required>
                         </div>
                         <div class="col-4 mb-3">
                             <label for="identificacion" class="form-label">Numero de documento</label>
@@ -501,7 +496,7 @@
                 ordering: false,
             });
 
-            $('#form-importar').submit(function(e){
+            $('#form-importar').submit(function (e) {
                 e.preventDefault();
                 var formulario = this;
                 var formData = new FormData(formulario);
@@ -512,43 +507,44 @@
                     processData: false,
                     contentType: false,
                     data: formData,
-                    success: function(respuesta) {
-                        if(respuesta.success == 1){
+                    success: function (respuesta) {
+                        if (respuesta.success == 1) {
                             location.reload();
-                        }else{
+                        } else {
                             console.error("Error:", respuesta.error);
                         }
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         console.error("Error:", error);
                     }
                 });
             });
 
-            $('#Rol_ID').change(function(){
-                if($(this).val() == '2'){
-                    $('#id_grupo').attr('multiple',true)
+            $('#Rol_ID').change(function () {
+                if ($(this).val() == '2') {
+                    $('#id_grupo').attr('multiple', true)
                     // $('#id_grupo').attr('name','id_grupo[]')
-                }else{
-                    $('#id_grupo').attr('multiple',false)
+                } else {
+                    $('#id_grupo').attr('multiple', false)
                 }
             })
 
-            $('.btn-info-usuario').click(function(){
+            $('.btn-info-usuario').click(function () {
                 usuario = $(this).parents('tr').data('row');
                 // Actualización del modal con los datos del usuario
                 $('#titulo-nombres').text(usuario.nombre + ' ' + usuario.apellido);
                 $('#titulo-apellido').text(usuario.apellido);
                 $('#titulo-email').text(usuario.email);
                 $('#titulo-cargo').text(usuario.cargo);
-                $('#titulo-grupo').html('<ul>' +$.map(usuario.grupos,function(valor){  // Se seleccionan todos los grupos que vengan de la base de datos
-                    return '<li>' + valor.grupos + '</li>';
+                $('#titulo-grupo').html('<ul>' + $.map(usuario.id_grupo, function (valor) {  // Se seleccionan todos los grupos que vengan de la base de datos
+                    return '<li>' + valor.id_grupo + '</li>';
                 }).join('') + '</ul>');
                 $('#titulo-rol').text(usuario.rol);
-            })
 
-            $('.btn-editar-usuario').click(function(){
-                usuario = $(this).parents('tr').data('row');
+                console.log(usuario);
+            })
+            $('.btn-editar-usuario').click(function () {
+                var usuario = $(this).parents('tr').data('row');
                 // Actualización de formulario con los datos del usuario
                 $('#modal-form-usuarioLabel').text('Editar usuario');
                 $('#id_usuario').val(usuario.id);
@@ -559,13 +555,18 @@
                 $('#identificacion').val(usuario.identificacion);
                 $('#Rol_ID').val(usuario.Rol_ID);
                 $('#Rol_ID').change();
-                $('#id_grupo').val($.map(usuario.grupos,function(valor){  // Se seleccionan todos los grupos que vengan de la base de datos
-                    return valor.id_grupo;
+                $('#id_grupo').val($.map(usuario.id_grupo, function (valor) {
+                    return valor.id_grupo; // Asegúrate de que este es el valor correcto
                 }));
                 $('#id_cargo').val(usuario.id_cargo);
-            })
+                console.log(usuario);
+            });
 
-            $('#btn-agregar-usuario').click(function(){
+
+
+
+
+            $('#btn-agregar-usuario').click(function () {
                 //Reinicio de modal para agregar usuario
                 $('#modal-form-usuarioLabel').text('Agregar nuevo usuario');
                 $('#id_usuario').val('');
