@@ -108,7 +108,7 @@
                             </div>
                         </div>
                         <div class="card-body px-0 pb-2">
-                            <form class="ms-auto" action="<?php echo IP_SERVER ?>Usuarios/asignar_evaluador"
+                            <form class="ms-auto" action="<?php echo IP_SERVER ?>Usuarios/asignar_evaluador/<?php echo encrypt($id_grupo)?>"
                                 method="POST" id="formulario-asignacion">
                                 <div class="d-flex  px-3">
                                     <select class="form-select me-3" name="evaluador" id="evaluador"
@@ -224,25 +224,13 @@
                                                                             <h6
                                                                                 class="card-subtitle mb-2 text-body-secondary">
                                                                                 Cargo:
-                                                                                <?php echo $row->cargo ?>
+                                                                                <?php echo $row->nombre_cargo ?>
                                                                             </h6>
                                                                             <p class="card-text">Evaluador:</p>
-
-                                                                            <?php
-                                                                            // Buscar el nombre del evaluador basado en el id_evaluador
-                                                                            $nombre_evaluador = "No asignado";
-                                                                            foreach ($usuarios as $usuario) {
-                                                                               var_dump($usuario->id_evaluador);
-                                                                                if ($usuario->id == $row->id_evaluador) {
-                                                                                    $nombre_evaluador = $usuario->nombre . ' ' . $usuario->apellido;
-                                                                                    break; // Salir del bucle una vez encontrado el nombre del evaluador
-                                                                                }
-                                                                            }
-                                                                            ?>
                                                                             <h6
-                                                                                class="text-md <?php echo ($nombre_evaluador != "No asignado") ? 'bg-asignado' : 'bg-sin_asignar'; ?>">
+                                                                                class="text-md <?php echo (!empty($row->nombre_evaluador)) ? 'bg-asignado' : 'bg-sin_asignar'; ?>">
                                                                                 Evaluador asignado:
-                                                                                <?php echo $nombre_evaluador; ?>
+                                                                                <?php echo (!empty($row->nombre_evaluador)) ? $row->nombre_evaluador: 'No asignado' ?>
                                                                             </h6>
 
                                                                             <p class="card-text">Competencias:</p>
@@ -469,12 +457,26 @@
                     event.preventDefault(); // Prevenir el envío del formulario
                     return;
                 }
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Usuarios asignados',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true
+                event.preventDefault(); // Prevenir el envío del formulario
+                var formulario = this;
+                var formData = new FormData(formulario);
+
+                $.ajax({
+                    method: $(this).attr('method'),
+                    url: $(this).attr('action'),
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    success: function (respuesta) {
+                        if (respuesta.success == 1) {
+                            location.reload();
+                        } else {
+                            console.error("Error:", respuesta.error);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error:", error);
+                    }
                 });
 
             });

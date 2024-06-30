@@ -632,3 +632,31 @@ if ( ! function_exists('redirect'))
 		exit;
 	}
 }
+if ( ! function_exists('encrypt'))
+{
+	/**
+	 * Encrypt
+	 *
+	 * Encripta el valor de una variable en formato base64, compatible para envío por parámetro de GET, en una URL
+	 *
+	 * @param	mixed
+	 * @return	string
+	 */
+	function encrypt($text){
+        return urlencode(base64_encode($text));
+	}
+}
+if ( ! function_exists('decrypt'))
+{
+	/**
+	 * Decrypt
+	 *
+	 * Decripta un string de formato base64
+	 *
+	 * @param	string
+	 * @return	string
+	 */
+	function decrypt($text){
+        return base64_decode(urldecode($text));
+	}
+}

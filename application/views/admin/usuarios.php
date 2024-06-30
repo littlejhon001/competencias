@@ -166,7 +166,7 @@
                             foreach ($grupos as $grupo) { ?>
                                 <div class="col-lg-3  col-sm-5 mt-sm-0 my-4">
                                     <div class="card card-users mb-2">
-                                        <a href="<?php echo IP_SERVER ?>Usuarios/asignar">
+                                        <a href="<?php echo IP_SERVER ?>Usuarios/asignar/<?php echo encrypt($grupo->id_grupo)?>">
                                             <div class="card-header p-3 pt-2 bg-transparent">
                                                 <div
                                                     class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
@@ -185,7 +185,7 @@
                                             <hr class="horizontal my-0 dark">
                                             <div class="card-footer p-3">
                                                 <p class="mb-0 "><span class="text-success text-sm font-weight-bolder">
-                                                        cantidad:
+                                                        cantidad: <?php echo $grupo->num_usuarios ?>
                                                     </span> </p>
                                             </div>
                                         </a>

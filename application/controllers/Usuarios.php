@@ -39,8 +39,6 @@ class Usuarios extends CI_Controller
                 $data['user_data'] = $user_data;
 
                 $data['grupos'] = $this->Asignaciones_grupos_model->listado_GE($user_data->id);
-                var_dump($data['grupos']);
-                die;
                 $this->load->view('layouts/header', $data);
                 $this->view('admin/usuarios', $data);
             } else {
@@ -84,7 +82,7 @@ class Usuarios extends CI_Controller
         }
 
     }
-    public function asignar()
+    public function asignar($id_grupo)
     {
         $user_data = $this->session->userdata('user_data');
 
@@ -94,15 +92,16 @@ class Usuarios extends CI_Controller
         if (!empty($user_data)) {
             // Si el usuario es administrador, cargar el header y la vista de usuarios
             if ($this->Usuario_model->has_role($user_data->id, 'Administrador') || $this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
-
-                $data['usuarios'] = $this->Usuario_model->usuarios_asignar();
+                $data['id_grupo'] = decrypt($id_grupo);
+                $data['usuarios'] = $this->Usuario_model->usuarios_asignar($data['id_grupo']);
                 $data['competencia_cargo'] = $this->Asignacion_cargo_model->findAll();
 
-                $data['evaluadores'] = $this->Usuario_model->datos_evaluadores();
+                $data['evaluadores'] = $this->Usuario_model->datos_evaluadores($data['id_grupo']);
 
                 $data['user_data'] = $user_data;
                 $this->load->view('layouts/header', $data);
                 $this->view('admin/asignar_evaluador', $data);
+                $this->view('layouts/footer', $data);
             } else {
                 // Si el usuario no es administrador, podrías redirigirlo a otra vista o mostrar un mensaje de error
                 redirect('Home');
@@ -115,25 +114,29 @@ class Usuarios extends CI_Controller
     }
 
 
-    public function asignar_evaluador()
+    public function asignar_evaluador($id_grupo)
     {
         // Verificar si se ha enviado el formulario
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Recuperar los datos del formulario
-            $evaluador = $this->input->post('evaluador');
-            // $competencia = $this->input->post('competencia');
-
-
-
-            $usuarios_seleccionados = $this->input->post('usuarios_seleccionados');
-
-            $this->Usuario_model->guardar_datos_evaluador($evaluador, $usuarios_seleccionados);
-
-            // $this->Usuario_competencia->guardar_datos_evaluador($competencia $usuarios_seleccionados);
-
-            // Redirigir a alguna página de éxito
-            redirect('Usuarios/asignar');
+        if ($this->input->is_ajax_request()) {
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                // Recuperar los datos del formulario
+                if(!empty($this->input->post())){
+                    if(!empty($this->input->post('evaluador')) && !empty($this->input->post('usuarios_seleccionados'))){
+                        $this->Usuario_model->guardar_datos_evaluador($this->input->post('evaluador'), $this->input->post('usuarios_seleccionados'));
+                        $this->if_success('Evaluador asignado con éxito');
+                    }else{
+                        $this->iffalse('Evaluador o usuarios no especificados');
+                    }
+                }else{
+                    $this->iffalse('Sin datos enviados');
+                }
+            }else{
+                $this->iffalse('Método HTTP no válido');
+            }
+        }else{
+            $this->iffalse('Petición no válida');
         }
+        $this->json();
     }
 
     public function agregar()
@@ -369,6 +372,13 @@ class Usuarios extends CI_Controller
         }
         $this->json();
     }
+    private function if_success($msj = '')
+	{
+		$this->reques->success = true;
+		$this->reques->message = $msj;
+		unset($this->reques->error);
+        $this->session->set_flashdata((array) $this->reques);
+	}
 }
 
 

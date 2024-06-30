@@ -38,10 +38,16 @@ class Usuario_model extends MY_Model
         return ($rol_usuario == $rol_consultado);
     }
 
-    public function datos_evaluadores()
+    public function datos_evaluadores($id_grupo)
     {
-        // Aquí colocarías la lógica para obtener los datos de los evaluadores del área correspondiente
-        $query = $this->db->get_where('usuarios', array('Rol_id' => 3, 'id_grupo' => $this->session->userdata('user_data')->id_grupo));
+        // Realizar la consulta
+        $query = $this->db->select('usuarios.*, cargos.nombre AS nombre_cargo')
+            ->from('usuarios')
+            ->join('cargos', 'usuarios.id_cargo = cargos.id','left')
+            ->join('asignaciones_grupos asignacion', 'asignacion.id_usuario = usuarios.id')
+            ->where('asignacion.id_grupo', $id_grupo)
+            ->where('usuarios.Rol_ID', 3)
+            ->get();
         return $query->result();
     }
 
@@ -87,16 +93,16 @@ class Usuario_model extends MY_Model
         return $this->findAll(['id_evaluador' => $id_evaluador], 'id,nombre,apellido,cargo,identificacion,email');
     }
 
-    public function usuarios_asignar()
+    public function usuarios_asignar($id_grupo)
     {
-        $id_grupo = $this->session->userdata('user_data')->id_grupo;
-
         // Realizar la consulta
-        $query = $this->db->select('usuarios.*, cargos.nombre AS nombre_cargo')
-            ->from('usuarios')
-            ->join('cargos', 'usuarios.id_cargo = cargos.id')
-            ->where('usuarios.id_grupo', $id_grupo)
-            ->where('usuarios.Rol_ID', 4)
+        $query = $this->db->select('usuario.*, cargos.nombre AS nombre_cargo, CONCAT(evaluador.nombre," ",evaluador.apellido) as nombre_evaluador')
+            ->from('usuarios usuario')
+            ->join('usuarios evaluador', 'usuario.id_evaluador = evaluador.id','left')
+            ->join('cargos', 'usuario.id_cargo = cargos.id','left')
+            ->join('asignaciones_grupos asignacion', 'asignacion.id_usuario = usuario.id')
+            ->where('asignacion.id_grupo', $id_grupo)
+            ->where('usuario.Rol_ID', 4)
             ->get();
         return $query->result();
     }

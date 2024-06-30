@@ -21,12 +21,12 @@ class Asignaciones_grupos_model extends MY_Model {
     }
 
     public function listado_GE($id_usuario){
-        return $this->db->select('asignacion.id_grupo, COUNT(usuario.id)')
-        ->from("$this->table as asignacion")
-        ->join("usuarios as usuario", "usuario.id = asignacion.id_usuario AND usuario.Rol_ID = 4", 'inner' )
-        ->where("usuario.id", $id_usuario)
+        $grupos_usuario = array_column($this->findAll(['id_usuario' => $id_usuario]),'id_grupo');
+        return $this->db->select('asignacion.id_grupo, COUNT(usuario.id) as num_usuarios')
+        ->join("usuarios as usuario", "usuario.id = asignacion.id_usuario AND usuario.Rol_ID = 4", 'left' )
+        ->where_in("asignacion.id_grupo", $grupos_usuario)
         ->group_by('asignacion.id_grupo')
-        ->get()
+        ->get("$this->table as asignacion")
         ->result();
     }
 
