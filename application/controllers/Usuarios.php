@@ -281,6 +281,11 @@ class Usuarios extends CI_Controller
 
     }
 
+    public function descargar_plantilla(){
+        $this->load->library('Excel');
+        $this->excel->plantilla_masivo('Plantilla_usuarios.xlsx');
+    }
+
     public function importar_masivo()
     {
         if (!empty($_FILES)) {
