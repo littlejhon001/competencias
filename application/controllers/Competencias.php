@@ -26,7 +26,7 @@ class Competencias extends CI_Controller
 		$user_data = $this->session->userdata('user_data');
 		// Verificar si el usuario está logeado
 		if (!empty($user_data)) {
-			if ($this->Usuario_model->has_role($user_data->id, 'Administrador') ) {
+			if ($this->Usuario_model->has_role($user_data->id, 'Administrador')  ) {
 				// Si el usuario es administrador, cargar el header y la vista de dashboard
 				// $data['competencias'] = $this->Competencias_model->findAll();
 				$data['user_data'] = $user_data;
@@ -36,6 +36,30 @@ class Competencias extends CI_Controller
 				$this->vista('admin/competencias', $data);
 
 
+
+			} else {
+				// Si no es administrador, cargar solo la vista de dashboard
+				$data['user_data'] = $user_data;
+				$this->vista('dashboard', $data);
+			}
+		} else {
+			// Si el usuario no está logeado, redirigir al formulario de inicio de sesión
+			redirect('login');
+		}
+	}
+	public function competencias_detalle()
+	{
+		// Obtener toda la información de sesión del usuario actual
+		$user_data = $this->session->userdata('user_data');
+		// Verificar si el usuario está logeado
+		if (!empty($user_data)) {
+			if ($this->Usuario_model->has_role($user_data->id, 'Administrador') || $this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores') ) {
+				// Si el usuario es administrador, cargar el header y la vista de dashboard
+				// $data['competencias'] = $this->Competencias_model->findAll();
+				$data['user_data'] = $user_data;
+
+				$data['competencias'] = $this->Competencias_model->findAll();
+				$this->vista('admin/competencias_detalle', $data);
 
 			} else {
 				// Si no es administrador, cargar solo la vista de dashboard

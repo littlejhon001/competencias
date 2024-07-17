@@ -124,7 +124,7 @@
             <?php } ?>
 
 
-            <?php if ($this->session->userdata('user_data')->Rol_ID == 1 || $this->session->userdata('user_data')->Rol_ID == 2) { ?>
+            <?php if ($this->session->userdata('user_data')->Rol_ID == 1 ) { ?>
                 <li class="nav-item">
                     <a class="nav-link text-dark " href="<?php echo IP_SERVER ?>Competencias">
 
@@ -139,7 +139,7 @@
 
             <?php if ($this->session->userdata('user_data')->Rol_ID == 1 || $this->session->userdata('user_data')->Rol_ID == 2) { ?>
                 <li class="nav-item">
-                    <a class="nav-link text-dark " href="#">
+                    <a class="nav-link text-dark " href="<?php echo IP_SERVER?>Competencias/competencias_detalle">
 
                         <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="bi bi-boxes"></i>
