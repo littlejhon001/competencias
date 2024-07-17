@@ -108,7 +108,7 @@
                                             </button>
                                             <button type="button" class="me-3 btn btn-success" data-bs-toggle="modal"
                                                 data-bs-target="#importar">
-                                                Importar usuarios masivamente<i class="fs-6 bi bi-plus-circle"></i>
+                                                Importar usuarios masivamente <i class="fs-6 bi bi-plus-circle"></i>
                                             </button>
                                         <?php } else { ?>
                                             <a href="<?php echo IP_SERVER ?>Usuarios/asignar" class="me-3 btn btn-success">

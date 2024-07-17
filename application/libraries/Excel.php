@@ -5,7 +5,9 @@ require_once 'application/third_party/Autoloader.php';
 require_once 'application/third_party/psr/Autoloader.php';
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class Excel{
     private $CI;
@@ -60,13 +62,13 @@ class Excel{
 
         $cell = 'C2';
         $dataValidation = $this->activeWorksheet->getCell($cell)->getDataValidation();
-        $dataValidation->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_CUSTOM)
+        $dataValidation->setType(DataValidation::TYPE_CUSTOM)
         ->setFormula1('=ISNUMBER(SEARCH("@", C2))')
         ->setShowDropDown(true)
         ->setShowInputMessage(true)
         ->setPromptTitle('Ingrese un correo válido')
         ->setShowErrorMessage(true)
-        ->setErrorStyle(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::STYLE_STOP)
+        ->setErrorStyle(DataValidation::STYLE_STOP)
         ->setErrorTitle('Entrada no válida')
         ->setError('El valor no corresponde a un correo válido.');
 
@@ -75,7 +77,7 @@ class Excel{
         $roles = array_column($this->CI->roles->listado(),'nombre');
         $cell = 'E1';
         $dataValidation = $this->activeWorksheet->getCell($cell)->getDataValidation();
-        $dataValidation->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST)
+        $dataValidation->setType(DataValidation::TYPE_LIST)
         // Set the formula (the list of allowed values)
         ->setFormula1('"'. implode(",", $roles) .'"')
         // Set other properties
@@ -83,7 +85,7 @@ class Excel{
         ->setShowInputMessage(true)
         ->setPromptTitle('Seleccione un rol')
         ->setShowErrorMessage(true)
-        ->setErrorStyle(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::STYLE_INFORMATION)
+        ->setErrorStyle(DataValidation::STYLE_INFORMATION)
         ->setErrorTitle('Entrada no válida')
         ->setError('El valor no está en la lista seleccionable.');
         // Aplicar la validación de datos a un rango de celdas
@@ -94,21 +96,21 @@ class Excel{
         //? Validación grupos (separados por comas)
         $cell = 'G2';
         $dataValidation = $this->activeWorksheet->getCell($cell)->getDataValidation();
-        $dataValidation->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_CUSTOM);
+        $dataValidation->setType(DataValidation::TYPE_CUSTOM);
         // Set the formula (the list of allowed values)
         $dataValidation->setFormula1('=ISNUMBER(VALUE(SUBSTITUTE(G2,",","")))');
         // Set other properties
         $dataValidation->setShowInputMessage(true);
         $dataValidation->setPromptTitle('Introduce números separados por comas');
         $dataValidation->setShowErrorMessage(true);
-        $dataValidation->setErrorStyle(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::STYLE_STOP);
+        $dataValidation->setErrorStyle(DataValidation::STYLE_STOP);
         $dataValidation->setErrorTitle('Entrada no válida');
         $dataValidation->setError('Por favor introduce una lista de números separados por comas');
 
         //? Validación de cargos
         $cell = 'F2';
         $dataValidation = $this->activeWorksheet->getCell($cell)->getDataValidation();
-        $dataValidation->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST)
+        $dataValidation->setType(DataValidation::TYPE_LIST)
         ->setFormula1('$Z$1:$Z$'. count($cargos));
         // Set the formula (the list of allowed values)
         // Set other properties
@@ -116,7 +118,7 @@ class Excel{
         $dataValidation->setShowInputMessage(true);
         $dataValidation->setPromptTitle('Introduce números separados por comas');
         $dataValidation->setShowErrorMessage(true);
-        $dataValidation->setErrorStyle(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::STYLE_STOP);
+        $dataValidation->setErrorStyle(DataValidation::STYLE_STOP);
         $dataValidation->setErrorTitle('Entrada no válida');
         $dataValidation->setError('Por favor introduce una lista de números separados por comas');
 
@@ -135,5 +137,31 @@ class Excel{
         header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
         header('Pragma: public');
         $writer->save('php://output');
+    }
+
+    public function obtener_clientes($nombre_archivo){
+        try{
+            $spreadsheet = IOFactory::load($nombre_archivo);
+            // leer la hoja 1 del excel cargado
+            $worksheet = $spreadsheet->getSheetByName('Usuarios'); // lectura por indice
+            $rows = $worksheet->toArray(null, true, true, true);
+            $usuarios = [];
+            foreach ($rows as $row => $columns) {
+                if ($row >= 2 && $columns['A'] != null) {
+                    $usuarios[] = (object) [
+                        'nombre' => $columns['A'],
+                        'apellido' => $columns['B'],
+                        'email' => $columns['C'],
+                        'identificacion' => $columns['D'],
+                        'Rol_ID' => $columns['E'],
+                        'id_cargo' => $columns['F'],
+                        'id_grupo' => $columns['G'],
+                    ];
+                }
+            }
+            return $usuarios;
+        } catch (Exception $e) {
+            return null;
+        }
     }
 }

@@ -460,9 +460,6 @@ if (!function_exists('console')) {
 		}
 		$message = date('Y-m-d H:i:s') . ' --> ' . $msg . "\n";
 		flock($fp, LOCK_EX);
-		if ($newfile) {
-			fwrite($fp, $titulo);
-		}
         if($level){
             fwrite($fp, $level);
         }

@@ -289,45 +289,61 @@ class Usuarios extends CI_Controller
     public function importar_masivo()
     {
         if (!empty($_FILES)) {
-            try {
-                $spreadsheet = IOFactory::load($_FILES['usuarios']['tmp_name']);
-                // leer la hoja 1 del excel cargado
-                $worksheet = $spreadsheet->getSheetByName('usuarios'); // lectura por indice
-                $rows = $worksheet->toArray(null, true, true, true);
-                $usuarios = [];
-                foreach ($rows as $row => $columns) {
-                    if ($row >= 2 && $columns['A'] != null) {
-                        $this->load->model('Rol_model');
-                        $this->load->model('Cargos_model');
-                        $usuarios[] = (object) [
-                            'nombre' => $columns['A'],
-                            'apellido' => $columns['B'],
-                            'email' => $columns['C'],
-                            'password' => hash("sha256", 'aula' . $columns['D']),
-                            'identificacion' => $columns['D'],
-                            'Rol_ID' => $this->Rol_model->buscarExacto($columns['E']),
-                            'id_cargo' => $this->Cargos_model->buscarExacto($columns['F']),
-                            'id_grupo' => $columns['G'],
-                        ];
+            $this->load->library('Excel');
+            $usuarios = $this->excel->obtener_clientes($_FILES['usuarios']['tmp_name']);
+            if(!empty($usuarios)){
+                foreach($usuarios as $usuario){
+                    $this->db->trans_begin();
+                    if(empty($usuario->id_grupo) || is_numeric(str_replace(',','',$usuario->id_grupo))){
+                        $usuario->password = hash("sha256", 'aula' . $usuario->identificacion);
+                        $usuario->Rol_ID = $this->Rol_model->buscarExacto($usuario->Rol_ID);
+                        $usuario->id_cargo = $this->Cargos_model->buscarExacto($usuario->id_cargo);
+                        $grupos = explode(',', $usuario->id_grupo);
+                        unset($usuario->id_grupo);
+
+                        //buscar identificación del usuario, si existe lo actualiza
+                        $usuario_registrado = $this->Usuario_model->find(['identificacion' => $usuario->identificacion]);
+                        if(empty($usuario_registrado)){
+                            $id_usuario = $this->Usuario_model->insert($usuario);
+                        }else{
+                            $this->Usuario_model->update($usuario_registrado->id, $usuario);
+                            $id_usuario = $usuario_registrado->id;
+                        }
+
+                        if(!empty($id_usuario)){
+                            $this->db->trans_commit();
+                            $this->if_success("Usuario $usuario->nombre $usuario->apellido creado con éxito");
+                            if($grupos){
+                                foreach ($grupos as $grupo) {
+                                    if(empty($this->Grupo_asignado_model->find($grupo))){
+                                        if(!$this->Grupo_asignado_model->insert(['id' => $grupo])){
+                                            $this->iffalse("Error al crear el grupo $grupo");
+                                        }
+                                    }
+                                }
+                                if($this->asignar_grupos($id_usuario, $grupos)){
+                                    $this->if_success("Grupos para $usuario->nombre $usuario->apellido asignados con éxito");
+                                }else{
+                                    $this->iffalse("Error al asignar grupos a $usuario->nombre $usuario->apellido");
+                                }
+                            }
+                        }else{
+                            $this->iffalse("Error al crear el usuario $usuario->nombre $usuario->apellido");
+                        }
+                    }else{
+                        $this->iffalse("El grupo $usuario->id_grupo de $usuario->nombre $usuario->apellido no es válido");
                     }
                 }
-                $this->db->trans_begin();
-                if ($this->Usuario_model->insert_masivo($usuarios)) {
-                    $this->db->trans_commit();
-                    $this->reques->message = "Se registraron " . count($usuarios) . " usuarios";
-                    $this->session->set_flashdata([
-                        'message' => $this->reques->message,
-                        'success' => true,
-                    ]);
-                } else {
-                    $this->db->trans_rollback();
-                    $this->iffalse('Ocurrió un error al insertar los usuarios');
-                }
-            } catch (Exception $e) {
-                $this->iffalse('Error al abrir el archivo');
+            }else{
+                $this->iffalse('No se identificaron datos de usuarios');
             }
         } else {
             $this->iffalse('Cargue un archivo');
+        }
+        if(empty($this->reques->error)){
+            $this->if_success('Usuarios creados correctamente',true);
+        }else{
+            $this->iffalse(count($this->reques->error)  . " errores al cargar usuarios.");
         }
         $this->json();
     }
@@ -377,11 +393,15 @@ class Usuarios extends CI_Controller
         }
         $this->json();
     }
-    private function if_success($msj = '')
+    private function if_success($msj = '',$clear = false)
 	{
 		$this->reques->success = true;
-		$this->reques->message = $msj;
-		unset($this->reques->error);
+        if(empty($this->reques->message) || $clear){
+            $this->reques->message = $msj;
+        }else{
+            $this->reques->message .= "\n" . $msj;
+        }
+		// unset($this->reques->error);
         $this->session->set_flashdata((array) $this->reques);
 	}
 }
