@@ -298,7 +298,7 @@ class Usuarios extends CI_Controller
                         $usuario->password = hash("sha256", 'aula' . $usuario->identificacion);
                         $usuario->Rol_ID = $this->Rol_model->buscarExacto($usuario->Rol_ID);
                         $usuario->id_cargo = $this->Cargos_model->buscarExacto($usuario->id_cargo);
-                        $grupos = explode(',', $usuario->id_grupo);
+                        $grupos = explode(';', $usuario->id_grupo);
                         unset($usuario->id_grupo);
 
                         //buscar identificación del usuario, si existe lo actualiza

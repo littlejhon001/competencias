@@ -93,19 +93,19 @@ class Excel{
             $this->activeWorksheet->getCell('E' . $i)->setDataValidation(clone $dataValidation);
         }
 
-        //? Validación grupos (separados por comas)
+        //? Validación grupos (separados por punto y coma)
         $cell = 'G2';
         $dataValidation = $this->activeWorksheet->getCell($cell)->getDataValidation();
         $dataValidation->setType(DataValidation::TYPE_CUSTOM);
         // Set the formula (the list of allowed values)
-        $dataValidation->setFormula1('=ISNUMBER(VALUE(SUBSTITUTE(G2,",","")))');
+        $dataValidation->setFormula1('=MOD((VALUE(SUBSTITUTE(G2,";",""))),1)=0');
         // Set other properties
         $dataValidation->setShowInputMessage(true);
         $dataValidation->setPromptTitle('Introduce números separados por comas');
         $dataValidation->setShowErrorMessage(true);
         $dataValidation->setErrorStyle(DataValidation::STYLE_STOP);
         $dataValidation->setErrorTitle('Entrada no válida');
-        $dataValidation->setError('Por favor introduce una lista de números separados por comas');
+        $dataValidation->setError('Por favor introduce una lista de números separados por punto y coma');
 
         //? Validación de cargos
         $cell = 'F2';
