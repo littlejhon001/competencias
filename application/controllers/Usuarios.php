@@ -294,7 +294,7 @@ class Usuarios extends CI_Controller
             if(!empty($usuarios)){
                 foreach($usuarios as $usuario){
                     $this->db->trans_begin();
-                    if(empty($usuario->id_grupo) || is_numeric(str_replace(',','',$usuario->id_grupo))){
+                    if(empty($usuario->id_grupo) || is_numeric(str_replace(';','',$usuario->id_grupo))){
                         $usuario->password = hash("sha256", 'aula' . $usuario->identificacion);
                         $usuario->Rol_ID = $this->Rol_model->buscarExacto($usuario->Rol_ID);
                         $usuario->id_cargo = $this->Cargos_model->buscarExacto($usuario->id_cargo);
