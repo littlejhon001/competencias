@@ -1,5 +1,4 @@
 <body class="g-sidenav-show  bg-gray-200 animate__fadeIn animate__animated">
-
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
         <!-- Navbar -->
         <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur"
@@ -77,7 +76,8 @@
                         <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                             <div class="bg-info shadow-primary border-radius-lg pt-4 pb-3">
                                 <div class="d-flex ">
-                                    <h6 class="text-white  ps-5 mt-2">Seleccione un cargo o asigne competencias desde esta sección</h6>
+                                    <h6 class="text-white  ps-5 mt-2">Seleccione un cargo o asigne competencias desde
+                                        esta sección</h6>
 
                                 </div>
                             </div>
@@ -95,11 +95,12 @@
                             </div>
                             <div class="row m-3">
                                 <div class="col-6">
+
                                     <select class="form-select" id="select-competencias" aria-label="Competencias">
                                         <option selected>Selecciona la competencia</option>
                                         <?php foreach ($competencias as $row) { ?>
-                                            <option value="<?php echo $row->id ?>">
-                                                <?php echo $row->nombre ?>
+                                            <option value="<?php echo $row['id']; ?>">
+                                                <?php echo $row['nombre']; ?>
                                             </option>
                                         <?php } ?>
                                     </select>
@@ -138,7 +139,6 @@
                                     <tbody>
                                         <?php foreach ($cargos as $row): ?>
                                             <tr>
-
                                                 <th>
                                                     <input type="checkbox" class="checkbox-cargos"
                                                         value="<?php echo $row->id ?>">
@@ -153,7 +153,6 @@
                                                         <i class="text-success bi bi-clipboard2-plus"></i>
                                                     </a>
                                                 </td>
-
                                             </tr>
                                         <?php endforeach; ?>
                                     </tbody>
@@ -287,7 +286,7 @@
                         $('#select-actividades').empty();
 
                         // Agregar la opción "Seleccione una competencia" al principio
-                        $('#select-actividades').append('<option selected>Seleccione una competencia</option>');
+                        $('#select-actividades').append('<option selected>Seleccione una actividad clave</option>');
                         // Agregar las nuevas opciones
                         $.each(data, function (index, actividad) {
                             $('#select-actividades').append('<option value="' + actividad.id + '">' + actividad.nombre + '</option>');

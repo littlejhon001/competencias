@@ -26,13 +26,13 @@ class Competencias extends CI_Controller
 		$user_data = $this->session->userdata('user_data');
 		// Verificar si el usuario está logeado
 		if (!empty($user_data)) {
-			if ($this->Usuario_model->has_role($user_data->id, 'Administrador')  ) {
+			if ($this->Usuario_model->has_role($user_data->id, 'Administrador')) {
 				// Si el usuario es administrador, cargar el header y la vista de dashboard
 				// $data['competencias'] = $this->Competencias_model->findAll();
 				$data['user_data'] = $user_data;
 				$data['cargos'] = $this->Cargos_model->findAll();
 
-				$data['competencias'] = $this->Competencias_model->findAll();
+				$data['competencias'] = $this->Competencias_model->competencia_estado();
 				$this->vista('admin/competencias', $data);
 
 
@@ -47,30 +47,23 @@ class Competencias extends CI_Controller
 			redirect('login');
 		}
 	}
-	public function competencias_detalle()
-	{
-		// Obtener toda la información de sesión del usuario actual
+	public function competencias_detalle() {
 		$user_data = $this->session->userdata('user_data');
-		// Verificar si el usuario está logeado
 		if (!empty($user_data)) {
-			if ($this->Usuario_model->has_role($user_data->id, 'Administrador') || $this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores') ) {
-				// Si el usuario es administrador, cargar el header y la vista de dashboard
-				// $data['competencias'] = $this->Competencias_model->findAll();
-				$data['user_data'] = $user_data;
+			if ($this->Usuario_model->has_role($user_data->id, 'Administrador') || $this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
 
+				$data['user_data'] = $user_data;
 				$data['competencias'] = $this->Competencias_model->findAll();
 				$this->vista('admin/competencias_detalle', $data);
-
 			} else {
-				// Si no es administrador, cargar solo la vista de dashboard
 				$data['user_data'] = $user_data;
 				$this->vista('dashboard', $data);
 			}
 		} else {
-			// Si el usuario no está logeado, redirigir al formulario de inicio de sesión
 			redirect('login');
 		}
 	}
+
 
 	public function asignar_competencia($id)
 	{
@@ -79,8 +72,8 @@ class Competencias extends CI_Controller
 		$data['competencias'] = $this->Competencias_model->findAll();
 		$data['competencias_asignadas'] = $this->Asignacion_cargo_model->obtener_asignacion_completa($id);
 		// echo '<pre>';
-        // var_dump($data['competencias_asignadas']);
-        // echo '</pre>';
+		// var_dump($data['competencias_asignadas']);
+		// echo '</pre>';
 		// die;
 		$this->vista('admin/asignar_competencia_cargo', $data);
 	}
@@ -166,7 +159,32 @@ class Competencias extends CI_Controller
 			);
 			echo json_encode($response);
 		}
-		 $this->Asignacion_cargo_model->guardar_seleccion_varios_cargos($data);
+		$this->Asignacion_cargo_model->guardar_seleccion_varios_cargos($data);
+	}
+
+
+	public function actualizar_estado()
+	{
+		$estado = $this->input->post('estado');
+		$competencia_id = $this->input->post('competencia_id');
+		// Llamar al modelo para actualizar el proveedor
+		$update_result = $this->Competencias_model->actualizar_estado($competencia_id, $estado);
+
+		if ($update_result) {
+			// Respuesta exitosa
+			$response = array(
+				'success' => true,
+				'message' => 'El proveedor fue actualizado correctamente'
+			);
+		} else {
+			// Respuesta de error
+			$response = array(
+				'success' => false,
+				'message' => 'Error al actualizar el proveedor'
+			);
+		}
+
+		echo json_encode($response);
 	}
 
 }

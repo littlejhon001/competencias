@@ -117,9 +117,7 @@
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Apellido</th>
-                                        <th
-                                            class=" text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Cargo</th>
+
                                         <th
                                             class=" text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                             correo</th>
@@ -154,11 +152,7 @@
                                                         <?php echo $row->apellido ?>
                                                     </div>
                                                 </td>
-                                                <td>
-                                                    <div class="">
-                                                        <?php echo $row->cargo ?>
-                                                    </div>
-                                                </td>
+
                                                 <td>
                                                     <div class="">
                                                         <?php echo $row->email ?>

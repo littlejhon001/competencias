@@ -1,4 +1,7 @@
+
+
 <body class="g-sidenav-show  bg-gray-200 animate__fadeIn animate__animated">
+
 
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
         <!-- Navbar -->
@@ -110,6 +113,7 @@
                                         <span class="visually-hidden">Loading...</span>
                                     </div>
                                 </div>
+
                                 <div class="row m-3">
                                     <div class="col-6">
                                         <select class="form-select" id="select-competencias" aria-label="Competencias">

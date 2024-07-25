@@ -22,10 +22,7 @@
                                 Area:
                                 <?php // echo $area     ?>
                             </p>
-                            <p class=" m-0 p-0 ">
-                                Cargo:
-                                <?php echo $usuario->cargo ?>
-                            </p>
+
                             <p class=" small m-0 p-0">
                                 Correo:
                                 <?php echo $usuario->email ?>

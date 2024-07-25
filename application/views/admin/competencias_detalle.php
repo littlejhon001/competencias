@@ -7,11 +7,7 @@
             <div class="container-fluid py-1 px-3">
                 <nav aria-label="breadcrumb">
 
-                    <!-- <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">index</li>
-          </ol> -->
-                    <!-- <pre><?php // echo print_r($user_data, true)                                                                  ?></pre> -->
+
 
 
                     <h6 class="font-weight-bolder mb-0">Bienvenido de nuevo
@@ -107,9 +103,7 @@
                                             <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
                                                 Nombre
                                             </th>
-                                            <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
-                                                Descripción
-                                            </th>
+
                                             <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
                                                 Código
                                             </th>
@@ -119,22 +113,18 @@
                                             <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
                                                 Estado
                                             </th>
-                                            <!-- <th class="text-secondary opacity-7"></th> -->
+                                            <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
+                                                Ver mas
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-
-                                        <!-- <pre><?php // echo print_r($usuarios, true) ?></pre> -->
                                         <?php foreach ($competencias as $row) { ?>
-                                            <tr>
+                                            <tr
+                                                class="<?php echo ($row->estado == 0) ? 'bg-sin_asignar' : (($row->estado == 1) ? 'bg-asignado' : ''); ?>">
                                                 <td class="col">
-                                                    <div class=" text-wrap">
+                                                    <div class="text-wrap">
                                                         <h6><?php echo $row->nombre; ?></h6>
-                                                    </div>
-                                                </td>
-                                                <td class="col-5 text-wrap">
-                                                    <div class="mb-0 text-sm">
-                                                        <?php echo $row->descripcion; ?>
                                                     </div>
                                                 </td>
                                                 <td class="text-wrap">
@@ -144,16 +134,23 @@
                                                     <?php echo date('Y', strtotime($row->año)); ?>
                                                 </td>
                                                 <td class="text-wrap">
-                                                    <select>
+                                                    <select class="cambiar-estado"
+                                                        data-competencia-id="<?php echo $row->id; ?>">
                                                         <option value="1" <?php echo $row->estado == 1 ? 'selected' : ''; ?>>
                                                             Activo</option>
                                                         <option value="0" <?php echo $row->estado == 0 ? 'selected' : ''; ?>>
                                                             Inactivo</option>
                                                     </select>
                                                 </td>
+                                                <td class="text-wrap">
+                                                    <button type="button" class="btn btn-primary btn-competencias"
+                                                        data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                                        data-competencia='<?php echo json_encode($row) ?>'>
+                                                        <i class="bi bi-journal-plus"></i>
+                                                    </button>
+                                                </td>
                                             </tr>
                                         <?php } ?>
-
                                     </tbody>
                                 </table>
                             </div>
@@ -161,34 +158,30 @@
                     </div>
                 </div>
             </div>
-
-
-
         </div>
     </main>
 
-
-    <div class="modal fade" id="importar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="modal-form-usuarioLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header border-0">
-                    <h1 class="modal-title fs-5" id="modal-form-usuarioLabel">Importar usuarios</h1>
-                    <button type="button" class="bg-danger btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Detalles de la Competencia</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="form-importar" action="importar_masivo" method="POST">
-                        <input type="file" accept=".xlsx" class="form-control border p-2" id="inputGroupFile04"
-                            aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="usuarios" required>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-success">Cargar</button>
-                        </div>
-                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
     </div>
+
+
+
 
 
     <div class="fixed-plugin">
@@ -284,8 +277,7 @@
         </div>
     </div>
 
-
-
+    <!-- datatable -->
     <script>
         $('#tabla-competencias').DataTable({
             "language": {
@@ -315,7 +307,152 @@
             responsive: true,
             ordering: false,
         });
+
+
+
+
+
     </script>
+
+
+    <script>
+        $(function () {
+            // Manejar el clic en los botones de competencias
+            $(".btn-competencias").click(function () {
+                var competencia = $(this).data('competencia');
+
+                var estado = competencia.estado == 1 ? 'Activo' : 'Inactivo';
+
+                // Crear el contenido HTML inicial para el modal
+                var modalContent = `
+                                        <h3>Nombre: ${competencia.nombre}</h3>
+                                        <h4>Código: ${competencia.codigo}</h4>
+                                        <h4>Año: ${competencia.año}</h4>
+                                        <h4>Estado: ${estado}</h4>
+                                        <h3>Actividades clave:</h3>
+                                        <div id="modal-actividades">`;
+
+                // Vaciar el contenido actual y agregar el nuevo contenido al cuerpo del modal
+                $('#staticBackdrop').find('.modal-body').empty().append(modalContent);
+
+                // Realizar la solicitud AJAX para obtener actividades clave
+                $.ajax({
+                    url: '<?php echo IP_SERVER ?>/Competencias/obtener_actividades',
+                    type: 'POST',
+                    data: {
+                        competencia_id: competencia.id // Enviar el ID de la competencia al servidor
+                    },
+                    dataType: 'json', // Asegurarse de que la respuesta se trate como JSON
+                    success: function (actividades) {
+                        // Vaciar el contenido previo de actividades antes de agregar nuevas
+                        $.each(actividades, function (index, actividad) {
+                            var actividadHTML = `
+                        <h5>${actividad.nombre}</h5>
+                        <button class="criterios btn btn-info"
+                            data-id_actividad="${actividad.id}">
+                            Ver criterios
+                        </button>
+                    `;
+                            $('#modal-actividades').append(actividadHTML);
+                        });
+
+                        // Cerrar el div de actividades
+                        $('#modal-actividades').append('</div>');
+                    },
+                    error: function (xhr, status, error) {
+                        // Manejar errores
+                        $('#modal-actividades').html('<p>Error al cargar las actividades.</p>');
+                    }
+                });
+            });
+
+            // Delegar el evento click para los botones de ver criterios
+            $('#staticBackdrop').on('click', '.criterios', function () {
+                var actividadId = $(this).data('id_actividad');
+                var button = $(this);
+
+                // Limpiar los criterios existentes antes de añadir nuevos
+                button.nextUntil('button.criterios').remove();
+
+                $.ajax({
+                    url: '<?php echo IP_SERVER ?>/Competencias/obtener_criterios',
+                    type: 'POST',
+                    data: {
+                        actividad_id: actividadId // Enviar el ID de la actividad al servidor
+                    },
+                    dataType: 'json', // Asegurarse de que la respuesta se trate como JSON
+                    success: function (criterios) {
+                        // Crear el contenido HTML para los criterios
+                        var criteriosHTML = '<h6>Criterios:</h6><ul>';
+
+                        $.each(criterios, function (index, criterio) {
+                            criteriosHTML += `<li>${criterio.nombre} - ${criterio.descripcion}</li>`;
+                        });
+
+                        criteriosHTML += '</ul>';
+
+                        // Insertar los criterios después del botón correspondiente
+                        button.after(criteriosHTML);
+                    },
+                    error: function (xhr, status, error) {
+                        // Manejar errores
+                        button.after('<p>Error al cargar los criterios.</p>');
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('.cambiar-estado').change(function () {
+                var url = '<?php echo IP_SERVER ?>';
+                var estado = $(this).val();
+                var competencia_id = $(this).data('competencia-id'); // Asegúrate de que el nombre del atributo coincida
+
+                $.ajax({
+                    url: url + 'Competencias/actualizar_estado',
+                    type: 'POST',
+                    data: {
+                        estado: estado,
+                        competencia_id: competencia_id
+                    },
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success) {
+                            Swal.fire({
+                                position: "center",
+                                icon: "info",
+                                title: "Has modificado el estado de la competencia",
+                                showConfirmButton: false,
+                                timer: 3500,
+                                timerProgressBar: true
+                            }).then(() => {
+                                // Recargar la página después de que el mensaje se ha mostrado
+                                window.location.reload();
+                            }); // Mensaje de éxito
+
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: response.message || 'Hubo un error al actualizar el estado.',
+                            }); // Mensaje de error
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Error al actualizar el estado: ' + textStatus,
+                        }); // Mensaje de error
+                    }
+                });
+            });
+        });
+    </script>
+
+
+
 
     <!--   Core JS Files   -->
     <script src="../assets/js/core/popper.min.js"></script>
@@ -335,6 +472,7 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="../assets/js/material-dashboard.min.js?v=3.1.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 
