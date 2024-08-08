@@ -1,5 +1,3 @@
-
-
 <body class="g-sidenav-show  bg-gray-200 animate__fadeIn animate__animated">
 
 
@@ -193,17 +191,13 @@
                                                             </div>
                                                         </div>
                                                     <?php endforeach; ?>
-                                                    <button class="btn btn-danger btn-sm btn-eliminar"
+                                                    <button class="btn btn-danger btn-sm eliminar_competencia"
                                                         data-competencia="<?php echo $competencia->id; ?>">Eliminar
                                                     </button>
                                                 </div>
                                             </div>
                                         <?php endforeach; ?>
                                     <?php endif; ?>
-
-
-
-
                                 </div>
                             </div>
                         </div>
@@ -409,17 +403,63 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.post('<?php echo IP_SERVER; ?>AsignacionCargoCompetencia/eliminar_actividad', data, function (respuesta) {
-                            if (respuesta.success) {
-                                if (respuesta.actividades > 0) {
-                                    boton.closest('.card').hide('fast')
-                                } else {
-                                    boton.closest('.card-competencia').hide('fast')
-                                }
+                            if (respuesta.success == 1) {
+                                Swal.fire({
+                                    title: "Realizado",
+                                    text: respuesta.message,
+                                    icon: "success",
+                                    timerProgressBar: true,
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                }).then(() =>
+                                {
+                                    location.reload();
+                                });
                             }
+
                         })
                     }
                 });
             });
+
+
+            $('.eliminar_competencia').click(function () {
+                boton = $(this);
+                data = {
+                    id_cargo: '<?php echo $cargo->id ?>',
+                    id_competencia: $(this).data('competencia')
+                };
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: 'Se eliminara toda la competencia para este cargo',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#f44335',
+                    cancelButtonColor: '#5f687f',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.post('<?php echo IP_SERVER; ?>AsignacionCargoCompetencia/eliminar_competencia', data, function (respuesta) {
+                            if (respuesta.success == 1) {
+                                Swal.fire({
+                                    title: "Realizado",
+                                    text: respuesta.message,
+                                    icon: "success",
+                                    timerProgressBar: true,
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                }).then(() =>
+                                {
+                                    location.reload();
+                                });
+                            }
+
+                        })
+                    }
+                });
+            });
+
 
             $('.btn-eliminar').click(function () {
 

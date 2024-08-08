@@ -47,13 +47,13 @@ class Competencias extends CI_Controller
 			redirect('login');
 		}
 	}
-	public function competencias_detalle() {
+	public function competencias_detalle()
+	{
 		$user_data = $this->session->userdata('user_data');
 		if (!empty($user_data)) {
 			if ($this->Usuario_model->has_role($user_data->id, 'Administrador') || $this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
-
+				// $data['competencias'] = $this->Competencias_model->findAll();
 				$data['user_data'] = $user_data;
-				$data['competencias'] = $this->Competencias_model->findAll();
 				$this->vista('admin/competencias_detalle', $data);
 			} else {
 				$data['user_data'] = $user_data;
@@ -63,6 +63,26 @@ class Competencias extends CI_Controller
 			redirect('login');
 		}
 	}
+
+	public function competencias_year()
+	{
+		$user_data = $this->session->userdata('user_data');
+		if (!empty($user_data)) {
+			if ($this->Usuario_model->has_role($user_data->id, 'Administrador') || $this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
+				$data['user_data'] = $user_data; // Asegurar que user_data siempre esté disponible en la vista
+				$año = $this->input->post('year'); // Cambio de POST a post
+				$data['competencias'] = $this->Competencias_model->get_competencias_by_year($año);
+
+				$this->vista('admin/competencias_detalle', $data);
+			} else {
+				$data['user_data'] = $user_data;
+				$this->vista('dashboard', $data);
+			}
+		} else {
+			redirect('login');
+		}
+	}
+
 
 
 	public function asignar_competencia($id)
@@ -186,6 +206,8 @@ class Competencias extends CI_Controller
 
 		echo json_encode($response);
 	}
+
+
 
 }
 

@@ -77,15 +77,26 @@ class Competencias_model extends MY_Model
         return $this->db->update('competencia', ['estado' => $estado]);
     }
 
-    public function competencia_estado() {
+    public function competencia_estado()
+    {
         // Ejecutar la consulta SQL
         $this->db->select('id, nombre, codigo, estado');
         $this->db->from('competencia');
         $this->db->where('estado', 1);
-        
+
         $query = $this->db->get();
-        
+
         // Retornar los resultados como un array
+        return $query->result_array();
+    }
+
+
+    public function get_competencias_by_year($año)
+    {
+        $this->db->select('*');
+        $this->db->from('competencia');
+        $this->db->where('YEAR(`año`)', $año);
+        $query = $this->db->get();
         return $query->result_array();
     }
 }

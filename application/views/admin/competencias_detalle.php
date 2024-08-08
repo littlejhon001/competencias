@@ -90,6 +90,32 @@
             <h2>Aula competencias</h2>
             <div class="row">
                 <h2 class="font-weight-bolder my-3 mb-4">Vista general de las competencias</h2>
+
+                <div class="container">
+                    <div class="">
+                        <form method="POST" action="<?php echo IP_SERVER ?>Competencias/competencias_year">
+                            <div class="col-4 d-flex align-items-center">
+                                <label for="year-select" class="me-2">Seleccione el año</label>
+                                <select id="año_seleccionado" name="year" class="form-select"
+                                    aria-label="Seleccione el año">
+                                    <option value="" disabled selected>Seleccione</option>
+                                    <option value="2024">2024</option>
+                                    <option value="2023">2023</option>
+                                    <option value="2022">2022</option>
+                                </select>
+                                <button type="submit" class="btn btn-primary ms-2"><i class="bi bi-search"></i></button>
+                            </div>
+                        </form>
+
+                        <div class="">
+                            <button class="btn btn-success mt-1">
+                                Agregar competencia
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
                 <div class="col-12">
                     <div class="card my-4">
                         <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
@@ -97,62 +123,59 @@
                         <div class="card-body px-0 pb-2">
 
                             <div class="table-responsive mx-4 p-0">
-                                <table id="tabla-competencias" class="table  mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
-                                                Nombre
-                                            </th>
+                                <?php if (!empty($competencias)) { ?>
+                                    <table id="tabla-competencias" class="table  mb-0" border="1">
+                                        <thead>
+                                            <tr>
+                                                <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
+                                                    Nombre
+                                                </th>
 
-                                            <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
-                                                Código
-                                            </th>
-                                            <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
-                                                Año
-                                            </th>
-                                            <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
-                                                Estado
-                                            </th>
-                                            <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
-                                                Ver mas
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($competencias as $row) { ?>
-                                            <tr
-                                                class="<?php echo ($row->estado == 0) ? 'bg-sin_asignar' : (($row->estado == 1) ? 'bg-asignado' : ''); ?>">
-                                                <td class="col">
-                                                    <div class="text-wrap">
-                                                        <h6><?php echo $row->nombre; ?></h6>
-                                                    </div>
-                                                </td>
-                                                <td class="text-wrap">
-                                                    <?php echo $row->codigo; ?>
-                                                </td>
-                                                <td class="text-wrap">
-                                                    <?php echo date('Y', strtotime($row->año)); ?>
-                                                </td>
-                                                <td class="text-wrap">
-                                                    <select class="cambiar-estado"
-                                                        data-competencia-id="<?php echo $row->id; ?>">
-                                                        <option value="1" <?php echo $row->estado == 1 ? 'selected' : ''; ?>>
-                                                            Activo</option>
-                                                        <option value="0" <?php echo $row->estado == 0 ? 'selected' : ''; ?>>
-                                                            Inactivo</option>
-                                                    </select>
-                                                </td>
-                                                <td class="text-wrap">
-                                                    <button type="button" class="btn btn-primary btn-competencias"
-                                                        data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-                                                        data-competencia='<?php echo json_encode($row) ?>'>
-                                                        <i class="bi bi-journal-plus"></i>
-                                                    </button>
-                                                </td>
+                                                <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
+                                                    Código
+                                                </th>
+                                                <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
+                                                    Año
+                                                </th>
+                                                <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
+                                                    Ver mas
+                                                </th>
                                             </tr>
-                                        <?php } ?>
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($competencias as $row) { ?>
+                                                <tr
+                                                    class="<?php echo ($row['estado'] == 0) ? 'bg-sin_asignar' : (($row['estado'] == 1) ? 'bg-asignado' : ''); ?>">
+                                                    <td class="col">
+                                                        <div class="text-wrap">
+                                                            <h6><?php echo $row['nombre']; ?></h6>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-wrap">
+                                                        <?php echo $row['codigo']; ?>
+                                                    </td>
+                                                    <td class="text-wrap">
+                                                        <?php echo date('Y', strtotime($row['año'])); ?>
+                                                    </td>
+                                                    <td class="text-wrap">
+                                                        <button type="button" class="btn btn-primary btn-competencias"
+                                                            data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                                            data-competencia='<?php echo json_encode($row) ?>'>
+                                                            <i class="bi bi-journal-plus"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            <?php } ?>
+                                        </tbody>
+                                    </table>
+                                <?php } else { ?>
+                                    <div class="text-wrap">
+                                        <h2 class="my-5 text-center">
+                                            Seleccione un año
+                                        </h2>
+                                    </div>
+                                <?php } ?>
+
                             </div>
                         </div>
                     </div>
@@ -307,11 +330,6 @@
             responsive: true,
             ordering: false,
         });
-
-
-
-
-
     </script>
 
 
@@ -402,6 +420,7 @@
             });
         });
     </script>
+
     <script>
         $(document).ready(function () {
             $('.cambiar-estado').change(function () {
