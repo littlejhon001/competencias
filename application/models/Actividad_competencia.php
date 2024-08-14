@@ -67,4 +67,10 @@ class Actividad_competencia extends MY_Model
         ->get("$this->table actividad")->row()->evaluada;
 
     }
+
+    public function crear_actividad($data)
+    {
+        $this->db->insert('actividad_competencia', $data);
+        return $this->db->insert_id();
+    }
 }

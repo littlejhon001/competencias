@@ -45,4 +45,9 @@ class Criterios_model extends MY_Model
        }
         return $this->db->get("$this->table criterio")->result();
     }
+
+    public function crear_criterio($data)
+    {
+        return $this->insert($data);
+    }
 }

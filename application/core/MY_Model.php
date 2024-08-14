@@ -108,7 +108,7 @@ class MY_Model extends CI_Model {
 	 */
 	public function delete($id) {
 		$this->db->where((is_array($id) ? $id : [$this->table_id => $id]));
-		$this->db->delete($this->table);
+		return $this->db->delete($this->table);
 	}
 	/**
 	 * MY_Model::insert()

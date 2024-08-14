@@ -33,7 +33,7 @@ class Home extends CI_Controller
 
             } else if ($this->Usuario_model->has_role($user_data->id, 'Usuario')) {
                 $data['competencias_asignadas'] = $this->Competencias_model->asignadas_por_cargo($user_data->id_cargo);
-                $this->vista('usuario/dashboard_usuario',$data);
+                $this->vista('usuario/dashboard_usuario', $data);
             } else {
                 // Si el usuario no es administrador, podrías redirigirlo a otra vista o mostrar un mensaje de error
                 redirect('Home');
@@ -46,11 +46,17 @@ class Home extends CI_Controller
 
     }
 
-    public function ver_competencia($id_competencia){
+    public function ver_competencia($id_competencia)
+    {
         var_dump('Hola');
         die;
     }
 
+    public function get_all_users()
+    {
+        $users = $this->Usuario_model->leer();
+        $this->json($users);
+    }
 }
 
 

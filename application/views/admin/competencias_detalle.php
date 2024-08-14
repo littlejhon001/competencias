@@ -1,8 +1,12 @@
+<?php
+$now = date('Y-m-d H:i:s');
+?>
+
 <body class="g-sidenav-show  bg-gray-200 animate__fadeIn animate__animated">
 
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
         <!-- Navbar -->
-        <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur"
+        <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-lg" id="navbarBlur"
             data-scroll="true">
             <div class="container-fluid py-1 px-3">
                 <nav aria-label="breadcrumb">
@@ -90,97 +94,219 @@
             <h2>Aula competencias</h2>
             <div class="row">
                 <h2 class="font-weight-bolder my-3 mb-4">Vista general de las competencias</h2>
-
                 <div class="container">
-                    <div class="">
-                        <form method="POST" action="<?php echo IP_SERVER ?>Competencias/competencias_year">
-                            <div class="col-4 d-flex align-items-center">
-                                <label for="year-select" class="me-2">Seleccione el año</label>
-                                <select id="año_seleccionado" name="year" class="form-select"
-                                    aria-label="Seleccione el año">
-                                    <option value="" disabled selected>Seleccione</option>
-                                    <option value="2024">2024</option>
-                                    <option value="2023">2023</option>
-                                    <option value="2022">2022</option>
-                                </select>
-                                <button type="submit" class="btn btn-primary ms-2"><i class="bi bi-search"></i></button>
-                            </div>
-                        </form>
-
-                        <div class="">
-                            <button class="btn btn-success mt-1">
-                                Agregar competencia
-                            </button>
+                    <div class="d-flex">
+                        <div>
+                            <form method="POST" action="<?php echo IP_SERVER ?>Competencias/competencias_year"
+                                class="w-auto">
+                                <div class=" d-flex align-items-center">
+                                    <label for="year-select" class="w-25 me-2">Seleccione el año</label>
+                                    <select id="año_seleccionado" name="year" class="form-select"
+                                        aria-label="Seleccione el año">
+                                        <option value="" <?php echo (empty($año)) ? "selected disabled" : "" ?>>
+                                            Seleccione</option>
+                                        <option value="2024" <?php echo (!empty($año) && ($año) == '2024') ? "selected" : "" ?>>2024</option>
+                                        <option value="2023" <?php echo (!empty($año) && ($año) == '2023') ? "selected" : "" ?>>2023</option>
+                                        <option value="2022" <?php echo (!empty($año) && ($año) == '2022') ? "selected" : "" ?>>2022</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary ms-2"><i
+                                            class="bi bi-search"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="ms-auto">
+                            <?php if (!empty($competencias_nuevas)) { ?>
+                                <button class="btn btn-success mt-1" disabled type="button" data-bs-toggle="modal"
+                                    data-bs-target="#modal_add_competencia">
+                                    Agregar competencia
+                                </button>
+                            <?php } else { ?>
+                                <button class="btn btn-success mt-1" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#modal_add_competencia">
+                                    Agregar competencia
+                                </button>
+                            <?php } ?>
                         </div>
                     </div>
-
-                </div>
-
-                <div class="col-12">
-                    <div class="card my-4">
-                        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                        </div>
-                        <div class="card-body px-0 pb-2">
-
-                            <div class="table-responsive mx-4 p-0">
-                                <?php if (!empty($competencias)) { ?>
-                                    <table id="tabla-competencias" class="table  mb-0" border="1">
-                                        <thead>
-                                            <tr>
-                                                <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
-                                                    Nombre
-                                                </th>
-
-                                                <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
-                                                    Código
-                                                </th>
-                                                <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
-                                                    Año
-                                                </th>
-                                                <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
-                                                    Ver mas
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php foreach ($competencias as $row) { ?>
-                                                <tr
-                                                    class="<?php echo ($row['estado'] == 0) ? 'bg-sin_asignar' : (($row['estado'] == 1) ? 'bg-asignado' : ''); ?>">
-                                                    <td class="col">
-                                                        <div class="text-wrap">
-                                                            <h6><?php echo $row['nombre']; ?></h6>
-                                                        </div>
-                                                    </td>
-                                                    <td class="text-wrap">
-                                                        <?php echo $row['codigo']; ?>
-                                                    </td>
-                                                    <td class="text-wrap">
-                                                        <?php echo date('Y', strtotime($row['año'])); ?>
-                                                    </td>
-                                                    <td class="text-wrap">
-                                                        <button type="button" class="btn btn-primary btn-competencias"
-                                                            data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-                                                            data-competencia='<?php echo json_encode($row) ?>'>
-                                                            <i class="bi bi-journal-plus"></i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            <?php } ?>
-                                        </tbody>
-                                    </table>
-                                <?php } else { ?>
-                                    <div class="text-wrap">
-                                        <h2 class="my-5 text-center">
-                                            Seleccione un año
+                    <div class="mt-3">
+                        <div class="d-flex justify-content-center">
+                            <?php if (empty($competencias_nuevas)) { ?>
+                                <div class="text-wrap">
+                                    <p class="my-5 text-center">
+                                        No hay competencias nuevas, comienza creando una
+                                    </p>
+                                </div>
+                            <?php } else {
+                                foreach ($competencias_nuevas as $row) { ?>
+                                    <div class="col-8 my-2" id="competencia">
+                                        <h2>
+                                            Estas creando la competencia
                                         </h2>
-                                    </div>
-                                <?php } ?>
+                                        <div class="card " style="">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-center  ">
+                                                    <h4 class="card-title">
+                                                        <?php echo $row->nombre ?>
+                                                    </h4>
+                                                    <div class="">
+                                                        <button class="border-0 btn me-2">
+                                                            <i class="text-warning bi fs-4 bi-pencil-square">
+                                                            </i>
+                                                        </button>
+                                                        <button class="border-0 btn me-2" id="eliminar_competencia" data-id_competencia="<?php echo $row->id?>">
+                                                            <i class="text-danger fs-4 bi bi-trash" ></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <p class="card-text mt-2">
+                                                    Descripción: <?php echo $row->descripcion ?>
+                                                </p>
+                                                <div class="d-flex justify-content-between">
+                                                    <p>
+                                                        Código: <?php echo $row->codigo ?>
+                                                    </p>
+                                                    <p>
+                                                        Año: <?php echo $row->año ?>
+                                                    </p>
+                                                </div>
 
-                            </div>
+                                                <?php
+                                                if (empty($row->actividades)) { ?>
+                                                    <h5 class="text-center text-info">
+                                                        No tienes Actividades, comienza agregando una.
+                                                    </h5>
+                                                <?php } else {
+                                                    foreach ($row->actividades as $actividades) { ?>
+                                                        <div class="card my-2">
+                                                            <div class="card-body">
+                                                                <div class="d-flex justify-content-between">
+                                                                    <h5 class="card-title">
+                                                                        Nombre de la actividad: <?php echo $actividades->nombre ?>
+                                                                    </h5>
+                                                                    <div>
+                                                                        <button type="button" class="border-0 m-0 p-0 btn">
+                                                                            <i class="fs-5 bi-trash text-danger"></i>
+                                                                        </button>
+                                                                        <button class="border-0 m-0 p-0 btn">
+                                                                            <i class="text-warning bi fs-5 bi-pencil-square"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <?php if (empty($actividades->criterios)) { ?>
+                                                                    <h6>
+                                                                        No tienes criterios, comienza agregando uno
+                                                                    </h6>
+                                                                <?php } else {
+                                                                    foreach ($actividades->criterios as $criterios) { ?>
+                                                                        <div class="card my-1">
+                                                                            <div class="card-body">
+                                                                                <div class="d-flex justify-content-between">
+                                                                                    <p class="m-0 p-0">
+                                                                                        Nombre del criterio: <?php echo $criterios->nombre ?>
+                                                                                    </p>
+                                                                                    <div>
+                                                                                        <button type="button" class="border-0 m-0 p-0 btn">
+                                                                                            <i class="fs-5 bi-trash text-danger"></i>
+                                                                                        </button>
+                                                                                        <button class="border-0 m-0 p-0 btn ">
+                                                                                            <i
+                                                                                                class="text-warning bi fs-5 bi-pencil-square"></i>
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    <?php }
+                                                                } ?>
+                                                            </div>
+                                                            <div class="card-footer">
+                                                                <button type="button" class="btn btn-success agregar_criterio"
+                                                                    data-id_actividad="<?php echo $actividades->id ?>" type="button"
+                                                                    data-bs-toggle="modal" data-bs-target="#modal_criterio">Agregar
+                                                                    criterio</button>
+                                                            </div>
+                                                        </div>
+                                                    <?php }
+                                                } ?>
+                                            </div>
+                                            <div class="card-footer ms-auto">
+                                                <a href="#" class="btn btn-success agregar_actividad " type="button"
+                                                    data-bs-toggle="modal" data-bs-target="#modal_actividad"
+                                                    data-id_competencia="<?php echo $row->id ?>">Agregar actividad</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php }
+                            } ?>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="col-12">
+                <div class="card my-4">
+                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    </div>
+                    <div class="card-body px-0 pb-2">
+
+                        <div class="table-responsive mx-4 p-0">
+                            <?php if (!empty($competencias)) { ?>
+                                <table id="tabla-competencias" class="table  mb-0" border="1">
+                                    <thead>
+                                        <tr>
+                                            <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
+                                                Nombre
+                                            </th>
+
+                                            <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
+                                                Código
+                                            </th>
+                                            <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
+                                                Año
+                                            </th>
+                                            <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
+                                                Ver mas
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($competencias as $row) { ?>
+                                            <tr
+                                                class="<?php echo ($row->estado == 0) ? 'bg-sin_asignar' : (($row->estado == 1) ? 'bg-asignado' : ''); ?>">
+                                                <td class="col">
+                                                    <div class="text-wrap">
+                                                        <h6><?php echo $row->nombre; ?></h6>
+                                                    </div>
+                                                </td>
+                                                <td class="text-wrap">
+                                                    <?php echo $row->codigo; ?>
+                                                </td>
+                                                <td class="text-wrap">
+                                                    <?php echo $row->año; ?>
+                                                </td>
+                                                <td class="text-wrap">
+                                                    <button type="button" class="btn btn-primary btn-competencias"
+                                                        data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                                        data-competencia='<?php echo json_encode($row) ?>'>
+                                                        <i class="bi bi-journal-plus"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                            <?php } else { ?>
+                                <div class="text-wrap">
+                                    <h2 class="my-5 text-center">
+                                        Seleccione un año
+                                    </h2>
+                                </div>
+                            <?php } ?>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         </div>
     </main>
 
@@ -202,103 +328,307 @@
             </div>
         </div>
     </div>
+    <!--    modal crear competencia -->
+    <div class="modal fade" id="modal_add_competencia" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="modal_add_competencia" aria-hidden="true">
+        <div class="modal-dialog  modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modal_add_competencia">Agregar competencia</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="crear_competencia_form">
+                        <div class="row">
+                            <input type="hidden" value="<?php echo date('Y-m-d H:i:s'); ?>" name="fecha_creacion">
+                            <input type="hidden" value="2" name="estado">
+                            <div class="col-12">
+                                <label for="nombre" class="form-label">Nombre</label>
+                                <input type="text" name="nombre" class="border form-control" id=""
+                                    placeholder="Nombre de la competencia">
+                            </div>
+                            <div class="col-12">
+                                <label for="descripcion" class="form-label">Descripción</label>
+                                <textarea class="form-control" id="" rows="3" name="descripcion"
+                                    placeholder="Descripcion"></textarea>
+                            </div>
+                            <div class="col-6">
+                                <label for="codigo" class="form-label">Código</label>
+                                <input type="text" name="codigo" class="border form-control" id="" placeholder="Codigo">
+                            </div>
+                            <div class="col-6">
+                                <label for="año" class="form-label">Año</label>
+                                <input type="number" name="año" class="border form-control" id="" placeholder="Año">
+                            </div>
+                            <button type="button" id="crear_competencia"
+                                class="me-2 ms-auto w-50 btn btn-success mt-4">Agregar</button>
+                        </div>
+                    </form>
+                </div>
 
-
-
-
-
-    <div class="fixed-plugin">
-        <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
-            <i class="material-icons py-2">settings</i>
-        </a>
-        <div class="card shadow-lg">
-            <div class="card-header pb-0 pt-3">
-                <div class="float-start">
-                    <h5 class="mt-3 mb-0">Material UI Configurator</h5>
-                    <p>See our dashboard options.</p>
-                </div>
-                <div class="float-end mt-4">
-                    <button class="btn btn-link text-dark p-0 fixed-plugin-close-button">
-                        <i class="material-icons">clear</i>
-                    </button>
-                </div>
-                <!-- End Toggle Button -->
-            </div>
-            <hr class="horizontal dark my-1">
-            <div class="card-body pt-sm-3 pt-0">
-                <!-- Sidebar Backgrounds -->
-                <div>
-                    <h6 class="mb-0">Sidebar Colors</h6>
-                </div>
-                <a href="javascript:void(0)" class="switch-trigger background-color">
-                    <div class="badge-colors my-2 text-start">
-                        <span class="badge filter bg-gradient-primary active" data-color="primary"
-                            onclick="sidebarColor(this)"></span>
-                        <span class="badge filter bg-gradient-dark" data-color="dark"
-                            onclick="sidebarColor(this)"></span>
-                        <span class="badge filter bg-gradient-info" data-color="info"
-                            onclick="sidebarColor(this)"></span>
-                        <span class="badge filter bg-gradient-success" data-color="success"
-                            onclick="sidebarColor(this)"></span>
-                        <span class="badge filter bg-gradient-warning" data-color="warning"
-                            onclick="sidebarColor(this)"></span>
-                        <span class="badge filter bg-gradient-danger" data-color="danger"
-                            onclick="sidebarColor(this)"></span>
-                    </div>
-                </a>
-                <!-- Sidenav Type -->
-                <div class="mt-3">
-                    <h6 class="mb-0">Sidenav Type</h6>
-                    <p class="text-sm">Choose between 2 different sidenav types.</p>
-                </div>
-                <div class="d-flex">
-                    <button class="btn bg-gradient-dark px-3 mb-2 active" data-class="bg-gradient-dark"
-                        onclick="sidebarType(this)">Dark</button>
-                    <button class="btn bg-gradient-dark px-3 mb-2 ms-2" data-class="bg-transparent"
-                        onclick="sidebarType(this)">Transparent</button>
-                    <button class="btn bg-gradient-dark px-3 mb-2 ms-2" data-class="bg-white"
-                        onclick="sidebarType(this)">White</button>
-                </div>
-                <p class="text-sm d-xl-none d-block mt-2">You can change the sidenav type just on desktop view.</p>
-                <!-- Navbar Fixed -->
-                <div class="mt-3 d-flex">
-                    <h6 class="mb-0">Navbar Fixed</h6>
-                    <div class="form-check form-switch ps-0 ms-auto my-auto">
-                        <input class="form-check-input mt-1 ms-auto" type="checkbox" id="navbarFixed"
-                            onclick="navbarFixed(this)">
-                    </div>
-                </div>
-                <hr class="horizontal dark my-3">
-                <div class="mt-2 d-flex">
-                    <h6 class="mb-0">Light / Dark</h6>
-                    <div class="form-check form-switch ps-0 ms-auto my-auto">
-                        <input class="form-check-input mt-1 ms-auto" type="checkbox" id="dark-version"
-                            onclick="darkMode(this)">
-                    </div>
-                </div>
-                <hr class="horizontal dark my-sm-4">
-                <a class="btn bg-gradient-info w-100"
-                    href="https://www.creative-tim.com/product/material-dashboard-pro">Free Download</a>
-                <a class="btn btn-outline-dark w-100"
-                    href="https://www.creative-tim.com/learning-lab/bootstrap/overview/material-dashboard">View
-                    documentation</a>
-                <div class="w-100 text-center">
-                    <a class="github-button" href="https://github.com/creativetimofficial/material-dashboard"
-                        data-icon="octicon-star" data-size="large" data-show-count="true"
-                        aria-label="Star creativetimofficial/material-dashboard on GitHub">Star</a>
-                    <h6 class="mt-3">Thank you for sharing!</h6>
-                    <a href="https://twitter.com/intent/tweet?text=Check%20Material%20UI%20Dashboard%20made%20by%20%40CreativeTim%20%23webdesign%20%23dashboard%20%23bootstrap5&amp;url=https%3A%2F%2Fwww.creative-tim.com%2Fproduct%2Fsoft-ui-dashboard"
-                        class="btn btn-dark mb-0 me-2" target="_blank">
-                        <i class="fab fa-twitter me-1" aria-hidden="true"></i> Tweet
-                    </a>
-                    <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.creative-tim.com/product/material-dashboard"
-                        class="btn btn-dark mb-0 me-2" target="_blank">
-                        <i class="fab fa-facebook-square me-1" aria-hidden="true"></i> Share
-                    </a>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Modal actividad -->
+    <div class="modal fade" id="modal_actividad" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Agregar actividad</h1>
+                    <button type="button" class="btn-close bg-warning" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="crear_actividad_form">
+                        <input id="id_competencia" type="hidden" value="<?php ?>" name="id_competencia">
+                        <div class="row">
+                            <div class="col-12">
+                                <label for="nombre" class="form-label">Nombre de la actividad</label>
+                                <input type="text" name="nombre" class="border form-control" id=""
+                                    placeholder="Nombre de la actividad">
+                            </div>
+                        </div>
+                        <div class="mt-3 ms-end">
+                            <button type="button" id="crear_actividad" class="btn btn-success">Agregar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal criterio-->
+    <div class="modal fade" id="modal_criterio" data-bs-backdrop="static" tabindex="-1"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="" class="" id="crear_criterio_form">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar criterio</h1>
+                        <button type="button" class="btn-close bg-warning" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input id="id_criterio" type="hidden" value="" name="id_criterio">
+                        <div class="row">
+                            <div class="col-12">
+                                <label for="nombre" class="form-label">Nombre del criterio</label>
+                                <input type="text" name="criterio" class="border form-control" id=""
+                                    placeholder="Nombre del criterio">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success " id="crear_criterio">Guardar criterio</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        $(document).ready(function () {
+            $('.agregar_actividad').click(function () {
+                var competencia_id = $(this).data('id_competencia');
+                $('#id_competencia').val(competencia_id);
+            });
+
+            $('.agregar_criterio').click(function () {
+                console.log('click');
+                var criterio_id = $(this).data('id_actividad');
+                $('#id_criterio').val(criterio_id);
+            });
+        });
+
+        $(document).ready(function () {
+            $('#crear_actividad').click(function () {
+                Swal.fire({
+                    title: "Esta seguro de crear la actividad?",
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: "Si",
+                    denyButtonText: `No cerrar`,
+                    confirmButtonColor: "#3085d6",
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+
+                        var formData = $('#crear_actividad_form').serialize();
+                        $.ajax({
+                            url: '<?php echo IP_SERVER ?>Actividad/crear_actividad',
+                            type: 'POST',
+                            data: formData,
+                            success: function (response) {
+                                // Manejar la respuesta del servidor aquí
+                                Swal.fire({
+                                    title: "Actividad creada!",
+                                    icon: "success",
+                                    showConfirmButton: false
+                                });
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 2000);
+                            },
+                            error: function (xhr, status, error) {
+                                // Manejar errores aquí
+                                Swal.fire("ooppps.. ocurrió un error !", "", "error");
+                            }
+                        });
+
+
+                    } else if (result.isDenied) {
+                        Swal.fire("Cambios no aplicados", "", "info");
+                    }
+                });
+
+
+            });
+
+            $('#crear_criterio').click(function () {
+                Swal.fire({
+                    title: "Esta seguro de crear el criterio?",
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: "Si",
+                    denyButtonText: `No cerrar`,
+                    confirmButtonColor: "#3085d6",
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+
+                        var formData = $('#crear_criterio_form').serialize();
+                        $.ajax({
+                            url: '<?php echo IP_SERVER ?>Criterio/crear_criterio',
+                            type: 'POST',
+                            data: formData,
+                            success: function (response) {
+                                // Manejar la respuesta del servidor aquí
+                                Swal.fire({
+                                    title: "Criterio creado!",
+                                    icon: "success",
+                                    showConfirmButton: false
+                                });
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 2000);
+                            },
+                            error: function (xhr, status, error) {
+                                // Manejar errores aquí
+                                Swal.fire("ooppps.. ocurrió un error !", "", "error");
+                            }
+                        });
+
+
+                    } else if (result.isDenied) {
+                        Swal.fire("Cambios no aplicados", "", "info");
+                    }
+                });
+
+
+            });
+        });
+    </script>
+
+
+
+
+
+    <script>
+        $(document).ready(function () {
+            $('#crear_competencia').click(function () {
+                Swal.fire({
+                    title: "Esta seguro de crear la competencia ?",
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: "Si",
+                    denyButtonText: `No cerrar`,
+                    confirmButtonColor: "#3085d6",
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+
+                        var formData = $('#crear_competencia_form').serialize();
+                        $.ajax({
+                            url: '<?php echo IP_SERVER ?>Competencias/crear_competencia',
+                            type: 'POST',
+                            data: formData,
+                            success: function (response) {
+                                // Manejar la respuesta del servidor aquí
+                                Swal.fire({
+                                    title: "Competencia creada!",
+                                    icon: "success",
+                                    showConfirmButton: false
+                                });
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 2000);
+                            },
+                            error: function (xhr, status, error) {
+                                // Manejar errores aquí
+                                Swal.fire("ooppps.. ocurrió un error !", "", "error");
+                            }
+                        });
+
+
+                    } else if (result.isDenied) {
+                        Swal.fire("Cambios no aplicados", "", "info");
+                    }
+                });
+
+
+            });
+
+
+            $('#eliminar_competencia').click(function () {
+                Swal.fire({
+                    title: "Esta seguro de eliminar la competencia?",
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: "Si",
+                    denyButtonText: `Cancelar`,
+                    confirmButtonColor: "#3085d6",
+                    icon: "warning"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var id_competencia = $(this).data('id_competencia');
+                        console.log(id_competencia);
+                        $.ajax({
+                            url: '<?php echo IP_SERVER ?>Competencias/eliminar_competencia',
+                            type: 'POST',
+                            data: {
+                                competencia_id: id_competencia
+                            },
+                            success: function (response) {
+                                // Manejar la respuesta del servidor aquí
+                                Swal.fire({
+                                    title: "Competencia eliminada!",
+                                    icon: "success",
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                });
+                                // Eliminar el elemento del DOM
+                                $('#competencia').remove();
+                            },
+                            error: function (xhr, status, error) {
+                                // Manejar errores aquí
+                                Swal.fire("ooppps.. ocurrió un error !", "", "error");
+                            }
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire("Cambios no aplicados", "", "info");
+                    }
+                });
+            });
+
+        });
+    </script>
+
+
 
     <!-- datatable -->
     <script>

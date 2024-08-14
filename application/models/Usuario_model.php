@@ -111,4 +111,12 @@ class Usuario_model extends MY_Model
         return $this->db->insert_batch($this->table,$data);
     }
 
+
+    function leer(){
+        $this->db->select();
+        $this->db->from($this->table);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
 }

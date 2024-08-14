@@ -8,15 +8,10 @@ class Competencias_model extends MY_Model
     public $table = "competencia";
     public $table_id = "id";
 
-
-
     public function __construct()
     {
         parent::__construct();
     }
-
-
-
     // public function competencias_por_area()
     // {
     //     return $this->findAll(['id_area' => $this->session->userdata('user_data')->id_area]);
@@ -89,6 +84,92 @@ class Competencias_model extends MY_Model
         // Retornar los resultados como un array
         return $query->result_array();
     }
+    public function competencia_nueva()
+    {
+
+        $query = $this->db->query("
+        SELECT
+            competencia.*,
+            actividad_competencia.nombre AS nombre_actividad,
+            criterios.nombre AS nombre_criterio,
+            actividad_competencia.id AS id_actividad,
+            criterios.id AS id_criterios
+        FROM
+            competencia
+        INNER JOIN
+            actividad_competencia
+        ON
+            competencia.id = actividad_competencia.id_competencia
+        INNER JOIN
+            criterios
+        ON
+            actividad_competencia.id = criterios.id_actividad
+        WHERE
+            competencia.estado = '2'
+    ");
+        return $query->result(); // O cualquier otro procesamiento que necesites
+
+
+        // // Ejecutar la consulta SQL
+        // $this->db->select('*');
+        // $this->db->from('competencia');
+        // $this->db->where('estado', 2);
+        // // $this->db->get("$this->table competencia")->result();
+
+        // $query = $this->db->get();
+
+        // // Retornar los resultados como un array
+        // return $query->result();
+    }
+
+
+    public function obtener_asignacion_completa($año = "")
+    {
+        $this->db->select('competencia.id id_competencia,competencia.nombre nombre_competencia, competencia.descripcion descripcion_competencia, competencia.codigo codigo, actividad.id id_actividad,actividad.nombre nombre_actividad,criterio.id id_criterio,criterio.nombre nombre_criterio, año');
+        $this->db->join('actividad_competencia actividad', 'actividad.id_competencia = competencia.id', 'LEFT');
+        $this->db->join('criterios criterio', 'criterio.id_actividad = actividad.id', 'LEFT');
+        $this->db->where('competencia.estado', "2");
+        if ($año != "") {
+            $this->db->where('competencia.año', $año);
+        }
+        $resultados = $this->db->get("$this->table competencia")->result();
+        $respuesta = [];
+
+        foreach ($resultados as $row) {
+            if (empty($respuesta[$row->id_competencia])) {
+                if (!empty($row->id_competencia)) {
+                    $competencia = $respuesta[$row->id_competencia] = (object) [
+                        'id' => $row->id_competencia,
+                        'nombre' => $row->nombre_competencia,
+                        'descripcion' => $row->descripcion_competencia,
+                        'codigo' => $row->codigo,
+                        'año' => $row->año,
+                        'actividades' => []
+                    ];
+                }
+            }
+            if (empty($competencia->actividades[$row->id_actividad])) {
+                if (!empty($row->id_actividad)) {
+                    $actividad = $competencia->actividades[$row->id_actividad] = (object) [
+                        'id' => $row->id_actividad,
+                        'nombre' => $row->nombre_actividad,
+                        'criterios' => []
+                    ];
+                }
+            }
+            if (empty($actividad->criterios[$row->id_criterio])) {
+                if (!empty($row->id_criterio)) {
+                    $actividad->criterios[$row->id_criterio] = (object) [
+                        'id' => $row->id_criterio,
+                        'nombre' => $row->nombre_criterio
+                    ];
+                }
+            }
+        }
+        console($respuesta);
+        return $respuesta;
+    }
+
 
 
     public function get_competencias_by_year($año)
@@ -97,6 +178,17 @@ class Competencias_model extends MY_Model
         $this->db->from('competencia');
         $this->db->where('YEAR(`año`)', $año);
         $query = $this->db->get();
-        return $query->result_array();
+        return $query->result();
+    }
+
+
+    public function crear_competencia($data)
+    {
+        return $this->insert($data);
+    }
+
+    public function eliminar_competencia($competencia_id)
+    {
+        return $this->delete($competencia_id);
     }
 }

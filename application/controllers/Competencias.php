@@ -47,6 +47,8 @@ class Competencias extends CI_Controller
 			redirect('login');
 		}
 	}
+
+
 	public function competencias_detalle()
 	{
 		$user_data = $this->session->userdata('user_data');
@@ -54,6 +56,8 @@ class Competencias extends CI_Controller
 			if ($this->Usuario_model->has_role($user_data->id, 'Administrador') || $this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
 				// $data['competencias'] = $this->Competencias_model->findAll();
 				$data['user_data'] = $user_data;
+				$data['competencias_nuevas'] = $this->Competencias_model->obtener_asignacion_completa();
+
 				$this->vista('admin/competencias_detalle', $data);
 			} else {
 				$data['user_data'] = $user_data;
@@ -70,7 +74,9 @@ class Competencias extends CI_Controller
 		if (!empty($user_data)) {
 			if ($this->Usuario_model->has_role($user_data->id, 'Administrador') || $this->Usuario_model->has_role($user_data->id, 'Gestor de Evaluadores')) {
 				$data['user_data'] = $user_data; // Asegurar que user_data siempre esté disponible en la vista
-				$año = $this->input->post('year'); // Cambio de POST a post
+				$año = $this->input->post('year');
+				$data['año'] =  $año; // Cambio de POST a post
+				$data['competencias_nuevas'] = $this->Competencias_model->obtener_asignacion_completa();
 				$data['competencias'] = $this->Competencias_model->get_competencias_by_year($año);
 
 				$this->vista('admin/competencias_detalle', $data);
@@ -208,6 +214,55 @@ class Competencias extends CI_Controller
 	}
 
 
+	public function crear_competencia()
+	{
+		$nombre = $this->input->post('nombre');
+		$descripcion = $this->input->post('descripcion');
+		$año = $this->input->post('año');
+		$create_at = $this->input->post('fecha_creacion');
+		$codigo = $this->input->post('codigo');
+		$estado = $this->input->post('estado');
+
+		$data = array(
+			'nombre' => $nombre,
+			'descripcion' => $descripcion,
+			'año' => $año,
+			'codigo' => $codigo,
+			'create_at' => $create_at,
+			'estado' => $estado
+		);
+
+		$insert_result = $this->Competencias_model->crear_competencia($data);
+
+		if ($insert_result) {
+			$response = array('status' => 'success', 'message' => 'Competencia creada exitosamente');
+		} else {
+			$response = array('status' => 'error', 'message' => 'Error al crear la competencia');
+		}
+
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($response));
+	}
+
+	public function eliminar_competencia(){
+
+		$competencia_id = $this->input->post('competencia_id');
+
+		$delete_result = $this->Competencias_model->eliminar_competencia($competencia_id);
+
+		if ($delete_result) {
+			$response = array('status' => 'success', 'message' => 'Competencia eliminada exitosamente');
+		} else {
+			$response = array('status' => 'error', 'message' => 'Error al eliminar la competencia');
+		}
+
+		console($delete_result);
+
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($response));
+	}
 
 }
 
