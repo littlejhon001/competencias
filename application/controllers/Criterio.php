@@ -44,6 +44,25 @@ class Criterio extends CI_Controller
 			->set_output(json_encode($response));
 
     }
+
+    public function eliminar_criterio(){
+
+		$id_criterio = $this->input->post('id_criterio');
+
+		$delete_result = $this->Criterios_model->eliminar_criterio($id_criterio);
+
+		if ($delete_result) {
+			$response = array('status' => 'success', 'message' => 'Criterio eliminado exitosamente');
+		} else {
+			$response = array('status' => 'error', 'message' => 'Error al eliminar el criterio');
+		}
+
+
+
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($response));
+	}
 }
 
 

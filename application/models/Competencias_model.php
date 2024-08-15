@@ -166,7 +166,6 @@ class Competencias_model extends MY_Model
                 }
             }
         }
-        console($respuesta);
         return $respuesta;
     }
 
@@ -190,5 +189,10 @@ class Competencias_model extends MY_Model
     public function eliminar_competencia($competencia_id)
     {
         return $this->delete($competencia_id);
+    }
+
+    public function actualizar_competencia($competencia_id, $data) {
+        $this->db->where('id', $competencia_id);
+        return $this->db->update('competencia', $data);
     }
 }

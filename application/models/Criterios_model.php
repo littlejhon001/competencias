@@ -50,4 +50,9 @@ class Criterios_model extends MY_Model
     {
         return $this->insert($data);
     }
+
+    public function eliminar_criterio($id_criterio)
+    {
+        return $this->delete($id_criterio);
+    }
 }

@@ -41,6 +41,25 @@ class Actividad extends CI_Controller
 			->set_output(json_encode($response));
 
     }
+
+	public function eliminar_actividad(){
+
+		$id_actividad = $this->input->post('id_actividad');
+
+		$delete_result = $this->Actividad_competencia->eliminar_actividad($id_actividad);
+
+		if ($delete_result) {
+			$response = array('status' => 'success', 'message' => 'Actividad eliminada exitosamente');
+		} else {
+			$response = array('status' => 'error', 'message' => 'Error al eliminar la Actividad');
+		}
+
+		console($delete_result);
+
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($response));
+	}
 }
 
 

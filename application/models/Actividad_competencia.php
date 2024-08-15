@@ -73,4 +73,9 @@ class Actividad_competencia extends MY_Model
         $this->db->insert('actividad_competencia', $data);
         return $this->db->insert_id();
     }
+
+    public function eliminar_actividad($id_actividad)
+    {
+        return $this->delete($id_actividad);
+    }
 }

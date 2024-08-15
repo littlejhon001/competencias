@@ -257,7 +257,38 @@ class Competencias extends CI_Controller
 			$response = array('status' => 'error', 'message' => 'Error al eliminar la competencia');
 		}
 
-		console($delete_result);
+
+
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($response));
+	}
+
+	public function actualizar_competencia(){
+
+		$competencia_id = $this->input->post('competencia_id');
+		$nombre = $this->input->post('nombre');
+		$descripcion = $this->input->post('descripcion');
+		$año = $this->input->post('año');
+		$create_at = $this->input->post('fecha_creacion');
+		$codigo = $this->input->post('codigo');
+		$estado = $this->input->post('estado');
+
+		$data = array(
+			'nombre' => $nombre,
+			'descripcion' => $descripcion,
+			'año' => $año,
+			'codigo' => $codigo,
+			'estado' => $estado
+		);
+
+		$update_result = $this->Competencias_model->actualizar_competencia($competencia_id, $data);
+
+		if ($update_result) {
+			$response = array('status' => 'success', 'message' => 'Competencia actualizada exitosamente');
+		} else {
+			$response = array('status' => 'error', 'message' => 'Error al actualizar la competencia');
+		}
 
 		$this->output
 			->set_content_type('application/json')

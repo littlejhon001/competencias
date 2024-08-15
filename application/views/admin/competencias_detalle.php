@@ -149,12 +149,19 @@ $now = date('Y-m-d H:i:s');
                                                         <?php echo $row->nombre ?>
                                                     </h4>
                                                     <div class="">
-                                                        <button class="border-0 btn me-2">
+                                                        <button class="border-0 btn me-2 btn_editar_competencia"
+                                                            data-id_competencia="<?php echo $row->id ?>"
+                                                            data-nombre_competencia="<?php echo $row->nombre ?>"
+                                                            data-descripcion_competencia="<?php echo $row->descripcion ?>"
+                                                            data-codigo_competencia="<?php echo $row->codigo ?>"
+                                                            data-codigo_año="<?php echo $row->año ?>" data-bs-toggle="modal"
+                                                            data-bs-target="#modal_add_competencia">
                                                             <i class="text-warning bi fs-4 bi-pencil-square">
                                                             </i>
                                                         </button>
-                                                        <button class="border-0 btn me-2" id="eliminar_competencia" data-id_competencia="<?php echo $row->id?>">
-                                                            <i class="text-danger fs-4 bi bi-trash" ></i>
+                                                        <button class="border-0 btn me-2" id="eliminar_competencia"
+                                                            data-id_competencia="<?php echo $row->id ?>">
+                                                            <i class="text-danger fs-4 bi bi-trash"></i>
                                                         </button>
                                                     </div>
                                                 </div>
@@ -177,14 +184,16 @@ $now = date('Y-m-d H:i:s');
                                                     </h5>
                                                 <?php } else {
                                                     foreach ($row->actividades as $actividades) { ?>
-                                                        <div class="card my-2">
+                                                        <div class="card my-2" id="actividad_<?php echo $actividades->id ?>">
                                                             <div class="card-body">
                                                                 <div class="d-flex justify-content-between">
                                                                     <h5 class="card-title">
                                                                         Nombre de la actividad: <?php echo $actividades->nombre ?>
                                                                     </h5>
                                                                     <div>
-                                                                        <button type="button" class="border-0 m-0 p-0 btn">
+                                                                        <button type="button" class="border-0 m-0 p-0 btn"
+                                                                            id="eliminar_actividad"
+                                                                            data-id_actividad="<?php echo $actividades->id ?>">
                                                                             <i class="fs-5 bi-trash text-danger"></i>
                                                                         </button>
                                                                         <button class="border-0 m-0 p-0 btn">
@@ -205,7 +214,9 @@ $now = date('Y-m-d H:i:s');
                                                                                         Nombre del criterio: <?php echo $criterios->nombre ?>
                                                                                     </p>
                                                                                     <div>
-                                                                                        <button type="button" class="border-0 m-0 p-0 btn">
+                                                                                        <button type="button" class="border-0 m-0 p-0 btn"
+                                                                                            id="eliminar_criterio"
+                                                                                            data-id_criterio="<?php echo $criterios->id ?>">
                                                                                             <i class="fs-5 bi-trash text-danger"></i>
                                                                                         </button>
                                                                                         <button class="border-0 m-0 p-0 btn ">
@@ -334,7 +345,7 @@ $now = date('Y-m-d H:i:s');
         <div class="modal-dialog  modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modal_add_competencia">Agregar competencia</h1>
+                    <h1 class="modal-title fs-5 titulo_modal" id="modal_add_competencia">Agregar competencia</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -342,26 +353,29 @@ $now = date('Y-m-d H:i:s');
                         <div class="row">
                             <input type="hidden" value="<?php echo date('Y-m-d H:i:s'); ?>" name="fecha_creacion">
                             <input type="hidden" value="2" name="estado">
+                            <input type="hidden"  name="id_competencia" id="id_competencia" >
                             <div class="col-12">
                                 <label for="nombre" class="form-label">Nombre</label>
-                                <input type="text" name="nombre" class="border form-control" id=""
+                                <input type="text" name="nombre" id="nombre" class="border form-control" id=""
                                     placeholder="Nombre de la competencia">
                             </div>
                             <div class="col-12">
                                 <label for="descripcion" class="form-label">Descripción</label>
-                                <textarea class="form-control" id="" rows="3" name="descripcion"
+                                <textarea class="form-control" id="descripcion" rows="3" name="descripcion"
                                     placeholder="Descripcion"></textarea>
                             </div>
                             <div class="col-6">
                                 <label for="codigo" class="form-label">Código</label>
-                                <input type="text" name="codigo" class="border form-control" id="" placeholder="Codigo">
+                                <input type="text" name="codigo" class="border form-control" id="codigo"
+                                    placeholder="Codigo">
                             </div>
                             <div class="col-6">
                                 <label for="año" class="form-label">Año</label>
-                                <input type="number" name="año" class="border form-control" id="" placeholder="Año">
+                                <input type="number" name="año" class="border form-control" id="año" placeholder="Año">
                             </div>
-                            <button type="button" id="crear_competencia"
-                                class="me-2 ms-auto w-50 btn btn-success mt-4">Agregar</button>
+                            <button type="button"
+                                class="me-2 ms-auto w-50 btn btn-success mt-4 guardar_competencia">Crear
+                                competencia</button>
                         </div>
                     </form>
                 </div>
@@ -531,12 +545,159 @@ $now = date('Y-m-d H:i:s');
 
 
             });
+
+            $('#eliminar_actividad').click(function () {
+                Swal.fire({
+                    title: "Esta seguro de eliminar la actividad ?",
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: "Si",
+                    denyButtonText: `Cancelar`,
+                    confirmButtonColor: "#3085d6",
+                    icon: "warning"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var id_actividad = $(this).data('id_actividad');
+
+                        $.ajax({
+                            url: '<?php echo IP_SERVER ?>Actividad/eliminar_actividad',
+                            type: 'POST',
+                            data: {
+                                id_actividad: id_actividad
+                            },
+                            success: function (response) {
+                                // Manejar la respuesta del servidor aquí
+                                Swal.fire({
+                                    title: "Actividad eliminada!",
+                                    icon: "success",
+                                    showConfirmButton: false,
+                                });
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 2000);
+                            },
+                            error: function (xhr, status, error) {
+                                // Manejar errores aquí
+                                Swal.fire("ooppps.. ocurrió un error !", "", "error");
+                            }
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire("Cambios no aplicados", "", "info");
+                    }
+                });
+            });
+
+            $('#eliminar_criterio').click(function () {
+                Swal.fire({
+                    title: "Esta seguro de eliminar el criterio ?",
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: "Si",
+                    denyButtonText: `Cancelar`,
+                    confirmButtonColor: "#3085d6",
+                    icon: "warning"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var id_criterio = $(this).data('id_criterio');
+
+                        $.ajax({
+                            url: '<?php echo IP_SERVER ?>Criterio/eliminar_criterio',
+                            type: 'POST',
+                            data: {
+                                id_criterio: id_criterio
+                            },
+                            success: function (response) {
+                                // Manejar la respuesta del servidor aquí
+                                Swal.fire({
+                                    title: "Criterio eliminado!",
+                                    icon: "success",
+                                    showConfirmButton: false,
+                                });
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 2000);
+                            },
+                            error: function (xhr, status, error) {
+                                // Manejar errores aquí
+                                Swal.fire("ooppps.. ocurrió un error !", "", "error");
+                            }
+                        });
+                    } else if (result.isDenied) {
+                        Swal.fire("Cambios no aplicados", "", "info");
+                    }
+                });
+            });
+
         });
     </script>
 
+    <script>
 
+        $(document).ready(function() {
+            // Función para abrir el modal en modo de actualización
+            $('.btn_editar_competencia').click(function() {
+                var nombre = $(this).data('nombre_competencia');
+                var descripcion = $(this).data('descripcion_competencia');
+                var codigo = $(this).data('codigo_competencia');
+                var año = $(this).data('codigo_año');
+                var id_competencia = $(this).data('id_competencia');
 
+                $('.titulo_modal').text('Actualizar competencia');
+                $('.guardar_competencia').text('Actualizar');
+                $('#nombre').val(nombre);
+                $('#descripcion').val(descripcion);
+                $('#codigo').val(codigo);
+                $('#año').val(año);
+                $('#id_competencia').val(id_competencia);
 
+            });
+
+            // Función para guardar la competencia (crear o actualizar)
+            $('.guardar_competencia').click(function() {
+                var competencia_id = $('#id_competencia').val();
+                var tipo = competencia_id ? 'POST' : 'POST'; // POST para creación y actualización (asume que usas POST para ambos)
+                var url = competencia_id ? '<?php echo IP_SERVER ?>Competencias/actualizar_competencia' : '<?php echo IP_SERVER ?>Competencias/crear_competencia';
+                var mensaje_confirmacion = competencia_id ? "Esta seguro de editar la competencia ?" : "Esta seguro de crear la competencia ?";
+                var mensaje_exito = competencia_id ? "Competencia actualizada!" : "Competencia creada!";
+                console.log(competencia_id);
+
+                Swal.fire({
+                    title: mensaje_confirmacion,
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: "Si",
+                    denyButtonText: `Cancelar`,
+                    confirmButtonColor: "#3085d6",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: url,
+                            type: tipo,
+                            data: $('#crear_competencia_form').serialize(),
+                            success: function(response) {
+                                if (response.status === 'success') {
+                                    Swal.fire({
+                                        title: mensaje_exito,
+                                        icon: 'success',
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    });
+                                    setTimeout(() => {
+                                        window.location.reload();
+                                    }, 2000);
+                                } else {
+                                    Swal.fire('Error', response.message, 'error');
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                Swal.fire('ooppps.. ocurrió un error !', '', 'error');
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 
     <script>
         $(document).ready(function () {
@@ -609,10 +770,10 @@ $now = date('Y-m-d H:i:s');
                                     title: "Competencia eliminada!",
                                     icon: "success",
                                     showConfirmButton: false,
-                                    timer: 2000
                                 });
-                                // Eliminar el elemento del DOM
-                                $('#competencia').remove();
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 2000);
                             },
                             error: function (xhr, status, error) {
                                 // Manejar errores aquí
@@ -627,6 +788,7 @@ $now = date('Y-m-d H:i:s');
 
         });
     </script>
+
 
 
 
