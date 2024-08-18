@@ -199,4 +199,16 @@ class Competencias_model extends MY_Model
         $this->db->where('id', $competencia_id);
         return $this->db->update('competencia', ['estado' => $estado]);
     }
+
+    public function contar_usuarios_por_anio($year) {
+        $this->db->select('COUNT(ec.id_usuario) AS total_usuarios');
+        $this->db->from('evaluacion_completada ec');
+        $this->db->join('competencia c', 'ec.id_competencia = c.id');
+        $this->db->where('c.año', $year); // Filtrar por el año en la tabla competencias
+        
+        $query = $this->db->get();
+        $result = $query->row();
+        
+        return $result->total_usuarios;
+    }
 }

@@ -57,6 +57,17 @@ class Home extends CI_Controller
         $users = $this->Usuario_model->leer();
         $this->json($users);
     }
+    public function all_competencias()
+    {
+        $competencias = $this->Competencias_model->findAll();
+        $this->json($competencias);
+    }
+    public function total_competencias_anio($year){
+
+        $total_usuarios = $this->Competencias_model->contar_usuarios_por_anio($year);
+
+        $this->json($total_usuarios);
+    }
 }
 
 
