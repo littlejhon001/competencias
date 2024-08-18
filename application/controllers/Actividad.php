@@ -60,6 +60,31 @@ class Actividad extends CI_Controller
 			->set_content_type('application/json')
 			->set_output(json_encode($response));
 	}
+
+	public function actualizar_actividad(){
+
+		$id_actividad = $this->input->post('id_actividad');
+		$nombre = $this->input->post('nombre');
+
+		$data = array(
+			'nombre' => $nombre
+		);
+
+		$update_result = $this->Actividad_competencia->actualizar_actividad($id_actividad, $data);
+
+		if ($update_result) {
+			$response = array('status' => 'success', 'message' => 'Actividad actualizada exitosamente');
+		} else {
+			$response = array('status' => 'error', 'message' => 'Error al actualizar la Actividad');
+		}
+
+		console($this->db->last_query());
+
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($response));
+	}
+
 }
 
 

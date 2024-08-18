@@ -193,20 +193,20 @@ class Competencias extends CI_Controller
 	{
 		$estado = $this->input->post('estado');
 		$competencia_id = $this->input->post('competencia_id');
-		// Llamar al modelo para actualizar el proveedor
+
 		$update_result = $this->Competencias_model->actualizar_estado($competencia_id, $estado);
 
 		if ($update_result) {
 			// Respuesta exitosa
 			$response = array(
 				'success' => true,
-				'message' => 'El proveedor fue actualizado correctamente'
+				'message' => 'El estado fue actualizado correctamente'
 			);
 		} else {
 			// Respuesta de error
 			$response = array(
 				'success' => false,
-				'message' => 'Error al actualizar el proveedor'
+				'message' => 'Error al actualizar el estado'
 			);
 		}
 
@@ -266,7 +266,7 @@ class Competencias extends CI_Controller
 
 	public function actualizar_competencia(){
 
-		$competencia_id = $this->input->post('competencia_id');
+		$competencia_id = $this->input->post('id_competencia');
 		$nombre = $this->input->post('nombre');
 		$descripcion = $this->input->post('descripcion');
 		$año = $this->input->post('año');
@@ -288,6 +288,26 @@ class Competencias extends CI_Controller
 			$response = array('status' => 'success', 'message' => 'Competencia actualizada exitosamente');
 		} else {
 			$response = array('status' => 'error', 'message' => 'Error al actualizar la competencia');
+		}
+
+		console($this->db->last_query());
+
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($response));
+	}
+
+	public function guardar_nueva_competencia (){
+		$competencia_id = $this->input->post('competencia_id');
+		$estado = 2;
+
+		$insert_result = $this->Competencias_model->guardar_nueva_competencia($competencia_id, $estado);
+		console($this->db->last_query());
+
+		if ($insert_result) {
+			$response = array('status' => 'success', 'message' => 'Competencia creada exitosamente');
+		} else {
+			$response = array('status' => 'error', 'message' => 'Error al crear la competencia');
 		}
 
 		$this->output

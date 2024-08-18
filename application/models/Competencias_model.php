@@ -192,7 +192,11 @@ class Competencias_model extends MY_Model
     }
 
     public function actualizar_competencia($competencia_id, $data) {
+        return $this->update($competencia_id, $data);
+    }
+    public function guardar_nueva_competencia($competencia_id,$estado)
+    {
         $this->db->where('id', $competencia_id);
-        return $this->db->update('competencia', $data);
+        return $this->db->update('competencia', ['estado' => $estado]);
     }
 }

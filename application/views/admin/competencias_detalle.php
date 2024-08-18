@@ -140,7 +140,7 @@ $now = date('Y-m-d H:i:s');
                                 foreach ($competencias_nuevas as $row) { ?>
                                     <div class="col-8 my-2" id="competencia">
                                         <h2>
-                                            Estas creando la competencia
+                                            Estas creando/editando la competencia:
                                         </h2>
                                         <div class="card " style="">
                                             <div class="card-body">
@@ -188,15 +188,24 @@ $now = date('Y-m-d H:i:s');
                                                             <div class="card-body">
                                                                 <div class="d-flex justify-content-between">
                                                                     <h5 class="card-title">
-                                                                        Nombre de la actividad: <?php echo $actividades->nombre ?>
+                                                                        <span class="text-dark">
+                                                                            Nombre de la actividad:
+                                                                        </span>
+                                                                        <?php echo $actividades->nombre ?>
                                                                     </h5>
                                                                     <div>
-                                                                        <button type="button" class="border-0 m-0 p-0 btn"
-                                                                            id="eliminar_actividad"
+                                                                        <button type="button"
+                                                                            class="border-0 m-0 p-0 btn eliminar_actividad"
                                                                             data-id_actividad="<?php echo $actividades->id ?>">
                                                                             <i class="fs-5 bi-trash text-danger"></i>
                                                                         </button>
-                                                                        <button class="border-0 m-0 p-0 btn">
+                                                                        <button class="border-0 m-0 p-0 btn btn_editar_actividad"
+                                                                            data-id_actividad="<?php echo $actividades->id ?>"
+                                                                            data-nombre_actividad="<?php echo $actividades->nombre ?>"
+                                                                            type="button" data-bs-toggle="modal"
+                                                                            data-bs-target="#modal_actividad"
+                                                                            data-id_competencia="<?php echo $row->id ?>"> </i>
+
                                                                             <i class="text-warning bi fs-5 bi-pencil-square"></i>
                                                                         </button>
                                                                     </div>
@@ -214,8 +223,8 @@ $now = date('Y-m-d H:i:s');
                                                                                         Nombre del criterio: <?php echo $criterios->nombre ?>
                                                                                     </p>
                                                                                     <div>
-                                                                                        <button type="button" class="border-0 m-0 p-0 btn"
-                                                                                            id="eliminar_criterio"
+                                                                                        <button type="button"
+                                                                                            class="border-0 m-0 p-0 btn eliminar_criterio"
                                                                                             data-id_criterio="<?php echo $criterios->id ?>">
                                                                                             <i class="fs-5 bi-trash text-danger"></i>
                                                                                         </button>
@@ -244,6 +253,11 @@ $now = date('Y-m-d H:i:s');
                                                 <a href="#" class="btn btn-success agregar_actividad " type="button"
                                                     data-bs-toggle="modal" data-bs-target="#modal_actividad"
                                                     data-id_competencia="<?php echo $row->id ?>">Agregar actividad</a>
+                                            </div>
+                                            <div class="card-footer">
+                                                <button type="button"
+                                                    class="btn btn-success w-100 mt-2 guardar_competencia_completa"
+                                                    data-id_competencia="<?php echo $row->id ?>">Guardar competencia</button>
                                             </div>
                                         </div>
                                     </div>
@@ -275,6 +289,9 @@ $now = date('Y-m-d H:i:s');
                                                 Año
                                             </th>
                                             <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
+                                                Estado
+                                            </th>
+                                            <th class="my-0 py-0 text-uppercase text-xxs text-secondary opacity-7">
                                                 Ver mas
                                             </th>
                                         </tr>
@@ -293,6 +310,16 @@ $now = date('Y-m-d H:i:s');
                                                 </td>
                                                 <td class="text-wrap">
                                                     <?php echo $row->año; ?>
+                                                </td>
+                                                <td class="text-wrap">
+                                                    <select class="cambiar-estado"
+                                                        data-competencia-id="<?php echo $row->id; ?>">
+                                                        <option value="1" <?php echo $row->estado == 1 ? 'selected' : ''; ?>>
+                                                            Activo</option>
+                                                        <option value="2" <?php echo $row->estado == 2 ? 'selected' : ''; ?>>
+                                                            Inactivo</option>
+                                                    </select>
+
                                                 </td>
                                                 <td class="text-wrap">
                                                     <button type="button" class="btn btn-primary btn-competencias"
@@ -353,7 +380,7 @@ $now = date('Y-m-d H:i:s');
                         <div class="row">
                             <input type="hidden" value="<?php echo date('Y-m-d H:i:s'); ?>" name="fecha_creacion">
                             <input type="hidden" value="2" name="estado">
-                            <input type="hidden"  name="id_competencia" id="id_competencia" >
+                            <input type="hidden" name="id_competencia" id="id_competencia">
                             <div class="col-12">
                                 <label for="nombre" class="form-label">Nombre</label>
                                 <input type="text" name="nombre" id="nombre" class="border form-control" id=""
@@ -393,22 +420,23 @@ $now = date('Y-m-d H:i:s');
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Agregar actividad</h1>
+                    <h1 class="modal-title fs-5 titulo_modal_actividad" id="staticBackdropLabel">Agregar actividad</h1>
                     <button type="button" class="btn-close bg-warning" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="crear_actividad_form">
-                        <input id="id_competencia" type="hidden" value="<?php ?>" name="id_competencia">
+                        <input id="id_competencia_actividad" type="hidden" value="" name="id_competencia">
                         <div class="row">
                             <div class="col-12">
+                                <input type="hidden" id="id_actividad" name="id_actividad" value="">
                                 <label for="nombre" class="form-label">Nombre de la actividad</label>
-                                <input type="text" name="nombre" class="border form-control" id=""
+                                <input type="text" name="nombre" class="border form-control" id="nombre_actividad"
                                     placeholder="Nombre de la actividad">
                             </div>
                         </div>
                         <div class="mt-3 ms-end">
-                            <button type="button" id="crear_actividad" class="btn btn-success">Agregar</button>
+                            <button type="button" id="crear_actividad" class="btn btn-success ">Agregar</button>
                         </div>
                     </form>
                 </div>
@@ -449,7 +477,7 @@ $now = date('Y-m-d H:i:s');
         $(document).ready(function () {
             $('.agregar_actividad').click(function () {
                 var competencia_id = $(this).data('id_competencia');
-                $('#id_competencia').val(competencia_id);
+                $('#id_competencia_actividad').val(competencia_id);
             });
 
             $('.agregar_criterio').click(function () {
@@ -546,7 +574,7 @@ $now = date('Y-m-d H:i:s');
 
             });
 
-            $('#eliminar_actividad').click(function () {
+            $('.eliminar_actividad').click(function () {
                 Swal.fire({
                     title: "Esta seguro de eliminar la actividad ?",
                     showDenyButton: true,
@@ -587,7 +615,7 @@ $now = date('Y-m-d H:i:s');
                 });
             });
 
-            $('#eliminar_criterio').click(function () {
+            $('.eliminar_criterio').click(function () {
                 Swal.fire({
                     title: "Esta seguro de eliminar el criterio ?",
                     showDenyButton: true,
@@ -633,9 +661,9 @@ $now = date('Y-m-d H:i:s');
 
     <script>
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Función para abrir el modal en modo de actualización
-            $('.btn_editar_competencia').click(function() {
+            $('.btn_editar_competencia').click(function () {
                 var nombre = $(this).data('nombre_competencia');
                 var descripcion = $(this).data('descripcion_competencia');
                 var codigo = $(this).data('codigo_competencia');
@@ -653,7 +681,7 @@ $now = date('Y-m-d H:i:s');
             });
 
             // Función para guardar la competencia (crear o actualizar)
-            $('.guardar_competencia').click(function() {
+            $('.guardar_competencia').click(function () {
                 var competencia_id = $('#id_competencia').val();
                 var tipo = competencia_id ? 'POST' : 'POST'; // POST para creación y actualización (asume que usas POST para ambos)
                 var url = competencia_id ? '<?php echo IP_SERVER ?>Competencias/actualizar_competencia' : '<?php echo IP_SERVER ?>Competencias/crear_competencia';
@@ -674,7 +702,7 @@ $now = date('Y-m-d H:i:s');
                             url: url,
                             type: tipo,
                             data: $('#crear_competencia_form').serialize(),
-                            success: function(response) {
+                            success: function (response) {
                                 if (response.status === 'success') {
                                     Swal.fire({
                                         title: mensaje_exito,
@@ -689,13 +717,74 @@ $now = date('Y-m-d H:i:s');
                                     Swal.fire('Error', response.message, 'error');
                                 }
                             },
-                            error: function(xhr, status, error) {
+                            error: function (xhr, status, error) {
                                 Swal.fire('ooppps.. ocurrió un error !', '', 'error');
                             }
                         });
                     }
                 });
             });
+
+            $('.agregar_actividad').click(function () {
+                $('#crear_actividad_form')[0].reset();
+            });
+
+
+            $('.btn_editar_actividad').click(function () {
+                var nombre = $(this).data('nombre_actividad');
+                var id_actividad = $(this).data('id_actividad');
+
+                $('.titulo_modal_actividad').text('Actualizar actividad');
+                $('#crear_actividad').text('Actualizar actividad');
+                $('#nombre_actividad').val(nombre);
+                $('#id_actividad').val(id_actividad);
+            });
+
+            $('#crear_actividad').click(function () {
+                var id_actividad = $('#id_actividad').val();
+                var tipo = id_actividad ? 'POST' : 'POST';
+                var url = id_actividad ? '<?php echo IP_SERVER ?>Actividad/actualizar_actividad' : '<?php echo IP_SERVER ?>Actividad/crear_actividad';
+                var mensaje_confirmacion = id_actividad ? "Esta seguro de editar la actividad ?" : "Esta seguro de crear la actividad ?";
+                var mensaje_exito = id_actividad ? "actividad actualizada!" : "actividad creada!";
+                console.log(id_actividad);
+
+                Swal.fire({
+                    title: mensaje_confirmacion,
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: "Si",
+                    denyButtonText: `Cancelar`,
+                    confirmButtonColor: "#3085d6",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: url,
+                            type: tipo,
+                            data: $('#crear_actividad_form').serialize(),
+                            success: function (response) {
+                                if (response.status === 'success') {
+                                    Swal.fire({
+                                        title: mensaje_exito,
+                                        icon: 'success',
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    });
+                                    setTimeout(() => {
+                                        window.location.reload();
+                                    }, 2000);
+                                } else {
+                                    Swal.fire('Error', response.message, 'error');
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                Swal.fire('ooppps.. ocurrió un error !', '', 'error');
+                            }
+                        });
+                    }
+                });
+            });
+
+
         });
     </script>
 
@@ -788,9 +877,6 @@ $now = date('Y-m-d H:i:s');
 
         });
     </script>
-
-
-
 
     <!-- datatable -->
     <script>
@@ -911,6 +997,56 @@ $now = date('Y-m-d H:i:s');
                 });
             });
         });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('.guardar_competencia_completa').click(function () {
+                Swal.fire({
+                    title: "Esta seguro de guardar la competencia ?",
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: "Si, guardar",
+                    denyButtonText: `No, guardar`,
+                    confirmButtonColor: "#3085d6",
+                    icon: "question"
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        var competencia_id = $(this).data('id_competencia');
+
+                        $.ajax({
+                            url: '<?php echo IP_SERVER ?>Competencias/actualizar_estado',
+                            type: 'POST',
+                            data: {
+                                estado: 1,
+                                competencia_id: competencia_id
+                            }, // Aquí se envían los datos
+                            success: function (response) {
+                                // Manejar la respuesta del servidor aquí
+                                Swal.fire({
+                                    title: "Competencia creada!",
+                                    icon: "success",
+                                    showConfirmButton: false
+                                });
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 2000);
+                            },
+                            error: function (xhr, status, error) {
+                                // Manejar errores aquí
+                                Swal.fire("ooppps.. ocurrió un error !", "", "error");
+                            }
+                        });
+
+
+                    } else if (result.isDenied) {
+                        Swal.fire("Cambios no aplicados", "", "info");
+                    }
+                });
+            });
+        });
+
     </script>
 
     <script>

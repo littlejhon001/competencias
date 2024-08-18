@@ -78,4 +78,7 @@ class Actividad_competencia extends MY_Model
     {
         return $this->delete($id_actividad);
     }
+    public function actualizar_actividad($id_actividad, $data) {
+        return $this->update($id_actividad, $data);
+    }
 }

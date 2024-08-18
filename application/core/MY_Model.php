@@ -106,7 +106,7 @@ class MY_Model extends CI_Model
 	 */
 	public function update($id, $data)
 	{
-		$this->db->where((is_array($id) ? $id : [$this->table_id => $id]))->update($this->table, $data);
+		return $this->db->where((is_array($id) ? $id : [$this->table_id => $id]))->update($this->table, $data);
 	}
 	/**
 	 * MY_Model::delete()
