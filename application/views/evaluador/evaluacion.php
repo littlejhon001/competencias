@@ -19,10 +19,10 @@
 
                                 <?php echo $usuarios->nombre . ' ' . $usuarios->apellido ?>
                             </h4>
-                            <p class=" m-0 p-0 ">
+                            <!-- <p class=" m-0 p-0 ">
                                 Cargo:
-                                <?php echo $usuarios->cargo ?>
-                            </p>
+                                <?php // echo $usuarios->cargo ?>
+                            </p> -->
                             <p class=" small m-0 p-0">
                                 Correo:
                                 <?php echo $usuarios->email ?>
@@ -52,7 +52,7 @@
                                 </h6>
                                 <div class="ms-auto">
 
-                                    <?php if (empty ($row->evaluada)) { ?>
+                                    <?php if (empty($row->evaluada)) { ?>
                                         <a type="button" class="btn btn-primary consulta_criterios" data-bs-toggle="modal"
                                             data-bs-target="#evaluacion" data-row='<?php echo json_encode($row); ?>'>
                                             Comenzar evaluación
@@ -62,14 +62,25 @@
                                             data-bs-target="#evaluacion" data-row='<?php echo json_encode($row); ?>'>
                                             Ver resultados
                                         </a>
+                                        <?php if (isset($estado_competencia)) { ?>
+                                            <button type="button" class=" mt-3 btn btn-danger termianar_evaluacion disabled"
+                                                data-id_competencia="<?php echo $competencia->id ?>"
+                                                data-id_Usuario="<?php echo $usuarios->id ?>" disabled>
+                                                Cerraste la evaluación
+                                            </button>
+                                        <?php } else { ?>
+                                            <button type="button" class=" mt-3 btn btn-success termianar_evaluacion"
+                                                data-id_competencia="<?php echo $competencia->id ?>"
+                                                data-id_Usuario="<?php echo $usuarios->id ?>">
+                                                Terminar evaluación
+                                            </button>
+                                        <?php } ?>
                                     <?php } ?>
                                 </div>
 
                             </div>
                             <!-- Modal -->
-
                         <?php } ?>
-
                         <div class="modal modal-lg fade" id="evaluacion" data-bs-backdrop="static"
                             data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
                             aria-hidden="true">
@@ -104,7 +115,8 @@
                                                             <label class="form-check-label" for="resultado2">
                                                                 No
                                                             </label>
-                                                            <div class="invalid-feedback">Evalúe este criterio, por favor.</div>
+                                                            <div class="invalid-feedback">Evalúe este criterio, por
+                                                                favor.</div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -118,9 +130,7 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
-
             </div>
         </div>
     </div>
@@ -150,17 +160,17 @@
             if (!respuesta.error) {
                 if (respuesta.success == true) {
                     accion = "<?php echo IP_SERVER ?>usuarios/guardar_evaluacion";
-                    $('#evaluacion').find('form').attr('action', accion + '/'+ boton_actividad.data('row').id);
+                    $('#evaluacion').find('form').attr('action', accion + '/' + boton_actividad.data('row').id);
                     criterios = respuesta.criterios
                     $.each(criterios, (index, criterio) => {
                         input = input_criterio.clone()
                         // SI YA ESTÁ EVALUADA, DESHABILITA LOS INPUTS
-                        if(boton_actividad.data('row').evaluada == 1){
-                            input.find(`.form-check-input`).attr('disabled',true)
-                            input.find(`input[type="radio"][value="${criterio.resultado}"]`).attr('checked',true)
+                        if (boton_actividad.data('row').evaluada == 1) {
+                            input.find(`.form-check-input`).attr('disabled', true)
+                            input.find(`input[type="radio"][value="${criterio.resultado}"]`).attr('checked', true)
                         }
                         input.find('label b').text(criterio.nombre)
-                        input.find('input[type="radio"]').each(function (posicion){
+                        input.find('input[type="radio"]').each(function (posicion) {
                             $(this).attr('id', 'resultado' + index + posicion)
                             $(this).next('label').attr('for', 'resultado' + index + posicion)
                         })
@@ -176,12 +186,12 @@
     })
 
     function consultar_criterios(id_actividad) {
-        return $.get(`<?php echo IP_SERVER ?>usuarios/criterios_por_cargo/<?php echo $usuarios->id_cargo?>/${id_actividad}/<?php echo $usuarios->id?>`)
+        return $.get(`<?php echo IP_SERVER ?>usuarios/criterios_por_cargo/<?php echo $usuarios->id_cargo ?>/${id_actividad}/<?php echo $usuarios->id ?>`)
     }
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
 
     // Loop over them and prevent submission
-    $.each($('form.needs-validation'), (index,form) => {
+    $.each($('form.needs-validation'), (index, form) => {
         $(form).on('submit', function (event) {
             event.preventDefault()
             event.stopPropagation()
@@ -190,14 +200,14 @@
                     method: $(this).attr('method'),
                     url: $(this).attr('action'),
                     data: $(this).serialize()
-                }).done(function( respuesta ) {
-                    if(respuesta.success == true){
-                        if(respuesta.url){
+                }).done(function (respuesta) {
+                    if (respuesta.success == true) {
+                        if (respuesta.url) {
                             location.replace(respuesta.url)
-                        }else{
+                        } else {
                             location.reload()
                         }
-                    }else{
+                    } else {
                         console.log(respuesta.error)
                         respuesta.message = respuesta.error.join('<br>')
                         Swal.fire({
@@ -213,6 +223,59 @@
                 });
             }
             $(this).addClass('was-validated')
+        })
+    })
+
+    $('.termianar_evaluacion').click(function () {
+        Swal.fire({
+            title: "Esta seguro de terminar la evaluacion guardar la competencia ?",
+            text: "No podrá revertir esta acción",
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: "Si, guardar",
+            denyButtonText: `No, guardar`,
+            confirmButtonColor: "#3085d6",
+            icon: "info"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    method: 'POST',
+                    url: '<?php echo IP_SERVER ?>Usuarios/terminar_evaluacion',
+                    data: {
+                        id_competencia: $(this).data('id_competencia'),
+                        id_usuario: $(this).data('id_usuario')
+                    },
+                    success: function (response) {
+                        console.log(response)
+
+                        if (typeof response === 'string') {
+                            response = JSON.parse(response);
+                        }
+
+                        if (response.success) {
+                            Swal.fire({
+                                title: response.message,
+                                icon: "success",
+                                showConfirmButton: false
+                            });
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 2000);
+                        } else {
+                            Swal.fire({
+                                title: "Error",
+                                text: response.message,
+                                icon: "error",
+                                showConfirmButton: true
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Manejar errores aquí
+                        Swal.fire("ooppps.. ocurrió un error !", "", "error");
+                    }
+                })
+            }
         })
     })
 </script>

@@ -1,4 +1,4 @@
-<!-- <pre><?php // echo // print_r($usuario, true)          ?> </pre> -->
+
 <div class="row py-5 animate__animated animate__fadeIn ">
     <div class="row">
         <div class="col-md-2 col-2 ">
@@ -19,8 +19,8 @@
                                 <?php echo $usuario->nombre . ' ' . $usuario->apellido ?>
                             </h4>
                             <p class=" m-0 p-0 ">
-                                Area:
-                                <?php // echo $area     ?>
+                                Cargo:
+                                <?php echo $usuario_info->nombre_cargo?>
                             </p>
 
                             <p class=" small m-0 p-0">
@@ -36,6 +36,7 @@
                 <?php if(!empty($competencias_cargo)){ foreach ($competencias_cargo as $row) { ?>
                     <div class="px-4 py-3">
                         <div class="p-4 card-competencia rounded shadow-sm">
+
                             <a
                                 href="<?php echo IP_SERVER    ?>Usuarios/evaluacion/<?php echo $usuario->id?>/<?php  echo $row->id?>">
                                 <h6 class="mb-0">

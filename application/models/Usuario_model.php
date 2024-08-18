@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') or exit ('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class Usuario_model extends MY_Model
 {
@@ -15,14 +15,15 @@ class Usuario_model extends MY_Model
         parent::__construct();
     }
 
-    public function listado_general(){
-        $this->db->join('roles rol',"$this->table.Rol_ID = rol.id",'left');
-        $this->db->join('cargos cargo',"$this->table.id_cargo = cargo.id",'left');
-        $this->db->join('asignaciones_grupos asignacion',"$this->table.id = asignacion.id_usuario",'left');
-        $this->db->join('grupo_asignado grupo',"asignacion.id_grupo = grupo.id",'left');
-        $data = $this->findAll('',"$this->table.id, $this->table.nombre, $this->table.apellido, $this->table.email, $this->table.identificacion, $this->table.id_cargo, $this->table.id_evaluador, grupo.id AS id_grupo, $this->table.Rol_ID, rol.nombre AS rol, cargo.nombre AS cargo");
+    public function listado_general()
+    {
+        $this->db->join('roles rol', "$this->table.Rol_ID = rol.id", 'left');
+        $this->db->join('cargos cargo', "$this->table.id_cargo = cargo.id", 'left');
+        $this->db->join('asignaciones_grupos asignacion', "$this->table.id = asignacion.id_usuario", 'left');
+        $this->db->join('grupo_asignado grupo', "asignacion.id_grupo = grupo.id", 'left');
+        $data = $this->findAll('', "$this->table.id, $this->table.nombre, $this->table.apellido, $this->table.email, $this->table.identificacion, $this->table.id_cargo, $this->table.id_evaluador, grupo.id AS id_grupo, $this->table.Rol_ID, rol.nombre AS rol, cargo.nombre AS cargo");
         $this->load->helper('array');
-        $data = group_by(['id_grupo'],'',$data,'id');
+        $data = group_by(['id_grupo'], '', $data, 'id');
         return $data;
     }
 
@@ -43,7 +44,7 @@ class Usuario_model extends MY_Model
         // Realizar la consulta
         $query = $this->db->select('usuarios.*, cargos.nombre AS nombre_cargo')
             ->from('usuarios')
-            ->join('cargos', 'usuarios.id_cargo = cargos.id','left')
+            ->join('cargos', 'usuarios.id_cargo = cargos.id', 'left')
             ->join('asignaciones_grupos asignacion', 'asignacion.id_usuario = usuarios.id')
             ->where('asignacion.id_grupo', $id_grupo)
             ->where('usuarios.Rol_ID', 3)
@@ -81,16 +82,17 @@ class Usuario_model extends MY_Model
 
     public function existe($email)
     {
-        return !empty ($this->findName('email', $email, 'email'));
+        return !empty($this->findName('email', $email, 'email'));
     }
 
-    public function usuario_por_correo($email){
-        return $this->find(['email' => $email],'id');
+    public function usuario_por_correo($email)
+    {
+        return $this->find(['email' => $email], 'id');
     }
 
     public function obtener_usuarios_por_evaluador($id_evaluador)
     {
-        return $this->findAll(['id_evaluador' => $id_evaluador], 'id,nombre,apellido,identificacion,email');
+        return $this->findAll(['id_evaluador' => $id_evaluador], 'id,nombre,apellido,identificacion,email,estado_evaluacion');
     }
 
     public function usuarios_asignar($id_grupo)
@@ -98,8 +100,8 @@ class Usuario_model extends MY_Model
         // Realizar la consulta
         $query = $this->db->select('usuario.*, cargos.nombre AS nombre_cargo, CONCAT(evaluador.nombre," ",evaluador.apellido) as nombre_evaluador')
             ->from('usuarios usuario')
-            ->join('usuarios evaluador', 'usuario.id_evaluador = evaluador.id','left')
-            ->join('cargos', 'usuario.id_cargo = cargos.id','left')
+            ->join('usuarios evaluador', 'usuario.id_evaluador = evaluador.id', 'left')
+            ->join('cargos', 'usuario.id_cargo = cargos.id', 'left')
             ->join('asignaciones_grupos asignacion', 'asignacion.id_usuario = usuario.id')
             ->where('asignacion.id_grupo', $id_grupo)
             ->where('usuario.Rol_ID', 4)
@@ -107,16 +109,38 @@ class Usuario_model extends MY_Model
         return $query->result();
     }
 
-    public function insert_masivo($data){
-        return $this->db->insert_batch($this->table,$data);
+    public function insert_masivo($data)
+    {
+        return $this->db->insert_batch($this->table, $data);
     }
 
 
-    function leer(){
+    function leer()
+    {
         $this->db->select();
         $this->db->from($this->table);
         $query = $this->db->get();
         return $query->result();
     }
+    public function obtener_usuarios_estudiantes($id)
+    {
+        $this->db->select('
+            usuarios.id AS id_usuario,
+            usuarios.nombre,
+            usuarios.apellido,
+            usuarios.email,
+            usuarios.identificacion,
+            usuarios.id_cargo,
+            cargos.id,
+            cargos.nombre AS nombre_cargo
+        ');
+        $this->db->from('usuarios');
+        $this->db->join('cargos', 'usuarios.id_cargo = cargos.id');
+        $this->db->where('usuarios.id', $id);
+
+        $query = $this->db->get();
+        return $query->row(); // Retorna un solo resultado como objeto
+    }
+
 
 }

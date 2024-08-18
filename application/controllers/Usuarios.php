@@ -23,6 +23,7 @@ class Usuarios extends CI_Controller
         $this->load->model('Asignacion_cargo_model');
         $this->load->model('Cargos_model');
         $this->load->model('Asignaciones_grupos_model');
+        $this->load->model('Evaluacion_completada_model');
 
         if (empty($this->session->userdata('user_data'))) {
             redirect('/login');
@@ -120,20 +121,20 @@ class Usuarios extends CI_Controller
         if ($this->input->is_ajax_request()) {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Recuperar los datos del formulario
-                if(!empty($this->input->post())){
-                    if(!empty($this->input->post('evaluador')) && !empty($this->input->post('usuarios_seleccionados'))){
+                if (!empty($this->input->post())) {
+                    if (!empty($this->input->post('evaluador')) && !empty($this->input->post('usuarios_seleccionados'))) {
                         $this->Usuario_model->guardar_datos_evaluador($this->input->post('evaluador'), $this->input->post('usuarios_seleccionados'));
                         $this->if_success('Evaluador asignado con éxito');
-                    }else{
+                    } else {
                         $this->iffalse('Evaluador o usuarios no especificados');
                     }
-                }else{
+                } else {
                     $this->iffalse('Sin datos enviados');
                 }
-            }else{
+            } else {
                 $this->iffalse('Método HTTP no válido');
             }
-        }else{
+        } else {
             $this->iffalse('Petición no válida');
         }
         $this->json();
@@ -250,6 +251,8 @@ class Usuarios extends CI_Controller
 
 
         $data['usuario'] = $this->Usuario_model->find($id);
+        $data['usuario_info'] = $this->Usuario_model->obtener_usuarios_estudiantes($id);
+
 
         // Obtener todas las entradas de usuarios_competencias para el usuario dado
         $data['competencias_cargo'] = $this->Competencias_model->asignadas_por_cargo($data['usuario']->id_cargo);
@@ -267,9 +270,12 @@ class Usuarios extends CI_Controller
     public function evaluacion($id, $id_competencia)
     {
         $user_data = $this->session->userdata('user_data');
+
         $data['usuarios'] = $this->Usuario_model->find($id);
 
         // $data['area'] = $this->Area_model->find(['id' => $user_data->id_area], 'nombre')->nombre;
+        $data['estado_competencia'] = $this->Evaluacion_completada_model->find(['id_usuario' => $id, 'id_competencia' => $id_competencia]);
+
 
         $data['competencia'] = $this->Competencias_model->find(['id' => $id_competencia]);
         // $data['resultado'] = $this->Evaluacion_usuario_model->find(['id_usuario' => $id],'resultado')->resultado;
@@ -281,7 +287,8 @@ class Usuarios extends CI_Controller
 
     }
 
-    public function descargar_plantilla(){
+    public function descargar_plantilla()
+    {
         $this->load->library('Excel');
         $this->excel->plantilla_masivo('Plantilla_usuarios.xlsx');
     }
@@ -291,10 +298,10 @@ class Usuarios extends CI_Controller
         if (!empty($_FILES)) {
             $this->load->library('Excel');
             $usuarios = $this->excel->obtener_clientes($_FILES['usuarios']['tmp_name']);
-            if(!empty($usuarios)){
-                foreach($usuarios as $usuario){
+            if (!empty($usuarios)) {
+                foreach ($usuarios as $usuario) {
                     $this->db->trans_begin();
-                    if(empty($usuario->id_grupo) || is_numeric(str_replace(';','',$usuario->id_grupo))){
+                    if (empty($usuario->id_grupo) || is_numeric(str_replace(';', '', $usuario->id_grupo))) {
                         $usuario->password = hash("sha256", 'aula' . $usuario->identificacion);
                         $usuario->Rol_ID = $this->Rol_model->buscarExacto($usuario->Rol_ID);
                         $usuario->id_cargo = $this->Cargos_model->buscarExacto($usuario->id_cargo);
@@ -303,47 +310,47 @@ class Usuarios extends CI_Controller
 
                         //buscar identificación del usuario, si existe lo actualiza
                         $usuario_registrado = $this->Usuario_model->find(['identificacion' => $usuario->identificacion]);
-                        if(empty($usuario_registrado)){
+                        if (empty($usuario_registrado)) {
                             $id_usuario = $this->Usuario_model->insert($usuario);
-                        }else{
+                        } else {
                             $this->Usuario_model->update($usuario_registrado->id, $usuario);
                             $id_usuario = $usuario_registrado->id;
                         }
 
-                        if(!empty($id_usuario)){
+                        if (!empty($id_usuario)) {
                             $this->db->trans_commit();
                             $this->if_success("Usuario $usuario->nombre $usuario->apellido creado con éxito");
-                            if($grupos){
+                            if ($grupos) {
                                 foreach ($grupos as $grupo) {
-                                    if(empty($this->Grupo_asignado_model->find($grupo))){
-                                        if(!$this->Grupo_asignado_model->insert(['id' => $grupo])){
+                                    if (empty($this->Grupo_asignado_model->find($grupo))) {
+                                        if (!$this->Grupo_asignado_model->insert(['id' => $grupo])) {
                                             $this->iffalse("Error al crear el grupo $grupo");
                                         }
                                     }
                                 }
-                                if($this->asignar_grupos($id_usuario, $grupos)){
+                                if ($this->asignar_grupos($id_usuario, $grupos)) {
                                     $this->if_success("Grupos para $usuario->nombre $usuario->apellido asignados con éxito");
-                                }else{
+                                } else {
                                     $this->iffalse("Error al asignar grupos a $usuario->nombre $usuario->apellido");
                                 }
                             }
-                        }else{
+                        } else {
                             $this->iffalse("Error al crear el usuario $usuario->nombre $usuario->apellido");
                         }
-                    }else{
+                    } else {
                         $this->iffalse("El grupo $usuario->id_grupo de $usuario->nombre $usuario->apellido no es válido");
                     }
                 }
-            }else{
+            } else {
                 $this->iffalse('No se identificaron datos de usuarios');
             }
         } else {
             $this->iffalse('Cargue un archivo');
         }
-        if(empty($this->reques->error)){
-            $this->if_success('Usuarios creados correctamente',true);
-        }else{
-            $this->iffalse(count($this->reques->error)  . " errores al cargar usuarios.");
+        if (empty($this->reques->error)) {
+            $this->if_success('Usuarios creados correctamente', true);
+        } else {
+            $this->iffalse(count($this->reques->error) . " errores al cargar usuarios.");
         }
         $this->json();
     }
@@ -393,17 +400,45 @@ class Usuarios extends CI_Controller
         }
         $this->json();
     }
-    private function if_success($msj = '',$clear = false)
-	{
-		$this->reques->success = true;
-        if(empty($this->reques->message) || $clear){
+    private function if_success($msj = '', $clear = false)
+    {
+        $this->reques->success = true;
+        if (empty($this->reques->message) || $clear) {
             $this->reques->message = $msj;
-        }else{
+        } else {
             $this->reques->message .= "\n" . $msj;
         }
-		// unset($this->reques->error);
+        // unset($this->reques->error);
         $this->session->set_flashdata((array) $this->reques);
-	}
+    }
+
+    public function terminar_evaluacion()
+    {
+        $id_usuario = $this->input->post('id_usuario');
+        $id_competencia = $this->input->post('id_competencia');
+        $estado_evaluacion = 1;
+        $create_at = date('Y-m-d H:i:s');
+
+        $respuesta = $this->Evaluacion_completada_model->insert(['id_usuario' => $id_usuario, 'id_competencia' => $id_competencia, 'create_at' => $create_at]);
+
+        $estado_evaluacion = $this->Usuario_model->update($id_usuario, ['estado_evaluacion' => $estado_evaluacion]);
+
+        if ($respuesta) {
+            // Respuesta exitosa
+            $response = array(
+                'success' => true,
+                'message' => 'Competencia completada para el usuario'
+            );
+        } else {
+            // Respuesta de error
+            $response = array(
+                'success' => false,
+                'message' => 'Error al actualizar el estado'
+            );
+        }
+
+        echo json_encode($response);
+    }
 }
 
 

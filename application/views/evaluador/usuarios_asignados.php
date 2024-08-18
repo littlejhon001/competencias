@@ -129,11 +129,12 @@
                                 </thead>
                                 <tbody>
 
+
                                     <?php
                                     if (!empty($usuarios_asignados)) {
                                         foreach ($usuarios_asignados as $row) {
                                             ?>
-                                            <tr>
+                                            <tr class="<?php echo $row->estado_evaluacion ? "bg-asignado" : "" ?>">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div>
@@ -161,7 +162,7 @@
                                                 <td class="d-flex justify-content-center">
                                                     <a
                                                         href="<?php echo IP_SERVER ?>Usuarios/evaluacion_usuario/<?php echo $row->id ?>">
-                                                        <i class="text-success bi bi-file-earmark-ruled"></i>
+                                                        <i class="text-success fs-3 bi bi-file-earmark-ruled"></i>
                                                     </a>
                                                 </td>
                                             </tr>
