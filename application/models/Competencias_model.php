@@ -191,24 +191,43 @@ class Competencias_model extends MY_Model
         return $this->delete($competencia_id);
     }
 
-    public function actualizar_competencia($competencia_id, $data) {
+    public function actualizar_competencia($competencia_id, $data)
+    {
         return $this->update($competencia_id, $data);
     }
-    public function guardar_nueva_competencia($competencia_id,$estado)
+    public function guardar_nueva_competencia($competencia_id, $estado)
     {
         $this->db->where('id', $competencia_id);
         return $this->db->update('competencia', ['estado' => $estado]);
     }
 
-    public function contar_usuarios_por_anio($year) {
+    public function contar_usuarios_por_anio($year)
+    {
         $this->db->select('COUNT(ec.id_usuario) AS total_usuarios');
         $this->db->from('evaluacion_completada ec');
         $this->db->join('competencia c', 'ec.id_competencia = c.id');
         $this->db->where('c.año', $year); // Filtrar por el año en la tabla competencias
-        
+
         $query = $this->db->get();
         $result = $query->row();
-        
+
         return $result->total_usuarios;
+    }
+
+    public function contar_usuarios_con_competencia_completada()
+    {
+        $this->db->select('COUNT(id) AS total_usuarios');
+        $this->db->from('usuarios');
+        $this->db->where('estado_evaluacion', 1); // Agregar cláusula WHERE
+
+        $query = $this->db->get();
+        $result = $query->row();
+
+        // Verificar si el resultado no es nulo
+        if ($result) {
+            return $result->total_usuarios;
+        } else {
+            return 0; // Retornar 0 si no hay resultados
+        }
     }
 }

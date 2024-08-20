@@ -142,5 +142,16 @@ class Usuario_model extends MY_Model
         return $query->row(); // Retorna un solo resultado como objeto
     }
 
+    public function contar_usuarios_con_rol_4() {
+        $this->db->where('Rol_ID', 4);
+        $this->db->from('usuarios');
+        return $this->db->count_all_results();
+    }
+    public function contar_usuarios_con_rol_3() {
+        $this->db->where('Rol_ID', 3);
+        $this->db->from('usuarios');
+        return $this->db->count_all_results();
+    }
+
 
 }

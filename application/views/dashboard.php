@@ -67,7 +67,7 @@
                                         <div class="d-flex py-1">
                                             <div class="my-auto">
                                                 <!-- <img src="./assets/img/small-logos/logo-spotify.svg" -->
-                                                    class="avatar avatar-sm bg-gradient-dark  me-3 ">
+                                                class="avatar avatar-sm bg-gradient-dark me-3 ">
                                             </div>
                                         </div>
                                     </a>
@@ -100,110 +100,151 @@
                         <div class="card-body p-3">
                             <div class="row">
                                 <div class="col-lg-6">
-                                    <div class="d-flex flex-column h-100">
-                                        <h3 class="font-weight-bolder mb-0">Información general</h3>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Usuarios que completaron competencias</h5>
+                                            <p class="card-text">Usuarios que completaron competencias por año
+                                            </p>
+
+                                        </div>
+                                        <div class="my-3" style="">
+                                            <canvas id="graficoUsuariosPorAnio"></canvas>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Total usuarios y evaluadores</h5>
+                                            <p class="card-text">
+                                                <?php //  echo ?>
+                                            </p>
+
+                                        </div>
+                                        <div class="my-3 w-50 text-center" style="">
+                                            <canvas id="graficoTotalUsuarios"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 my-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Usuarios con competencia realizada</h5>
+                                        </div>
+                                        <div class="my-3" style="">
+                                            <canvas id="graficoUsuarios_competencia_completa"></canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-            <!--
-      <footer class="footer py-4  ">
-        <div class="container-fluid">
-          <div class="row align-items-center justify-content-lg-between">
-            <div class="col-lg-6 mb-lg-0 mb-4">
-              <div class="copyright text-center text-sm text-muted text-lg-start">
-                ©
-                <script>
-                  document.write(new Date().getFullYear())
-                </script>,
-                made with <i class="fa fa-heart"></i> by
-                <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Creative Tim</a>
-                for a better web.
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <ul class="nav nav-footer justify-content-center justify-content-lg-end">
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com" class="nav-link text-muted" target="_blank">Creative Tim</a>
-                </li>
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com/presentation" class="nav-link text-muted" target="_blank">About
-                    Us</a>
-                </li>
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com/blog" class="nav-link text-muted" target="_blank">Blog</a>
-                </li>
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com/license" class="nav-link pe-0 text-muted"
-                    target="_blank">License</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </footer> -->
 
         </div>
-
-
+        </div>
+        </div>
     </main>
 
 
-
-    <div class="fixed-plugin">
-        <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
-            <i class="material-icons py-2">settings</i>
-        </a>
-        <div class="card shadow-lg">
-            <div class="card-header pb-0 pt-3">
-                <div class="float-start">
-                    <h5 class="mt-3 mb-0">Preferencias</h5>
-
-                </div>
-                <div class="float-end mt-4">
-                    <button class="btn btn-link text-dark p-0 fixed-plugin-close-button">
-                        <i class="material-icons">clear</i>
-                    </button>
-                </div>
-                <!-- End Toggle Button -->
-            </div>
-            <hr class="horizontal dark my-1">
-            <div class="card-body pt-sm-3 pt-0">
-                <!-- Sidebar Backgrounds -->
-
-
-                <!-- Navbar Fixed -->
-
-                <div class="mt-3 d-flex">
-                    <h6 class="mb-0">Navbar Fixed</h6>
-                    <div class="form-check form-switch ps-0 ms-auto my-auto">
-                        <input class="form-check-input mt-1 ms-auto" type="checkbox" id="navbarFixed"
-                            onclick="navbarFixed(this)">
-                    </div>
-                </div>
-
-
-
-                <hr class="horizontal dark my-3">
-                <div class="mt-2 d-flex">
-                    <h6 class="mb-0">Light / Dark</h6>
-                    <div class="form-check form-switch ps-0 ms-auto my-auto">
-                        <input class="form-check-input mt-1 ms-auto" type="checkbox" id="dark-version"
-                            onclick="darkMode(this)">
-                    </div>
-                </div>
-                <hr class="horizontal dark my-sm-4">
-
-            </div>
-        </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Gráfico de Usuarios por Año
+            var ctx1 = document.getElementById('graficoUsuariosPorAnio').getContext('2d');
+            new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: <?= json_encode(array_keys($datos['usuarios_por_anio'])) ?>, // Años
+                    datasets: [{
+                        label: 'Total de Usuarios por Año',
+                        data: <?= json_encode(array_values($datos['usuarios_por_anio'])) ?>, // Datos
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        tooltip: {
+                            enabled: true
+                        }
+                    }
+                }
+            });
 
-    </div>
+            // Gráfico de Total de Usuarios y Evaluadores
+            var ctx2 = document.getElementById('graficoTotalUsuarios').getContext('2d');
+            new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Estudiantes', 'Evaluadores'], // Etiquetas
+                    datasets: [{
+                        label: 'Total de Usuarios',
+                        data: [<?= $datos['usuarios_estudiantes'] ?>, <?= $datos['usuarios_evaluadores'] ?>], // Datos
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.6)',
+                            'rgba(54, 162, 235, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        tooltip: {
+                            enabled: true
+                        }
+                    }
+                }
+            });
+
+            var ctx3 = document.getElementById('graficoUsuarios_competencia_completa').getContext('2d');
+            new Chart(ctx3, {
+                type: 'bar', // Puedes cambiar el tipo de gráfico si es necesario
+                data: {
+                    labels: ['Usuarios con Competencia Completada'], // Etiqueta única
+                    datasets: [{
+                        label: 'Total de Usuarios con Competencia Completada',
+                        data: [<?= $datos['usuarios_competencia_completada'] ?>], // Datos
+                        backgroundColor: 'rgba(153, 102, 255, 0.6)',
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        tooltip: {
+                            enabled: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 
 
     <script>
@@ -218,6 +259,10 @@
 
     <!-- Github buttons -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+    <!--Load the AJAX API-->
+
 
 
 </body>
