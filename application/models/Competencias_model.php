@@ -75,9 +75,11 @@ class Competencias_model extends MY_Model
     public function competencia_estado()
     {
         // Ejecutar la consulta SQL
-        $this->db->select('id, nombre, codigo, estado');
+        $current_year = date('Y');
+        $this->db->select('id, nombre, codigo, estado, año');
         $this->db->from('competencia');
         $this->db->where('estado', 1);
+        $this->db->where('año', $current_year);
 
         $query = $this->db->get();
 
@@ -125,7 +127,7 @@ class Competencias_model extends MY_Model
 
     public function obtener_asignacion_completa($año = "")
     {
-        $this->db->select('competencia.id id_competencia,competencia.nombre nombre_competencia, competencia.descripcion descripcion_competencia, competencia.codigo codigo, actividad.id id_actividad,actividad.nombre nombre_actividad,criterio.id id_criterio,criterio.nombre nombre_criterio, año');
+        $this->db->select('competencia.id id_competencia,competencia.nombre nombre_competencia, competencia.descripcion descripcion_competencia, competencia.codigo codigo,competencia.fecha fecha,competencia.fecha_vigencia fecha_vigencia, competencia.version version, actividad.id id_actividad,actividad.nombre nombre_actividad,criterio.id id_criterio,criterio.nombre nombre_criterio, año' );
         $this->db->join('actividad_competencia actividad', 'actividad.id_competencia = competencia.id', 'LEFT');
         $this->db->join('criterios criterio', 'criterio.id_actividad = actividad.id', 'LEFT');
         $this->db->where('competencia.estado', "2");
@@ -144,6 +146,9 @@ class Competencias_model extends MY_Model
                         'descripcion' => $row->descripcion_competencia,
                         'codigo' => $row->codigo,
                         'año' => $row->año,
+                        'fecha' => $row->fecha,
+                        'fecha_vigencia' => $row->fecha_vigencia,
+                        'version' => $row->version,
                         'actividades' => []
                     ];
                 }

@@ -58,6 +58,7 @@ class Competencias extends CI_Controller
 				$data['user_data'] = $user_data;
 				$data['competencias_nuevas'] = $this->Competencias_model->obtener_asignacion_completa();
 
+
 				$this->vista('admin/competencias_detalle', $data);
 			} else {
 				$data['user_data'] = $user_data;
@@ -218,10 +219,13 @@ class Competencias extends CI_Controller
 	{
 		$nombre = $this->input->post('nombre');
 		$descripcion = $this->input->post('descripcion');
-		$año = $this->input->post('año');
+		$año = date('Y');
 		$create_at = $this->input->post('fecha_creacion');
 		$codigo = $this->input->post('codigo');
 		$estado = $this->input->post('estado');
+		$fecha = $this->input->post('fecha');
+		$fecha_vigencia = $this->input->post('fecha_vigencia');
+		$version = $this->input->post('version');
 
 		$data = array(
 			'nombre' => $nombre,
@@ -229,7 +233,10 @@ class Competencias extends CI_Controller
 			'año' => $año,
 			'codigo' => $codigo,
 			'create_at' => $create_at,
-			'estado' => $estado
+			'estado' => $estado,
+			'fecha' => $fecha,
+			'fecha_vigencia' => $fecha_vigencia,
+			'version' => $version
 		);
 
 		$insert_result = $this->Competencias_model->crear_competencia($data);
@@ -269,19 +276,25 @@ class Competencias extends CI_Controller
 		$competencia_id = $this->input->post('id_competencia');
 		$nombre = $this->input->post('nombre');
 		$descripcion = $this->input->post('descripcion');
-		$año = $this->input->post('año');
+		$año = date('Y');
 		$create_at = $this->input->post('fecha_creacion');
 		$codigo = $this->input->post('codigo');
 		$estado = $this->input->post('estado');
+		$fecha = $this->input->post('fecha');
+		$fecha_vigencia = $this->input->post('fecha_vigencia');
+		$version = $this->input->post('version');
 
 		$data = array(
 			'nombre' => $nombre,
 			'descripcion' => $descripcion,
 			'año' => $año,
 			'codigo' => $codigo,
-			'estado' => $estado
+			'create_at' => $create_at,
+			'estado' => $estado,
+			'fecha' => $fecha,
+			'fecha_vigencia' => $fecha_vigencia,
+			'version' => $version
 		);
-
 		$update_result = $this->Competencias_model->actualizar_competencia($competencia_id, $data);
 
 		if ($update_result) {

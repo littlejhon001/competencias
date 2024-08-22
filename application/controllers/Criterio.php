@@ -23,13 +23,14 @@ class Criterio extends CI_Controller
     }
     public function crear_criterio(){
         $criterio = $this->input->post('criterio');
-        $id_actividad = $this->input->post('id_criterio');
+        $id_actividad = $this->input->post('id_actividad_criterio');
 
 
 		$data = array(
 			'nombre' => $criterio,
             'id_actividad' => $id_actividad
 		);
+
 
 		$insert_result = $this->Criterios_model->crear_criterio($data);
 
@@ -55,6 +56,30 @@ class Criterio extends CI_Controller
 			$response = array('status' => 'success', 'message' => 'Criterio eliminado exitosamente');
 		} else {
 			$response = array('status' => 'error', 'message' => 'Error al eliminar el criterio');
+		}
+
+
+
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($response));
+	}
+
+	public function actualizar_criterio(){
+
+		$id_criterio = $this->input->post('id_criterio');
+		$nombre = $this->input->post('criterio');
+
+		$data = array(
+			'nombre' => $nombre
+		);
+
+		$update_result = $this->Criterios_model->actualizar_criterio($id_criterio, $data);
+
+		if ($update_result) {
+			$response = array('status' => 'success', 'message' => 'Criterio actualizado exitosamente');
+		} else {
+			$response = array('status' => 'error', 'message' => 'Error al actualizar el Criterio');
 		}
 
 

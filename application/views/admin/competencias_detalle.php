@@ -154,6 +154,9 @@ $now = date('Y-m-d H:i:s');
                                                             data-nombre_competencia="<?php echo $row->nombre ?>"
                                                             data-descripcion_competencia="<?php echo $row->descripcion ?>"
                                                             data-codigo_competencia="<?php echo $row->codigo ?>"
+                                                            data-fecha="<?php echo $row->fecha ?>"
+                                                            data-fecha_vigencia="<?php echo $row->fecha_vigencia ?>"
+                                                            data-version="<?php echo $row->version ?>"
                                                             data-codigo_año="<?php echo $row->año ?>" data-bs-toggle="modal"
                                                             data-bs-target="#modal_add_competencia">
                                                             <i class="text-warning bi fs-4 bi-pencil-square">
@@ -201,6 +204,7 @@ $now = date('Y-m-d H:i:s');
                                                                         </button>
                                                                         <button class="border-0 m-0 p-0 btn btn_editar_actividad"
                                                                             data-id_actividad="<?php echo $actividades->id ?>"
+                                                                            data-id_competencia="<?php echo $row->id ?>"
                                                                             data-nombre_actividad="<?php echo $actividades->nombre ?>"
                                                                             type="button" data-bs-toggle="modal"
                                                                             data-bs-target="#modal_actividad"
@@ -228,7 +232,13 @@ $now = date('Y-m-d H:i:s');
                                                                                             data-id_criterio="<?php echo $criterios->id ?>">
                                                                                             <i class="fs-5 bi-trash text-danger"></i>
                                                                                         </button>
-                                                                                        <button class="border-0 m-0 p-0 btn ">
+                                                                                        <button
+                                                                                            class="border-0 m-0 p-0 btn btn_editar_criterio "
+                                                                                            data-id_criterio="<?php echo $criterios->id ?>"
+                                                                                            data-nombre_criterio="<?php echo $criterios->nombre ?>"
+                                                                                            data-id_actividad="<?php echo $actividades->id ?>"
+                                                                                            data-bs-toggle="modal"
+                                                                                            data-bs-target="#modal_criterio">
                                                                                             <i
                                                                                                 class="text-warning bi fs-5 bi-pencil-square"></i>
                                                                                         </button>
@@ -242,8 +252,8 @@ $now = date('Y-m-d H:i:s');
                                                             <div class="card-footer">
                                                                 <button type="button" class="btn btn-success agregar_criterio"
                                                                     data-id_actividad="<?php echo $actividades->id ?>" type="button"
-                                                                    data-bs-toggle="modal" data-bs-target="#modal_criterio">Agregar
-                                                                    criterio</button>
+                                                                    data-bs-toggle="modal" data-bs-target="#modal_criterio">
+                                                                    Agregar criterio</button>
                                                             </div>
                                                         </div>
                                                     <?php }
@@ -396,9 +406,21 @@ $now = date('Y-m-d H:i:s');
                                 <input type="text" name="codigo" class="border form-control" id="codigo"
                                     placeholder="Codigo">
                             </div>
+
                             <div class="col-6">
-                                <label for="año" class="form-label">Año</label>
-                                <input type="number" name="año" class="border form-control" id="año" placeholder="Año">
+                                <label for="codigo" class="form-label">Fecha</label>
+                                <input type="text" name="fecha" class="border form-control" id="fecha"
+                                    placeholder="fecha">
+                            </div>
+                            <div class="col-6">
+                                <label for="codigo" class="form-label">Fecha vigencia</label>
+                                <input type="text" name="fecha_vigencia" class="border form-control" id="fecha_vigencia"
+                                    placeholder="fecha vigencia">
+                            </div>
+                            <div class="col-6">
+                                <label for="version" class="form-label">Version</label>
+                                <input type="text" name="version" class="border form-control" id="version"
+                                    placeholder="Version">
                             </div>
                             <button type="button"
                                 class="me-2 ms-auto w-50 btn btn-success mt-4 guardar_competencia">Crear
@@ -450,22 +472,24 @@ $now = date('Y-m-d H:i:s');
             <div class="modal-content">
                 <form action="" class="" id="crear_criterio_form">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar criterio</h1>
+                        <h1 class="modal-title fs-5 titulo_modal_criterio" id="staticBackdropLabel">Agregar criterio
+                        </h1>
                         <button type="button" class="btn-close bg-warning" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                        <input id="id_actividad_criterio" type="hidden" value="" name="id_actividad_criterio">
                         <input id="id_criterio" type="hidden" value="" name="id_criterio">
                         <div class="row">
                             <div class="col-12">
                                 <label for="nombre" class="form-label">Nombre del criterio</label>
-                                <input type="text" name="criterio" class="border form-control" id=""
+                                <input type="text" name="criterio" class="border form-control" id="nombre_criterio"
                                     placeholder="Nombre del criterio">
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success " id="crear_criterio">Guardar criterio</button>
+                        <button type="button" class="btn btn-success" id="crear_criterio">Guardar criterio</button>
                     </div>
                 </form>
             </div>
@@ -475,15 +499,24 @@ $now = date('Y-m-d H:i:s');
 
     <script>
         $(document).ready(function () {
+
+            $('.agregar_actividad').click(function () {
+                $('#id_actividad').val('');
+                $('#nombre_actividad').val('');
+            });
+            $('.agregar_criterio').click(function () {
+                $('#id_criterio').val('');
+                $('#nombre_criterio').val('');
+            });
+
             $('.agregar_actividad').click(function () {
                 var competencia_id = $(this).data('id_competencia');
                 $('#id_competencia_actividad').val(competencia_id);
             });
 
             $('.agregar_criterio').click(function () {
-                console.log('click');
-                var criterio_id = $(this).data('id_actividad');
-                $('#id_criterio').val(criterio_id);
+                var id_actividad = $(this).data('id_actividad');
+                $('#id_actividad_criterio').val(id_actividad);
             });
         });
 
@@ -657,9 +690,6 @@ $now = date('Y-m-d H:i:s');
             });
 
         });
-    </script>
-
-    <script>
 
         $(document).ready(function () {
             // Función para abrir el modal en modo de actualización
@@ -668,6 +698,9 @@ $now = date('Y-m-d H:i:s');
                 var descripcion = $(this).data('descripcion_competencia');
                 var codigo = $(this).data('codigo_competencia');
                 var año = $(this).data('codigo_año');
+                var fecha = $(this).data('fecha');
+                var fecha_vigencia = $(this).data('fecha_vigencia');
+                var version = $(this).data('version');
                 var id_competencia = $(this).data('id_competencia');
 
                 $('.titulo_modal').text('Actualizar competencia');
@@ -676,6 +709,9 @@ $now = date('Y-m-d H:i:s');
                 $('#descripcion').val(descripcion);
                 $('#codigo').val(codigo);
                 $('#año').val(año);
+                $('#fecha').val(fecha);
+                $('#fecha_vigencia').val(fecha_vigencia);
+                $('#version').val(version);
                 $('#id_competencia').val(id_competencia);
 
             });
@@ -725,17 +761,13 @@ $now = date('Y-m-d H:i:s');
                 });
             });
 
-            $('.agregar_actividad').click(function () {
-                $('#crear_actividad_form')[0].reset();
-            });
-
-
             $('.btn_editar_actividad').click(function () {
                 var nombre = $(this).data('nombre_actividad');
                 var id_actividad = $(this).data('id_actividad');
+                var id_competencia = $(this).data('id_competencia');
 
-                $('.titulo_modal_actividad').text('Actualizar actividad');
-                $('#crear_actividad').text('Actualizar actividad');
+
+                $('#id_competencia_actividad').val(id_competencia);
                 $('#nombre_actividad').val(nombre);
                 $('#id_actividad').val(id_actividad);
             });
@@ -784,6 +816,62 @@ $now = date('Y-m-d H:i:s');
                 });
             });
 
+
+            $('.btn_editar_criterio').click(function () {
+                var nombre = $(this).data('nombre_criterio');
+                var id_criterio = $(this).data('id_criterio');
+                var id_actividad = $(this).data('id_actividad');
+
+                $('#nombre_criterio').val(nombre);
+                $('#id_criterio').val(id_criterio);
+                $('#id_actividad_criterio').val(id_actividad);
+
+            });
+
+
+            $('#crear_criterio').click(function () {
+                var id_criterio = $('#id_criterio').val();
+
+                var tipo = id_criterio ? 'POST' : 'POST';
+                var url = id_criterio ? '<?php echo IP_SERVER ?>Criterio/actualizar_criterio' : '<?php echo IP_SERVER ?>Criterio/crear_criterio';
+                var mensaje_confirmacion = id_criterio ? "Esta seguro de actualizar el criterio ?" : "Esta seguro de crear el criterio ?";
+                var mensaje_exito = id_criterio ? "criterio actualizado!" : "criterio creado!";
+
+                Swal.fire({
+                    title: mensaje_confirmacion,
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: "Si",
+                    denyButtonText: `Cancelar`,
+                    confirmButtonColor: "#3085d6",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: url,
+                            type: tipo,
+                            data: $('#crear_criterio_form').serialize(),
+                            success: function (response) {
+                                if (response.status === 'success') {
+                                    Swal.fire({
+                                        title: mensaje_exito,
+                                        icon: 'success',
+                                        showConfirmButton: false,
+                                        timer: 2000
+                                    });
+                                    setTimeout(() => {
+                                        window.location.reload();
+                                    }, 2000);
+                                } else {
+                                    Swal.fire('Error', response.message, 'error');
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                Swal.fire('ooppps.. ocurrió un error !', '', 'error');
+                            }
+                        });
+                    }
+                });
+            });
 
         });
     </script>

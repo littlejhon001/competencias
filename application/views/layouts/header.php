@@ -133,7 +133,7 @@
                             <i class="bi bi-people-fill"></i>
                         </div>
 
-                        <span class="nav-link-text ms-1">Competencias por cargo</span>
+                        <span class="nav-link-text ms-1">Asignar competencias <br> por cargos</span>
                     </a>
                 </li>
             <?php } ?>

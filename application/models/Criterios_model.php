@@ -55,4 +55,8 @@ class Criterios_model extends MY_Model
     {
         return $this->delete($id_criterio);
     }
+
+    public function actualizar_criterio($id_criterio, $data) {
+        return $this->update($id_criterio, $data);
+    }
 }

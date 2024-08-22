@@ -165,17 +165,21 @@
                                                 </td>
                                                 <td class="col-2 text-wrap">
                                                     <div class="mb-0 text-sm">
-                                                        <?php echo ($row->rol) ?: '---' ?>
+                                                        <?php echo $row->rol ?>
                                                     </div>
                                                 </td>
                                                 <td class="col-2 text-wrap text-sm">
-                                                    <?php echo ($row->cargo) ?: '---' ?>
+                                                    <?php echo $row->cargo ?>
                                                 </td>
                                                 <td class="col-1 text-center">
                                                     <?php echo ($row->Rol_ID != '4') ? '' : (($row->id_evaluador != "") ? '<i class="bi bi-check-circle text-success"></i>' : '<i class="bi bi-info-circle-fill text-warning"></i>'); ?>
                                                 </td>
                                                 <td class="col-2 text-center">
                                                     <button class="border rounded bg-primary btn-info-usuario" type="button"
+                                                        data-nombre="<?php echo $row->nombre ?>"
+                                                        data-apellido="<?php echo $row->apellido ?>"
+                                                        data-rol="<?php echo $row->rol ?>"
+                                                        data-cargo="<?php echo $row->cargo ?>"
                                                         data-bs-toggle="modal" data-bs-target="#info_usuario">
                                                         <i class="text-light bi bi-eye"></i>
                                                     </button>
@@ -227,6 +231,10 @@
                         <h6>
                             <b>Rol:</b>
                             <p id="titulo-rol">Rol</p>
+                        </h6>
+                        <h6>
+                            <b>Cargo:</b>
+                            <p id="titulo-cargo"></p>
                         </h6>
                         <?php
                         // Buscar el nombre del evaluador basado en el id_evaluador
@@ -536,20 +544,36 @@
                 }
             })
 
-            $('.btn-info-usuario').click(function () {
-                usuario = $(this).parents('tr').data('row');
-                // Actualización del modal con los datos del usuario
-                $('#titulo-nombres').text(usuario.nombre + ' ' + usuario.apellido);
-                $('#titulo-apellido').text(usuario.apellido);
-                $('#titulo-email').text(usuario.email);
-                $('#titulo-cargo').text(usuario.cargo);
-                $('#titulo-grupo').html('<ul>' + $.map(usuario.id_grupo, function (valor) {  // Se seleccionan todos los grupos que vengan de la base de datos
-                    return '<li>' + valor.id_grupo + '</li>';
-                }).join('') + '</ul>');
-                $('#titulo-rol').text(usuario.rol);
+            // $('.btn-info-usuario').click(function () {
+            //     alert('hola');
+            //     usuario = $(this).parents('tr').data('row');
+            //     // Actualización del modal con los datos del usuario
+            //     $('#titulo-nombres').text(usuario.nombre + ' ' + usuario.apellido);
+            //     $('#titulo-apellido').text(usuario.apellido);
+            //     $('#titulo-email').text(usuario.email);
+            //     $('#titulo-cargo').text(usuario.cargo);
+            //     $('#titulo-grupo').html('<ul>' + $.map(usuario.id_grupo, function (valor) {  // Se seleccionan todos los grupos que vengan de la base de datos
+            //         return '<li>' + valor.id_grupo + '</li>';
+            //     }).join('') + '</ul>');
+            //     $('#titulo-rol').text(usuario.rol);
+            // })
 
-                console.log(usuario);
+            $('.btn-info-usuario').click(function () {
+
+                var nombre = $(this).data('nombre');
+                var apellido = $(this).data('apellido');
+                var rol = $(this).data('rol');
+                var cargo = $(this).data('cargo');
+
+                $('#titulo-nombres').text(nombre + ' ' + apellido);
+                $('#titulo-cargo').text(cargo);
+                $('#titulo-rol').text(rol);
+                $('#titulo-cargo').text(cargo);
+
             })
+
+
+
             $('.btn-editar-usuario').click(function () {
                 var usuario = $(this).parents('tr').data('row');
                 // Actualización de formulario con los datos del usuario
@@ -568,11 +592,6 @@
                 $('#id_cargo').val(usuario.id_cargo);
                 console.log(usuario);
             });
-
-
-
-
-
             $('#btn-agregar-usuario').click(function () {
                 //Reinicio de modal para agregar usuario
                 $('#modal-form-usuarioLabel').text('Agregar nuevo usuario');

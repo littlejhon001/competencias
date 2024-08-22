@@ -100,7 +100,7 @@
                                         <option selected>Selecciona la competencia</option>
                                         <?php foreach ($competencias as $row) { ?>
                                             <option value="<?php echo $row['id']; ?>">
-                                                <?php echo $row['nombre']; ?>
+                                                <?php echo $row['codigo'] . ' - '. $row['nombre'];  ?>
                                             </option>
                                         <?php } ?>
                                     </select>
