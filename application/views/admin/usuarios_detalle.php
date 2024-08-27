@@ -144,8 +144,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
-                                        <!-- <pre><?php // echo print_r($usuarios, true) ?></pre> -->
+                                        <!--
+                                        <pre><?php // echo print_r($usuarios, true) ?></pre> -->
 
                                         <?php foreach ($usuarios as $row) { ?>
                                             <tr class="<?php echo ($row->Rol_ID != '4') ? '' : (($row->id_evaluador != "") ? 'bg-asignado' : 'bg-sin_asignar'); ?>"
@@ -180,6 +180,7 @@
                                                         data-apellido="<?php echo $row->apellido ?>"
                                                         data-rol="<?php echo $row->rol ?>"
                                                         data-cargo="<?php echo $row->cargo ?>"
+                                                        data-grupos='<?php echo json_encode($row->id_grupo) ?>'
                                                         data-bs-toggle="modal" data-bs-target="#info_usuario">
                                                         <i class="text-light bi bi-eye"></i>
                                                     </button>
@@ -232,10 +233,7 @@
                             <b>Rol:</b>
                             <p id="titulo-rol">Rol</p>
                         </h6>
-                        <h6>
-                            <b>Cargo:</b>
-                            <p id="titulo-cargo"></p>
-                        </h6>
+
                         <?php
                         // Buscar el nombre del evaluador basado en el id_evaluador
                         $nombre_evaluador = "No asignado";
@@ -351,12 +349,14 @@
                 <div class="modal-body">
                     <div class="row g-3">
                         <div class="col">
-                            <a href="<?php echo IP_SERVER?>usuarios/descargar_plantilla" class="btn btn-primary">Descargar plantilla</a>
+                            <a href="<?php echo IP_SERVER ?>usuarios/descargar_plantilla"
+                                class="btn btn-primary">Descargar plantilla</a>
                         </div>
                         <div class="col-12">
                             <form id="form-importar" action="importar_masivo" method="POST">
                                 <input type="file" accept=".xlsx" class="form-control border p-2" id="inputGroupFile04"
-                                    aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="usuarios" required>
+                                    aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="usuarios"
+                                    required>
                                 <div class="modal-footer">
                                     <button type="submit" class="btn btn-success">Cargar</button>
                                 </div>
@@ -558,23 +558,28 @@
             //     $('#titulo-rol').text(usuario.rol);
             // })
 
-            $('.btn-info-usuario').click(function () {
+            $('#tabla-usuarios').on('click', '.btn-info-usuario', function () {
 
                 var nombre = $(this).data('nombre');
                 var apellido = $(this).data('apellido');
                 var rol = $(this).data('rol');
                 var cargo = $(this).data('cargo');
+                var grupos = $(this).data('grupos');
 
+                console.log(grupos);
                 $('#titulo-nombres').text(nombre + ' ' + apellido);
                 $('#titulo-cargo').text(cargo);
                 $('#titulo-rol').text(rol);
-                $('#titulo-cargo').text(cargo);
+                $('#titulo-grupo').html('<ul>' + $.map(grupos, function (valor) {  // Se seleccionan todos los grupos que vengan de la base de datos
+                    return '<li>' + valor.id_grupo + '</li>';
+                }).join('') + '</ul>');
 
             })
 
 
 
-            $('.btn-editar-usuario').click(function () {
+            $('#tabla-usuarios').on('click','btn-editar-usuario',function () {
+
                 var usuario = $(this).parents('tr').data('row');
                 // Actualización de formulario con los datos del usuario
                 $('#modal-form-usuarioLabel').text('Editar usuario');

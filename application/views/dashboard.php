@@ -99,45 +99,7 @@
                     <div class="card card-plain mb-4">
                         <div class="card-body p-3">
                             <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Usuarios que completaron competencias</h5>
-                                            <p class="card-text">Usuarios que completaron competencias por año
-                                            </p>
-
-                                        </div>
-                                        <div class="my-3" style="">
-                                            <canvas id="graficoUsuariosPorAnio"></canvas>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Total usuarios y evaluadores</h5>
-                                            <p class="card-text">
-                                                <?php //  echo ?>
-                                            </p>
-
-                                        </div>
-                                        <div class="my-3 w-50 text-center" style="">
-                                            <canvas id="graficoTotalUsuarios"></canvas>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 my-3">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Usuarios con competencia realizada</h5>
-                                        </div>
-                                        <div class="my-3" style="">
-                                            <canvas id="graficoUsuarios_competencia_completa"></canvas>
-                                        </div>
-                                    </div>
-                                </div>
+                            <iframe width="1200" height="900" src="https://lookerstudio.google.com/embed/reporting/f992ba82-38d6-4b98-b0aa-349382717b1b/page/WYR9D" frameborder="0" style="border:0" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
                             </div>
                         </div>
                     </div>
