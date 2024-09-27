@@ -105,6 +105,7 @@ class Mallas extends CI_Controller
     }
     public function get_cursos_usuario() {
         $id_cargo = $this->input->post('id_cargo');
+        $id_area = $this->input->post('id_area');
         $cursos = $this->Mallas_model->get_cursos_por_cargo($id_cargo);
         // Verificar los datos obtenidos
         echo json_encode($cursos);

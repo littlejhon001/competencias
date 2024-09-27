@@ -196,6 +196,7 @@
 
             $('.buscar_cursos').change(function () {
                 var id_cargo = $(this).val();
+
                 $.ajax({
                     url: url + "mallas/get_cursos_usuario",
                     type: "POST",

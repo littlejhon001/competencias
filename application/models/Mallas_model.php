@@ -102,7 +102,8 @@ class Mallas_model extends MY_Model
         ');
         $this->db->from('mallas');
         $this->db->join('cursos', 'mallas.id_curso = cursos.id');
-        $this->db->where('mallas.id_cargo', 421);
+        $this->db->where('mallas.id_cargo', $id_cargo);
+
 
         return $this->db->get()->result();
     }
