@@ -1,3 +1,33 @@
 .form-control {
   padding: 10px!important;
 }
+
+
+.button-mallas{
+  background-color: #f8f9fa;
+  color: #495057;
+  border: 1px solid #ced4da;
+  padding: 5px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.button-mallas:hover{
+  background-color: #79e281;
+
+}
+
+.btn-clear{
+  background-color: #2a6fd6;
+  color: #e6e6e6;
+  border: 1px solid #ced4da;
+  padding: 6px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-clear:hover{
+  background-color: #78ff4f;
+  color: #495057;
+}

@@ -160,6 +160,27 @@
                 <?php } ?>
             <?php } ?>
 
+            <?php if ($this->session->userdata('user_data')->Rol_ID == 1  ) { ?>
+                <li class="nav-item">
+                    <a class="nav-link text-dark " href="<?php echo IP_SERVER ?>mallas">
+                        <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="bi bi-map-fill"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Mallas</span>
+                    </a>
+                </li>
+            <?php } ?>
+            <?php if ($this->session->userdata('user_data')->Rol_ID == 4  ) { ?>
+                <li class="nav-item">
+                    <a class="nav-link text-dark " href="<?php echo IP_SERVER ?>mallas">
+                        <div class="text-dark text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="bi bi-map-fill"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Mallas</span>
+                    </a>
+                </li>
+            <?php } ?>
+
 
 
 

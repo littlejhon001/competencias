@@ -19,9 +19,6 @@ class Home extends CI_Controller
     public function index()
     {
         $user_data = $this->session->userdata('user_data');
-
-
-
         // Verificar si el usuario está logeado
         if (!empty($user_data)) {
             // Si el usuario es administrador, cargar el header y la vista de usuarios

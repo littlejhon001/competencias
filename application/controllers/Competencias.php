@@ -303,8 +303,6 @@ class Competencias extends CI_Controller
 			$response = array('status' => 'error', 'message' => 'Error al actualizar la competencia');
 		}
 
-		console($this->db->last_query());
-
 		$this->output
 			->set_content_type('application/json')
 			->set_output(json_encode($response));
